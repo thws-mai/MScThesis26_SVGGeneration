@@ -1,45 +1,134 @@
-% Magda Gregorova, 2025-01-10
+\chapter{Introduction}\label{ch:Introduction}
+ 
+\section{Motivation}
 
-\chapter{Introduction}\label{ch:Intro}
-This \LaTeX\ template provides a basic structure plus some tips about writing your master's thesis manuscript. 
-You shall not to keep the structure as is here, you shall change it as appropriate for your thesis.
-You can even change the \LaTeX\ formatting and the whole thesis style if you wish.
-The title-page shall, nevertheless, contain the information as provided in this template.
-In particular, you shall decide:
-\begin{itemize}[noitemsep, nosep]
-\item on the structure of the thesis, the chapters and their content
-\item inclusion of list of figures, list of tables, index, etc.
-\item reasonable math notation and stick to it throughout the thesis
-\end{itemize}
+Scalable Vector Graphics (SVG) play an essential role in modern digital design due to their scalability, compactness, and support for semantic editing. Unlike raster images, SVGs describe visual content through structured, text-based geometry using paths, shapes, and hierarchical groupings, allowing for precise control, reusability, and easy modification.
 
-\section{Organization of template}\label{sec:Intro_orga}
-This template make great use of the \verb|\input| commands to input files containing parts of the text.
-This is generally recommended for longer texts as it helps you to organize your work better and allows for easier re-usability, e.g. of the preamble.
-You can also easily change the order of the chapters or comment out complete chapters if not relevant.
-Nevertheless, you do not have to stick to this practice if you do not find it convenient for your work.
+In recent years, machine learning and deep learning models have been applied to the generation of SVGs from various input modalities, such as text prompts, raster images, and sketches. Open-source research has produced a variety of approaches, including sequence models, transformer-based architectures, and differentiable optimization methods, each proposing different strategies for representing and producing vector graphics.
 
-Though the template provides some examples for standard formatting and for including classical elements into your text, such as figures or tables, it expects sufficient knowledge of \LaTeX\ from your side.
-There is plenty of material about \TeX\ and \LaTeX\ available on line.
-A classical book is for example \cite{oetikerNotShortIntroduction2023}.
-There are many more things you can do to make your text look professionally and spending some time on polishing it so is strongly recommended.
-An example of advanced tool you may want to explore on your own is the \href{https://ctan.org/pkg/pgf?lang=en}{PGF/TikZ} package for creating graphics.
+Given this diversity, it becomes relevant to study how these open-source models differ in their architectures, internal representations, and the structure of the SVGs they generate. Understanding these aspects can provide a clearer picture of how SVGs are represented and produced computationally, and what factors may influence the quality and editability of the resulting graphics.
 
-For longer and more complicated documents it is recommended to install LaTex locally on your computer and use some of the dedicated LaTex editors such as Texstudio or standard code editors and their extensions such as VS Code and Latex Workshop. 
-In-browser editing via tools such as Overleaf is discouraged as it does not provide sufficient flexibility for organizing your manuscript files.
-Moreover, the free version does not have any versioning capability which is critical for keeping in control of your writing.
-Remember to back-up and version your writing for example through GitHub or the faculty Bitbucket to be sure not to accidentally lose your work.
 
-\section{Writing thesis}\label{sec:Intro_writing}
-When writing the thesis manuscript keep in mind that it is the most important part of your master thesis work.
-It is ``the'' document that will be read and evaluated and will remain even after you have left the school.
-It shall explain well what, why and how have you done.
+\section{Problem Statement}
+While multiple open-source models exist for SVG generation, they employ heterogeneous approaches in terms of architecture, data representation, and output structure. Some models treat SVGs as sequences of drawing commands, others as hierarchical objects, and still others as continuous geometric parameters optimized through differentiable rendering.
 
-Follow the basic principles of good writing. 
-Always keep the reader in the center of your attention and make sure that your text is well structured, easy to follow and possible to comprehend even for someone who has not been involved in developing the thesis.
-Focus on the main points and do not get distracted by minor technical details.
-If some detail might be useful or interesting, you can include them into the the appendix.
+This diversity makes it challenging to compare how different approaches handle SVG generation and how these choices influence the final output. Furthermore, the evaluation of SVG quality often depends on various factors, such as path simplicity, structural organization, and editability, which are not always measured in the same way.
 
-Remember that in scientific texts all claims have to be supported by evidence.
-Such evidence can come from some previous work you cite, such as a text book, e.g. \cite{bishopPatternRecognitionMachine2006},
-or it shall be directly provided by you, e.g. by results of experiments, mathematical proofs, etc.
-There are many more good practices for writing which I am not going to explain here.
+Therefore, the problem addressed in this research is to systematically describe, compare, and analyze open-source SVG generation methods, focusing on their architectures, internal representations, and output characteristics, in order to understand how these design choices relate to the quality and structure of the generated SVGs.
+\section{Research Goals}
+\begin{enumerate}
+    \item To explain and analyze the core properties, structures, and components of SVG graphics as a foundation for understanding their representation and generation.
+    \item To collect, review, and categorize existing open-source methods for SVG generation across various input modalities.
+    \item To investigate the types of deep learning and machine learning architectures employed in SVG generation models and analyze their design principles.
+    \item To examine how these architectures represent SVG data internally and how their outputs are transformed into standard SVG files.
+    \item To explore and evaluate existing approaches, metrics, and benchmarks for assessing the quality of generated SVGs.
+    \item To assess and compare the output quality of current SVG generation models based on the identified evaluation criteria.
+
+\end{enumerate}
+
+\section{Research Questions}
+
+\begin{enumerate}
+    \item What are the main properties and structures that define an editable and high-quality SVG?        
+    \item What open-source methods currently exist for generating SVGs from different input modalities?
+    \item What types of deep learning and machine learning architectures are models used for SVG generation?
+    \item What kinds of structure do these models produce?
+    \item How can the quality and editability of generated SVG be evaluated?
+    \item What is the observed quality of SVG outputs across different models?
+
+    \item What makes open source model suitable for testing? 
+
+    \item Which open-source SVG generation models are most suitable for testing and comparison?
+
+    \item How do the selected open-source SVG generation models perform in terms of defined criteria (eg. editability, quality and practical usage)?
+    
+
+\end{enumerate}
+
+    
+
+
+
+
+    
+% The main goal of this thesis is to understand how SVGs are generated, what makes them editable, and how their quality is currently measured.
+% To achieve this, the thesis aims to:
+
+% \begin{enumerate}
+%     \item Explain the key properties and structure of Scalable Vector Graphics (SVGs) — including their layers, primitives, and editability.
+    
+%     \item Review how current models (Text-to-SVG and Raster-to-SVG) generate SVGs and how they represent vector structure.
+    
+%     \item Analyze existing benchmarks and evaluation metrics to understand what they measure and where they fall short.
+    
+%     \item Identify open challenges and suggest directions for more consistent and structure-aware evaluation methods.
+% \end{enumerate}
+
+
+
+
+
+    % \begin{itemize}
+    % \item What kind of methods exist to generate SVGs?(e.g. from text and raster images)
+    % \item What kind of deep learning and ML methods do they use? (neural network, diffusion models, only open-source models)
+    % \item What types of output representations do these models produce?
+    % \item How to evaluate quality of output SVGs? (example: reading existing surveys and benchmarks of SVG generators)
+    % \item What is the quality of output SVGs?(e.g. editability, number of nodes/paths, number of shapes, etc.)
+    % \item  What are properties of SVGs? 
+    % \item  What should be the main properties? 
+    % \item How models generate SVGs? 
+    % \item  Which steps models took while producing SVG?
+    % \item Tentative How do current SVG generation models represent and encode these structural properties?
+    % \item How do existing benchmarks and metrics evaluate SVG generation, and what are their current limitations?
+    % \item What is still missing for a unified and fair evaluation of structural and visual quality in SVG generation?
+    % \item What kind of output models produce as result? Answer: SVG, text
+    %   \end{itemize}
+
+
+
+
+% % Magda Gregorova, 2025-01-10
+
+% \chapter{Introduction}\label{ch:Intro}
+% This \LaTeX\ template provides a basic structure plus some tips about writing your master's thesis manuscript. 
+% You shall not to keep the structure as is here, you shall change it as appropriate for your thesis.
+% You can even change the \LaTeX\ formatting and the whole thesis style if you wish.
+% The title-page shall, nevertheless, contain the information as provided in this template.
+% In particular, you shall decide:
+% \begin{itemize}[noitemsep, nosep]
+% \item on the structure of the thesis, the chapters and their content
+% \item inclusion of list of figures, list of tables, index, etc.
+% \item reasonable math notation and stick to it throughout the thesis
+% \end{itemize}
+
+% \section{Organization of template}\label{sec:Intro_orga}
+% This template make great use of the \verb|\input| commands to input files containing parts of the text.
+% This is generally recommended for longer texts as it helps you to organize your work better and allows for easier re-usability, e.g. of the preamble.
+% You can also easily change the order of the chapters or comment out complete chapters if not relevant.
+% Nevertheless, you do not have to stick to this practice if you do not find it convenient for your work.
+
+% Though the template provides some examples for standard formatting and for including classical elements into your text, such as figures or tables, it expects sufficient knowledge of \LaTeX\ from your side.
+% There is plenty of material about \TeX\ and \LaTeX\ available on line.
+% A classical book is for example \cite{oetikerNotShortIntroduction2023}.
+% There are many more things you can do to make your text look professionally and spending some time on polishing it so is strongly recommended.
+% An example of advanced tool you may want to explore on your own is the \href{https://ctan.org/pkg/pgf?lang=en}{PGF/TikZ} package for creating graphics.
+
+% For longer and more complicated documents it is recommended to install LaTex locally on your computer and use some of the dedicated LaTex editors such as Texstudio or standard code editors and their extensions such as VS Code and Latex Workshop. 
+% In-browser editing via tools such as Overleaf is discouraged as it does not provide sufficient flexibility for organizing your manuscript files.
+% Moreover, the free version does not have any versioning capability which is critical for keeping in control of your writing.
+% Remember to back-up and version your writing for example through GitHub or the faculty Bitbucket to be sure not to accidentally lose your work.
+
+% \section{Writing thesis}\label{sec:Intro_writing}
+% When writing the thesis manuscript keep in mind that it is the most important part of your master thesis work.
+% It is ``the'' document that will be read and evaluated and will remain even after you have left the school.
+% It shall explain well what, why and how have you done.
+
+% Follow the basic principles of good writing. 
+% Always keep the reader in the center of your attention and make sure that your text is well structured, easy to follow and possible to comprehend even for someone who has not been involved in developing the thesis.
+% Focus on the main points and do not get distracted by minor technical details.
+% If some detail might be useful or interesting, you can include them into the the appendix.
+
+% Remember that in scientific texts all claims have to be supported by evidence.
+% Such evidence can come from some previous work you cite, such as a text book, e.g. \cite{bishopPatternRecognitionMachine2006},
+% or it shall be directly provided by you, e.g. by results of experiments, mathematical proofs, etc.
+% There are many more good practices for writing which I am not going to explain here.
