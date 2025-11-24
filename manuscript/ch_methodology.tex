@@ -1,0 +1,339 @@
+\chapter{Systematic Literature Review}
+\label{ch:Systematic Literature Review}
+
+
+Kitchenham’s guidelines were originally developed for evidence-based software engineering 
+and have become one of the most widely adopted standards for conducting systematic 
+literature reviews in computer science and technical research disciplines 
+\cite{kitchenham_procedures_2004}. 
+The methodology provides detailed, domain-specific procedures for planning, searching, 
+selecting, and synthesizing studies in areas where research outputs are often 
+heterogeneous—such as algorithmic models, machine learning architectures, or engineering 
+pipelines. Unlike biomedical-focused protocols such as PRISMA 
+\cite{moher_preferred_2009}, which were designed primarily for clinical trials 
+and human-subject research with standardized quantitative outcomes, Kitchenham explicitly 
+addresses challenges unique to computational research: diversity of study designs, 
+inconsistent terminology, non-uniform evaluation metrics, and the frequent presence of 
+code-based or algorithmic artifacts instead of comparable statistical datasets. 
+Similarly, frameworks like SALSA \cite{noauthor_typology_nodate} emphasize high-level 
+structuring but do not prescribe the step-by-step operational procedures needed for 
+reproducibility in technical fields.
+
+For this thesis—situated within deep learning, machine learning, and vector-graphics 
+generation—a Kitchenham-style SLR is needed because the literature consists of diverse 
+model architectures, varied input modalities, and different evaluation criteria. 
+Kitchenham’s protocol supports this complexity by providing structured phases (planning, 
+conducting, and reporting) that guide the reviewer through formulating rigorous research 
+questions, defining search strategies, operationalizing selection criteria, assessing 
+methodological quality, and performing narrative synthesis. This structure minimizes 
+bias, increases reproducibility, and ensures that the review captures the full range of 
+relevant deep-learning and vectorization approaches. Consequently, Kitchenham offers the 
+most appropriate methodological foundation for achieving a systematic, transparent, and 
+technically robust synthesis of current research on SVG-related generative models 
+\cite{kitchenham_systematic_2009}.
+
+
+\section{Phase 1 — Planning}
+
+% \subsection{1. Justifying the Need for an SLR}
+
+% To ensure methodological rigor, this study adopts the Kitchenham guidelines for conducting Systematic Literature Reviews (SLRs) in computer science. Several existing works (e.g., \textit{Multiscale Visualization: A Structured Literature Analysis}, \textit{Systematic Review of Synthetic CT Generation Methodologies}, \textit{A Systematic Literature Review of Deep Learning Approaches for Sketch-Based Image Retrieval}) follow similar approaches using Kitchenham or PRISMA-based SLR structures.
+
+% Before conducting the SLR, the following questions must be addressed:
+% \begin{itemize}
+%    \item Is a similar SLR already published in the domain?
+%    \item Is there sufficient primary literature available to support an SLR?
+% \end{itemize}
+
+\subsection {Review Protocol}
+
+\paragraph{Databases}
+
+\begin{itemize}
+    \item arXiv
+    \item Google Scholar
+    \item ACM Digital Library
+\end{itemize}
+
+
+\paragraph{Search Strings/Keywords}
+\subparagraph{SVG Generation}
+\begin{verbatim}
+"SVG generation"
+"scalable vector graphics" AND generation
+"SVG generative models"
+"vector graphics generation"
+"SVG generation" AND deep learning
+"SVG generation" AND machine learning
+\end{verbatim}
+
+\subparagraph{Raster-to-Vector Vectorization}
+\begin{verbatim}
+"raster-to-vector" AND deep learning
+"image-to-vector" AND neural network
+"image vectorization" AND machine learning
+"deep vectorization"
+"differentiable vector graphics"
+\end{verbatim}
+
+\subparagraph{Text-to-SVG}
+\begin{verbatim}
+"text-to-SVG"
+"text-to-vector graphics"
+\end{verbatim}
+
+
+\subparagraph{Structure of SVG, Editability and Quality}
+\begin{verbatim}
+"SVG Basics"
+"SVG fundamentals"
+"Scalable Vector Graphics"
+"SVG editability"
+"editable SVG"
+"SVG path simplification"
+"layered SVG" AND generation" 
+\end{verbatim}
+
+\subparagraph{Survey and Review Searches}
+\begin{verbatim}
+"SVG" AND "systematic literature review"
+"vector graphics" AND survey
+"vector image" AND review
+"image vectorization" AND survey
+"graphic generation" AND review
+"SVG Generation" AND benchmark
+"image vectorization" AND benchmark
+\end{verbatim}
+
+
+
+% \paragraph{Population (P):}
+% \begin{itemize}
+%     \item SVG properties
+%     \item SVG generation methods
+%     \item Deep learning and machine learning architectures used for SVG generation
+%     \item Output structures
+%     \item Evaluation approaches
+%     \item Quality across models
+% \end{itemize}
+
+% \paragraph{Intervention (I):}
+% \begin{itemize}
+%     \item Diffusion-based or generative models that output SVG-like structures
+%     \item Sketch-to-SVG pipelines
+%     \item Image-to-SVG vectorization pipelines
+%     \item LLM-based SVG generation
+%     \item Hybrid multimodal SVG generation (text + image)
+%     \item ML and DL architectures (Transformers, VAEs, autoregressive models)
+% \end{itemize}
+
+% \paragraph{Comparison (C):}
+% \begin{itemize}
+%     \item Comparison across different deep learning models
+%     \item Rule-based vectorization vs. ML-based vectorization
+%     \item Structured SVG generation vs. raster-only generative models
+%     \item Different input modalities (sketch, raster image, text, multimodal)
+%     \item Editability of SVG outputs
+% \end{itemize}
+
+% \paragraph{Outcomes (O):}
+
+% Primary outcomes:
+% \begin{itemize}
+%     \item SVG quality
+%     \item SVG editability (e.g., number of nodes, clean paths, human-editable structure)
+%     \item Structural characteristics (hierarchy, grouping, path consistency)
+%     \item Reported performance metrics
+%     \item Comparative performance between open-source models
+% \end{itemize}
+
+% Secondary outcomes:
+% \begin{itemize}
+%     \item Practical usability for downstream editing or integration
+% \end{itemize}
+
+% \subsection{3. Creating the Review Protocol}
+
+% \paragraph{3.1 Search Strategy}
+
+% \textbf{Databases:}
+% \begin{itemize}
+%     \item ACM Digital Library
+%     \item IEEE Xplore
+%     \item arXiv
+%     \item Google Scholar
+% \end{itemize}
+
+% \textbf{Example Search Strings:}
+% \begin{verbatim}
+% ("SVG" OR "vector representation" OR "vectorized image" OR
+%  "vector data representation" OR "Scalable Vector Graphics" OR
+%  "vectorization" OR "image-to-vector" OR "raster-to-vector" OR
+%  "raster-to-SVG" OR "vector structure analysis" OR "sketch-to-vector" OR
+%  "text-to-SVG" OR "SVG generation" OR
+%  "deep learning" OR "machine learning" OR "transformer" OR "diffusion" OR
+%  "generative model" OR "vector quality evaluation" OR
+%  "survey" OR "systematic literature review")
+% \end{verbatim}
+
+% Search fields include title, abstract, and keywords.
+
+\paragraph{Study Selection Criteria}
+
+\subparagraph{Inclusion Criteria:}
+\begin{itemize}
+    \item \textbf{Language and Publication:} Written in English and published in a peer-reviewed journal, conference, or workshop.
+    \item \textbf{Time Range:} Published between 2020--2025 (post-emergence of modern SVG generative models such as DeepSVG).
+    \item \textbf{Domain Relevance:} Falls within computer vision, computer graphics, AI, machine learning, or deep learning.
+    \item \textbf{Reproducibility:} Provides an open-source implementation or references a publicly available repository. Availability of pre-trained weights is preferred, but source code alone is sufficient if the method is reproducible.
+    \item \textbf{SVG Output Requirement:} Describes a model, method, or architecture that directly generates SVG or structured vector outputs, including:
+        \begin{itemize}
+            \item Bézier curves,
+            \item SVG \texttt{<path>} commands,
+            \item layered or hierarchical SVG structure,
+            \item vector strokes or SVG-like stroke sequences,
+            \item structured outputs suitable for editability analysis.
+        \end{itemize}
+    \item \textbf{Input Modalities:} Supports at least one of:
+        \begin{itemize}
+            \item image-to-SVG vectorization,
+            \item text-to-SVG generation,
+            \item multimodal SVG generation,
+        \end{itemize}
+    \item \textbf{Architectural Transparency:} Provides sufficient technical detail to extract the model architecture or internal SVG representation (e.g., decoder design, transformer layers, vector tokenization, differentiable rasterization, or geometric parameterization).
+    \item \textbf{Evaluation:} Provides quantitative metrics and/or qualitative SVG examples that allow analysis of structural quality and editability.
+\end{itemize}
+
+\subparagraph{Exclusion Criteria:}
+\begin{itemize}
+    \item \textbf{No Vector Output:} The method does not generate vector or SVG outputs (pixel-only image generation).
+    \item \textbf{Non-ML Methods:} Purely rule-based or classical algorithmic vectorization methods without machine learning or deep learning.
+    \item \textbf{Closed-Source Systems:} No publicly available code, weights, or sufficient technical detail for reproduction.
+    \item \textbf{Insufficient Evaluation:} Papers lacking SVG evaluation, qualitative vector examples, or any structural analysis of outputs.
+    \item \textbf{Out-of-Scope Vector Work:} Studies focused solely on vector editing, rendering, compression, markup optimization, or stylistic modification without SVG generation.
+    \item \textbf{Domain Mismatch:} 
+        \begin{itemize}
+            \item handwriting synthesis,
+            \item font generation,
+            \item datasets,
+            \item sketch generation not intended for SVG graphics.
+        \end{itemize}
+    \item \textbf{Temporal Exclusion:} Studies published before 2020, except when cited for historical context only.
+    \item \textbf{LLM Restriction:} Proprietary LLMs (e.g., GPT-4, Gemini, Claude) that can emit SVG text but do not provide open-source architecture, reproducible training details, or transparent vector representations.
+\end{itemize}
+
+
+\paragraph{Study Selection Procedure}
+
+\begin{itemize}
+    \item Initial records
+    \item Duplicate removal
+    \item Title/abstract screening
+    \item Full-text assessment
+    \item Final included studies
+\end{itemize}
+
+\paragraph{Quality Assessment Criteria}
+
+Based on Kitchenham:
+\begin{itemize}
+    \item Clear aims and objectives
+    \item Clear description of methodology
+    \item Clear model/method architecture
+    \item Appropriate study design
+    \item Evaluation methodology
+    \item Clear results
+    \item Discussion of limitations
+    \item Open-source implementation
+\end{itemize}
+
+\paragraph{Data Extraction Plan}
+
+\begin{itemize}
+    \item Bibliographic metadata
+    \item Study context and goals
+    \item Model/method characteristics
+    \item Vector structure and SVG properties
+    \item Evaluation metrics and results
+    \item Reproducibility details
+\end{itemize}
+
+% \paragraph{Data Synthesis Plan}
+
+% Narrative synthesis includes:
+% \begin{itemize}
+%     \item Categorization by input modality, model type, output structure, evaluation type, reproducibility
+%     \item Identification of evaluation gaps
+%     \item Analysis of structural/editability challenges
+%     \item Architectural pattern comparison
+%     \item Model selection analysis (suitability, runtime feasibility)
+% \end{itemize}
+
+% \paragraph{Protocol Review}
+
+% The protocol may be reviewed by supervisors prior to execution.
+
+\section{Phase 2 — Conducting the Review}
+
+\subsection{Execution of the Search Strategy}
+The search strings defined in Phase~1 were executed across the selected databases 
+(Google Scholar, arXiv, and ACM Digital Library) to identify relevant literature on 
+SVG generation and vector-based deep learning methods. Searches were performed using 
+the conceptual string groups defined in the search strategy, with database-specific 
+syntax adjustments where necessary. All records retrieved by these searches were 
+exported and documented before any filtering or removal of duplicates. Table~\ref{tab:searchlog} 
+summarises the number of studies returned by each search group and database.
+
+\begin{table}[h!]
+\centering
+\caption{Search Log Summary Across Databases and Conceptual Groups}
+\label{tab:searchlog}
+\begin{tabular}{lcccc}
+\hline
+\textbf{Search Group} & \textbf{Google Scholar} & \textbf{arXiv} & \textbf{ACM DL} & \textbf{Total} \\
+\hline
+SVG Generation & 18 & 15 & 4 & 37 \\
+Raster-to-Vector & 10 & 8 & 2 & 20 \\
+Text-to-SVG / Multimodal & 7 & 10 & 5 & 22 \\
+Surveys/Benchmarks/Reviews & 6 & 3 & 1 & 10 \\
+SVG Fundamentals / Background & 3 & 3 & 2 & 8 \\
+\hline
+\textbf{Total Hits} & \textbf{44} & \textbf{39} & \textbf{12} & \textbf{95} \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Removing of Duplications}
+After merging all search results, duplicate records—including repeated titles and preprint–conference duplicates—were removed. This resulted in 72 unique studies.
+
+\subsection{5. Study Selection}
+\begin{itemize}
+    \item Stage 1: Title, Keywords and Abstract screening.
+
+After removing duplicates, \textbf{72} unique studies remained. A brief title and 
+abstract screening excluded works clearly unrelated to SVG generation (e.g., 
+sketch-only models, raster methods, classical vectorization, or closed-source LLMs), 
+resulting in \textbf{38} papers proceeding to full-text review.
+
+
+    \item Stage 2: Full-text screening
+\end{itemize}
+
+\subsection{6. Study Quality Assessment}
+Apply the quality checklist.
+
+\subsection{7. Data Extraction}
+Use standardized extraction tables.
+
+\subsection{8. Data Synthesis}
+
+\paragraph{8.1 Narrative Synthesis}
+Summarize findings, patterns, and categories.
+
+\paragraph{8.2 Sensitivity Analysis}
+Remove low-quality studies and reassess.
+
+\section{Phase 3 — Reporting}
+
+\subsection{9. Prepare the SLR Report}
+Document all methodology, results, synthesis, and identified gaps.

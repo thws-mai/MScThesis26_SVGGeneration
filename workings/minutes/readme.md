@@ -18,6 +18,7 @@ Fifth Meeting -> on 5th of November w/Philipp about 30 mins.
 
 Sixth Meeting -> on 11th of November w/Philipp and Magda about an hour. 
 
+Seventh Meeting -> on 18th of November w/Philipp and Magda about an hour. 
 
 
 ## License

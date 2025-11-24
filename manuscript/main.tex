@@ -12,10 +12,13 @@
 
 % biblatex settings for better referencing
 \usepackage[backend=biber, % more flexible than bibtex
-            citestyle=authoryear,
-            style=authoryear,
+            % citestyle=authoryear,
+            citestyle=numeric,
+            % style=authoryear,
+            style=numeric,
+            sorting=none,
             maxbibnames = 10,
-            date = year,
+            % date = year,
             doi=false,
             isbn=false,
             url=false,
@@ -27,6 +30,9 @@
 \input{custom_commands.tex}
 
 %% ========== main part ========== %%
+\AtBeginBibliography{\renewcommand*{\finalnamedelim}{\addcomma\space}}
+\renewcommand*{\nameyeardelim}{\addcomma\space}
+\DefineBibliographyStrings{english}{andothers = {et\addabbrvspace al\adddot}}
 
 \begin{document}
 
@@ -41,15 +47,12 @@
 \mainmatter
 
 \input{ch_intro}
+\input{ch_methodology.tex}
 
-\input{ch_formatting}
-
-\input{ch_svg_fundamentals.tex}
-
+\addcontentsline{toc}{chapter}{Bibliography}
+\printbibliography
 
 \backmatter
-\addcontentsline{toc}{chapter}{Bibliography}
-% \printbibliography
 
 \listoffigures
 \addcontentsline{toc}{chapter}{List of Figures}
