@@ -218,11 +218,10 @@ technically robust synthesis of current research on SVG-related generative model
             \item datasets,
             \item sketch generation not intended for SVG graphics.
         \end{itemize}
-    \item \textbf{Temporal Exclusion:} Studies published before 2020, except when cited for historical context only.
-    \item \textbf{LLM Restriction:} Proprietary LLMs (e.g., GPT-4, Gemini, Claude) that can emit SVG text but do not provide open-source architecture, reproducible training details, or transparent vector representations.
+    \item \textbf{Temporal Exclusion:} Studies published before 2020, except when cited for background context only.
+    \item \textbf{LLM Restriction:} Exclude proprietary LLMs that generate SVG text but do not provide architecture, training details, or reproducibility.
+
 \end{itemize}
-
-
 \paragraph{Study Selection Procedure}
 
 \begin{itemize}
@@ -233,30 +232,204 @@ technically robust synthesis of current research on SVG-related generative model
     \item Final included studies
 \end{itemize}
 
-\paragraph{Quality Assessment Criteria}
 
-Based on Kitchenham:
+\subsubsection{Quality Assessment Criteria}
+
+Following the recommendations by Kitchenham for evidence-based software 
+engineering \cite{kitchenham_procedures_2004,
+kitchenham_systematic_2009}, each primary study must be assessed for quality, 
+the assessment criteria must be explicitly described, applied consistently, and 
+the overall quality of each study should be reported (e.g., high, medium, or low 
+quality). The four Kitchenham categories used in this review are reporting 
+quality, methodological rigor, reproducibility, and result validity. The criteria 
+are listed below.
+
+The following Kitchenham-style quality criteria were applied to all studies that 
+passed the full-text screening. Each criterion was evaluated as \textbf{Yes = 1} or 
+\textbf{No = 0}. The total score was then used to classify studies as high, medium, 
+or low quality.
+
+\paragraph{Reporting Quality}
 \begin{itemize}
-    \item Clear aims and objectives
-    \item Clear description of methodology
-    \item Clear model/method architecture
-    \item Appropriate study design
-    \item Evaluation methodology
-    \item Clear results
-    \item Discussion of limitations
-    \item Open-source implementation
+    \item The study states its research aim clearly.
+    \item The model or method architecture is described in enough detail.
+    \item The SVG/vector representation (paths, strokes, Béziers, etc.) is explained.
 \end{itemize}
+
+\paragraph{Methodological Rigor}
+\begin{itemize}
+    \item The method is appropriate for SVG/vector generation.
+    \item The evaluation procedure is described clearly.
+\end{itemize}
+
+\paragraph{Reproducibility}
+\begin{itemize}
+    \item The study provides open-source code or enough detail to reproduce results.
+\end{itemize}
+
+\paragraph{Result Validity}
+\begin{itemize}
+    \item Quantitative metrics or qualitative SVG examples are provided and interpretable.
+\end{itemize}
+
+\paragraph{Scoring and Classification}
+
+Each criterion was scored as either \textbf{Yes = 1} or \textbf{No = 0}. The total 
+score determined the study’s quality classification:
+\begin{itemize}
+    \item \textbf{6--7 points:} High quality
+    \item \textbf{4--5 points:} Medium quality
+    \item \textbf{0--3 points:} Low quality (may be excluded)
+\end{itemize}
+
+Kitchenham recommends that “studies should be classified as high, medium or low 
+quality based on quality criteria” \cite{kitchenham_procedures_2004}.
+
+
+    % \paragraph{Quality Assessment Criteria}
+
+    % Based on Kitchenham:
+    % \begin{itemize}
+    %     \item Clear aims and objectives
+    %     \item Clear description of methodology
+    %     \item Clear model/method architecture
+    %     \item Appropriate study design
+    %     \item Evaluation methodology
+    %     \item Clear results
+    %     \item Discussion of limitations
+    %     \item Open-source implementation
+    % \end{itemize}
 
 \paragraph{Data Extraction Plan}
 
-\begin{itemize}
-    \item Bibliographic metadata
-    \item Study context and goals
-    \item Model/method characteristics
-    \item Vector structure and SVG properties
-    \item Evaluation metrics and results
-    \item Reproducibility details
-\end{itemize}
+    
+According to Kitchenham’s guidelines for evidence-based software engineering, 
+the purpose of data extraction is to systematically collect all information 
+required to answer the research questions in a consistent and reproducible way.  
+Kitchenham emphasises that a predefined data extraction form must be created 
+\emph{during the planning phase} to ensure uniformity and reduce subjective 
+variation among reviewers \cite{kitchenham_procedures_2004}.
+
+\subparagraph{Predefined Data Extraction Form}
+Kitchenham states that researchers should develop a structured data extraction 
+form before conducting the review. This prevents ad-hoc decisions and ensures 
+that all necessary information is collected consistently across all studies 
+\cite{kitchenham_procedures_2004}.
+
+\subparagraph{Alignment with Research Questions}
+Kitchenham notes that extracted data must be driven directly by the review’s 
+research questions. The form should therefore include only fields that support 
+answering the research questions or performing the planned synthesis 
+\cite{kitchenham_procedures_2004}.
+
+\subparagraph{Information to Extract}
+The guidelines specify that extraction should capture both bibliographic 
+information and structured study attributes, including study context, aims, 
+methodology, data used, experimental setup, and results. Kitchenham emphasises 
+that the level of detail must be sufficient for later comparison and synthesis 
+\cite{kitchenham_procedures_2004}.
+
+\subparagraph{Reviewer Consistency}
+Kitchenham recommends that extracted data should be validated—ideally by a 
+second reviewer—to minimise bias and ensure consistency. If this is not 
+possible, reviewers should re-check their own extraction for consistency 
+\cite{kitchenham_procedures_2004}.  
+
+\subparagraph{Structured (Not Free-Form) Fields}
+Kitchenham advises the use of structured or semi-structured fields to minimise 
+subjectivity and ensure that comparable information is extracted across studies. 
+Examples include fixed fields for model architecture, datasets, evaluation 
+metrics, and SVG output structure \cite{kitchenham_procedures_2004}.
+
+\subparagraph{Avoiding Unnecessary Information}
+Only data needed for answering the research questions or for synthesis should be 
+extracted. Kitchenham warns that recording irrelevant details increases effort 
+and contributes no value to the final review \cite{kitchenham_systematic_2009}.
+
+\subparagraph{Ensuring Comparability Across Studies}
+Finally, Kitchenham highlights that the extraction process must ensure that the 
+information gathered from different studies is comparable and suitable for 
+aggregation or narrative synthesis \cite{kitchenham_systematic_2009}.  
+Using a consistent extraction form enables systematic comparison of SVG 
+generation models.
+
+
+
+\begin{table}[H]
+\centering
+\caption{Data Extraction Form for Included Studies}
+\label{tab:data-extraction-template}
+\begin{tabular}{p{4cm} p{10cm}}
+\hline
+\textbf{Field} & \textbf{Extracted Information} \\
+\hline
+
+\textbf{Bibliographic Information} & \\
+Title & \\
+Authors & \\
+Year & \\
+Venue & \\
+
+\hline
+\textbf{Study Aim (RQ1)} & 
+What the paper aims to achieve; problem being solved; contribution. \\
+
+\hline
+\textbf{Input Modality (RQ2)} & 
+Image-to-SVG, Text-to-SVG, Multimodal, Sketch-to-SVG, or other. \\
+
+\hline
+\textbf{Model Architecture (RQ3)} & 
+Core model type (Transformer, Diffusion, VAE, autoregressive decoder, DiT, implicit model, VLM/LLM, etc.); 
+training strategy; important modules; optimization method. \\
+
+\hline
+\textbf{Internal SVG Representation (RQ4)} & 
+How the model represents vector graphics internally:
+paths, Bézier curves, control points, strokes, layers, hierarchy, tokens, neural implicit representation, etc. \\
+
+\hline
+\textbf{SVG Output Structure (RQ4)} & 
+Description of the output SVG structure: number of shapes, path types, hierarchy, style constraints, editability features. \\
+
+\hline
+\textbf{Evaluation Metrics (RQ5)} & 
+Quantitative metrics (e.g., FID, CLIP, PSNR, LPIPS, SSIM, MSE, R-Precision);  
+Qualitative evaluation (figures, examples). \\
+
+\hline
+\textbf{Editability Assessment (RQ1 \& RQ5)} & 
+Any information on path simplicity, layer structure, number of Bézier curves, redundancy, cleanliness, or user-editability. \\
+
+\hline
+\textbf{Results Summary (RQ6)} & 
+Key results: performance vs baselines, strengths, weaknesses, notable findings. \\
+
+\hline
+\textbf{Open-Source Availability (RQ7)} & 
+Code URL; availability of pretrained weights; reproducibility details. \\
+
+\hline
+\textbf{Suitability for Testing (RQ8)} & 
+Is this model appropriate for downstream testing and comparison? Why? \\
+
+\hline
+\textbf{Additional Notes} & 
+Any extra information relevant for synthesis. \\
+
+\hline
+\end{tabular}
+\end{table}
+
+
+% \begin{itemize}
+%     \item Bibliographic metadata
+%     \item Study context and goals
+%     \item Model/method characteristics
+%     \item Vector structure and SVG properties
+%     \item Evaluation metrics and results
+%     \item Reproducibility details
+% \end{itemize}
 
 % \paragraph{Data Synthesis Plan}
 
@@ -306,24 +479,151 @@ SVG Fundamentals / Background & 3 & 3 & 2 & 8 \\
 \subsection{Removing of Duplications}
 After merging all search results, duplicate records—including repeated titles and preprint–conference duplicates—were removed. This resulted in 72 unique studies.
 
-\subsection{5. Study Selection}
+\subsection{Study Selection}
 \begin{itemize}
     \item Stage 1: Title, Keywords and Abstract screening.
 
 After removing duplicates, \textbf{72} unique studies remained. A brief title and 
 abstract screening excluded works clearly unrelated to SVG generation (e.g., 
 sketch-only models, raster methods, classical vectorization, or closed-source LLMs), 
-resulting in \textbf{38} papers proceeding to full-text review.
+resulting in \textbf{37} papers proceeding to full-text review.
 
 
     \item Stage 2: Full-text screening
+
+A full-text assessment was conducted on the \textbf{37} studies that passed the 
+title and abstract screening. Each paper was examined for reproducibility, 
+architectural transparency, and whether it genuinely produced SVG or structured 
+vector outputs as defined by the inclusion criteria. In total, \textbf{10} studies 
+were excluded at this stage: four lacked any open-source implementation, two were 
+benchmark papers evaluating proprietary LLMs such as GPT, Gemini, or Claude, two 
+used non-reproducible LLM-based pipelines without sufficient methodological detail, 
+and one relied on a purely rule-based vectorization approach. Following this 
+eligibility check, \textbf{27} studies remained for quality assessment.
 \end{itemize}
 
-\subsection{6. Study Quality Assessment}
-Apply the quality checklist.
 
-\subsection{7. Data Extraction}
-Use standardized extraction tables.
+
+\begin{table}[H]
+\centering
+\caption{Reasons for Exclusion During Full-Text Screening}
+\label{tab:exclusion-reasons}
+\begin{tabular}{l c}
+\hline
+\textbf{Exclusion Reason} & \textbf{Count} \\
+\hline
+No open-source implementation & 4 \\
+Proprietary LLM benchmark studies (GPT, Gemini, Claude) & 2 \\
+Non-reproducible LLM-based pipeline & 2 \\
+Purely rule-based vectorization method & 2 \\
+\hline
+\textbf{Total Excluded} & 10 \\
+\hline
+\end{tabular}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\caption{Study Selection Summary Across Screening Stages}
+\label{tab:selection-summary}
+\begin{tabular}{l c}
+\hline
+\textbf{Selection Stage} & \textbf{Number of Studies} \\
+\hline
+Initial search results (all databases) & 95 \\
+After duplicate removal & 72 \\
+After title and abstract screening & 37 \\
+After full-text screening & 27 \\
+\hline
+\end{tabular}
+\end{table}
+
+
+
+
+
+% \subsection{Quality Assessment}
+
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\caption{Data Extraction Summary for NeuralSVG (2025)}
+\label{tab:data-extraction-neuralsvg}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.27\textwidth} >{\raggedright\arraybackslash}X}
+\hline
+\textbf{Field} & \textbf{Extracted Information} \\
+\hline
+
+\textbf{Title} & NeuralSVG: An Implicit Representation for Text-to-Vector Generation \\
+
+\textbf{Authors} & Sagi Polaczek, Yuval Alaluf, Elad Richardson, Yael Vinker, Daniel Cohen-Or \\
+
+\textbf{Year} & 2025 \\
+
+\textbf{Venue} & Not reported \\
+
+\hline
+\textbf{Study Aim (RQ1)} &
+NeuralSVG introduces an implicit neural representation for generating vector graphics from text. 
+It aims to produce ordered, layered, simple, and editable SVGs, addressing issues of 
+over-parameterization and disorganized structures in previous methods. \\
+
+\hline
+\textbf{Input Modality (RQ2)} &
+Text-to-SVG \\
+
+\hline
+\textbf{Model Architecture (RQ3)} &
+Implicit neural representation encoded in MLP weights. Uses positional encoding and two MLP 
+branches (control points and color). Optimized using Score Distillation Sampling (SDS) guided 
+by Stable Diffusion. Dropout regularization encourages meaningful layered structure. \\
+
+\hline
+\textbf{Internal SVG Representation (RQ4)} &
+Each index $i$ maps to a shape $z_i$ defined by control points $p_i$ and fill color $c_i$. 
+All shapes are produced from the implicit function $f_\theta$. \\
+
+\hline
+\textbf{SVG Output Structure (RQ4)} &
+Typically 16 shapes in a layered, ordered hierarchy. Each shape is a closed Bézier form with 
+four cubic curves (12 control points plus a fill color). Outputs are designed for human 
+editability. \\
+
+\hline
+\textbf{Evaluation Metrics (RQ5)} &
+CLIP cosine similarity, R-Precision (R-Prec), and cumulative CLIP similarity (for ordering). \\
+
+\hline
+\textbf{Editability Assessment (RQ1 \& RQ5)} &
+Produces semantically meaningful, standalone shapes with low redundancy, enabling practical editing. \\
+
+\hline
+\textbf{Results Summary (RQ6)} &
+Outperforms VectorFusion and SVGDreamer under the same 16-shape constraint. Baselines require 
+4--16$\times$ more shapes for comparable fidelity. NeuralSVG learns meaningful ordering: early 
+shapes capture core semantics. \\
+
+\hline
+\textbf{Open-Source Availability (RQ7)} &
+Project page: \url{https://sagipolaczek.github.io/NeuralSVG/} \\
+
+\hline
+\textbf{Suitability for Testing (RQ8 \& RQ9)} &
+Yes. Evaluated on the standard 128-prompt VectorFusion benchmark with strong quantitative and 
+qualitative comparisons. Suitable for downstream tests. \\
+
+\hline
+\textbf{Additional Notes} &
+Implicit representation allows inference-time control (e.g., colors, aspect ratio) and can 
+produce vector sketches at multiple abstraction levels. \\
+
+\hline
+\end{tabularx}
+\end{table}
+
+
 
 \subsection{8. Data Synthesis}
 
