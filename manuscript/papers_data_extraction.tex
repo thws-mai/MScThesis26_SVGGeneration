@@ -1,0 +1,265 @@
+\chapter{Text to Vector Generation with Neural Path Representation}
+
+% Paper Metadata
+\begin{table}[h!]
+\centering
+\caption{Metadata}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Field} & \textbf{Value} \\ \hline
+Title & Text-to-Vector Generation with Neural Path Representation \\ \hline
+Authors & Peiying Zhang, Nanxuan Zhao, Jing Liao \\ \hline
+Year & 2024 \\ \hline
+Venue & SIGGRAPH 2024 (accepted) \\ \hline
+DOI/URL & \href10.48550/arXiv.2405.10317 \\ \hline
+\end{tabular}
+\end{table}
+
+% ===============================
+% Problem & Task
+% ===============================
+\begin{table}[h!]
+\centering
+\caption{Problem \& Task}
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\textbf{Case} & \textbf{Notes} \\ \hline
+Task & "Text-to-Vector (T2V) generation, where the model learns to generate individual vector paths instead of the entire SVG at once." \\ \hline
+Input modality & "A single text prompt (T)." \\ \hline
+Output & "SVG consisting of a set of paths (SVG = \{Path$_1$, Path$_2$, ..., Path$_m$\}), each represented by a latent code, color, and transformation parameters." \\ \hline
+Domain & "Vector graphics, digital art, clipart, animation, and graphic design applications." \\ \hline
+Motivation & "Complex vector graphics are composed of simple paths. Previous T2V methods often produce intersecting or jagged paths due to lacking geometry constraints. This paper proposes a method to overcome these limitations by learning paths individually with a neural path representation." \\ \hline
+Goal & "The goal is to generate an SVG that aligns with the semantics of the text prompt while exhibiting desirable path properties and layer-wise structures consistent with human perception. " \\ \hline
+\end{tabular}
+\end{table}
+
+
+% ===============================
+% Method / Model 
+% ===============================
+\begin{table}[h!]
+\centering
+\caption{Method / Model Overview}
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\textbf{Field} & \textbf{Value} \\ \hline
+Architecture & Two-stage pipeline: Stage A: Neural Path Representation Learning (Dual-branch VAE). Stage B: Text-driven Neural Path Optimization(Optimization with Variational Score Distillation and Layer-wise Vectorization). \\ \hline
+Stage A & VAE trained on FIGR-8-SVG dataset (200,000 vector icons).  
+Step 1: Start with vector paths from the dataset (control points for each path).  
+Step 2: Rasterize each path into an image to capture its visual appearance.  
+Step 3: Encode vectors (sequence branch) and raster images (image branch) into latent space.  
+Step 4: Share a common latent vector z between both branches.  
+Step 5: Decode back to reconstruct both the original vector paths and the rendered images.  
+Each path is encoded independently; no fixed number of paths. \\ \hline
+Stage B & Text-driven optimization aligns latent vectors z$_1$,...,z$_m$ to text prompt via Variational Score Distillation (VSD), followed by layer-wise optimization and path refinement. \\ \hline
+Vector Representation & Each path represented by $\theta_i=(z_i, C_i, Tr_i)$ including latent code, color, transformation. Latent dimension $d_F=24$. \\ \hline
+Loss Function & VAE training: $L = \lambda_{cfr} L_{cfr} + \lambda_{img} L_{img} + \lambda_{kl} L_{kl}$. Stage 1: VSD loss. Stage 2: Layer-wise loss $L_{lyr} = L_{CLIP} + \lambda_{IoU} L_{IoU}$. \\ \hline
+Training Details & VAE training: Adam optimizer, LR=0.001, linear warmup/decay, dropout 0.1, trained for 100 epochs. \\ \hline
+Optimization Techniques & VSD(diffusion model as guidance, updates these z vectors so that, when decoded into SVG paths, the resulting image matches the text prompt), layer-wise vectorization(ensures that paths don’t overlap badly and follow a clear hierarchical structure), path simplification(removes unnecessary paths, low-opacity paths, and merges overlapping paths), CLIP/diffusion guidance(provides text-image similarity score). SDS used in baselines (VectorFusion) for comparison. \\ \hline
+Extensions & Supports line art (fine-tuned on sketches), exemplar-based SVG customization, and animation via text-guided optimization. \\ \hline
+\end{tabular}
+\end{table}
+% ===============================
+% Experimental Setup / Evaluation
+% ===============================
+\begin{table}[h!]
+\centering
+\caption{Experimental Setup and Evaluation}
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\textbf{Field} & \textbf{Details} \\ \hline
+Metrics Used & Smoothness, Simplicity (number of paths), Layer-wise Semantics, FID(visual quality), CLIP score(text-image correspondence) and Human preference. \\ \hline
+Baselines Compared & T2I + LoRA + Potrace, T2I + LIVE, CLIPDraw, VectorFusion. \\ \hline
+Evaluation Types & Quantitative metrics (numerical scores) and qualitative metrics (user study / human preference). \\ \hline
+General Performance & Proposed T2V-NPR model improves path smoothness, semantic alignment, text-image correspondence, and human-perceived SVG quality over baselines. \\ \hline
+\end{tabular}
+\end{table}
+
+% ===============================
+% Ablation / Component Analysis (Full Summary with Results)
+% ===============================
+\begin{table}[h!]
+\centering
+\caption{Ablation Study}
+\begin{tabular}{|l|p{6cm}|c|c|c|}
+\hline
+\textbf{Variant} & \textbf{Description} & \textbf{Smooth↑} & \textbf{Simp↓} & \textbf{$S_{img}$↑} \\ \hline
+
+w/o NPR &
+Neural Path Representation is disabled; paths are directly optimized via control points without learned latent geometry. This leads to unstable, jagged, and intersecting curves. &
+0.5271 & 40 & 0.9941 \\ \hline
+
+Sequence Only (VAE) &
+Only the sequence (geometry) encoder–decoder of the dual-branch VAE is used; the raster/image modality is removed, reducing appearance-awareness of paths. &
+0.8116 & 40 & 0.9910 \\ \hline
+
+w/o VSD (Stage 1) &
+Stage-1 text alignment is performed without Variational Score Distillation (VSD), meaning no stable latent-space alignment to the text prompt. Produces overly complex SVGs with many redundant paths. &
+0.7896 & 380 & -- \\ \hline
+
+SDS (Stage 1) &
+Score Distillation Sampling (SDS) replaces VSD for text-driven optimization. SDS gives reasonable paths but tends to oversmooth and reduces diversity. &
+0.8070 & 40 & 0.9932 \\ \hline
+
+VSD Only (Stage 2) &
+Only VSD is used in Stage-2 optimization, without layer-wise structural refinement. Produces smooth paths but less organized layer structure. &
+0.8194 & 40 & -- \\ \hline
+
+w/o Layer-wise (Stage 2) &
+Stage-2 optimization removes the layer-wise structural loss; paths are optimized globally only. Reduces clarity and topological ordering between layers. &
+0.7924 & 40 & 0.9929 \\ \hline
+
+Ours (Full Model) &
+Full pipeline with NPR, dual-branch VAE, Stage-1 VSD text alignment, and Stage-2 layer-wise refinement. Balanced performance across all metrics. &
+0.8012 & 40 & 0.9926 \\ \hline
+
+\end{tabular}
+\end{table}
+
+% ===============================
+% Contributions & Insights 
+% ===============================
+\begin{table}[h!]
+\centering
+\caption{Limitations}
+\begin{tabular}{|p{4.8cm}|p{5.2cm}|p{5.2cm}|}
+\hline
+
+Relies on the generative ability of the diffusion model. Overly detailed text prompts may lead to missing semantic elements (e.g., “ping pong table”, “ashtray”). \\ \hline
+
+Tends to oversimplify shapes with intricate boundaries. Complex edges exceed latent-space capacity, causing smoothing and loss of fine details (e.g., bear’s body contours). \\ \hline
+
+Optimization is iterative and slow. Full pipeline takes ~13 minutes for 128 paths on an NVIDIA 3090, whereas T2I vectorization baselines operate in seconds. \\ \hline
+
+In NeuralSVG paper, mentioned that T2V with NPR approach are unavailable. 
+\end{tabular}
+\end{table}
+
+
+
+
+
+
+
+
+
+
+\chapter{NeuralSVG}
+
+\begin{table}[h!]
+\centering
+\caption{Metadata}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Field} & \textbf{Value} \\ \hline
+Title & NeuralSVG: Converting Text to Vector Graphics via Joint Shape and Color Optimization \\ \hline
+Authors & Bowen Zhang, Zixuan Lu, Li-Yi Wei, Fang-Lue Zhang \\ \hline
+Year & 2025 \\ \hline
+Venue & ACM Transaction on Graphics  \\ \hline
+DOI/URL & 10.48550/ARXIV.2501.03992 \\ \hline
+\end{tabular}
+\end{table}
+
+
+\begin{table}[h!]
+\centering
+\caption{Method / Model Overview}
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\textbf{Field} & \textbf{Value} \\ \hline
+
+Vector Representation &
+SVG is modeled as $N$ Bézier curves; each curve has 12 control-point coordinates + 1 color vector.  
+You can visualize this as a 2D diamond composed of 4 Bézier segments (12 total points).  
+Each shape also has a scalar index used for positional encoding. \\ \hline
+
+Positional Encoding &
+Shape index $i$ is mapped to a high-dimensional embedding using Random Fourier Features  
+(64 frequencies → 128D vector, sin/cos pairs).  
+This allows the system to encode periodic geometric patterns across shapes. \\ \hline
+
+Network Architecture &
+Two MLPs are used:  
+• \textbf{MLP\textsubscript{pos}}$(v_i)$ → $\mathbb{R}^{12\times 2}$ outputs the Bézier control points.  
+• \textbf{MLP\textsubscript{c}}$(v_i)$ → $[0,1]^3$ outputs RGB color (sigmoid).  
+The input $v_i$ is the 128D Fourier feature embedding. \\ \hline
+
+Initialization Pipeline &
+1. Text prompt.  
+2. Stable Diffusion generates a raster image.  
+3. Attention map detects important regions.  
+4. Sample coarse shapes.  
+5. Convert them into convex polygons / Bézier curves.  
+6. Extract initial colors from raster pixels → $(p_t^{init}, c_t^{init})$ for each shape.  
+7. Train MLPs with L2 losses so they start from a reasonable SVG guess.  
+This avoids chaotic optimization at the start. \\ \hline
+
+Initialization Loss &
+$L_{pos}(i) = \| \text{MLP}_{pos}(v_i) - p_t^{init} \|_2^2$  
+$L_{c}(i) = \| \text{MLP}_{c}(v_i) - c_t^{init} \|_2^2$ \\ \hline
+
+Training / Optimization &
+1. MLPs reconstruct initial SVG.  
+2. SVG is rasterized differentiably.  
+3. Score Distillation Sampling (SDS) compares rasterized SVG with diffusion-model output.  
+4. Diffusion model predicts noise.  
+5. Noise gives gradient signal.  
+6. Backpropagation updates MLP\textsubscript{pos} and MLP\textsubscript{c}. \\ \hline
+
+SDS Text Alignment &
+SDS uses Stable Diffusion to push the SVG toward the semantics of the text prompt.  
+Unlike NPR, there is no latent VAE; gradients directly update the SVG primitives. \\ \hline
+
+Ordered Representation &
+A nested dropout technique randomly drops shapes during training, ensuring that:  
+• important shapes become stable and survive,  
+• unimportant shapes fade away,  
+• scene is simplified and layers become meaningful. \\ \hline
+
+Differentiable Rendering &
+The neural renderer (MLPs) outputs colors at sampled pixel locations, enabling continuous rasterization and end-to-end optimization. \\ \hline
+
+Extra Controls &
+Supports color palette constraints and aspect-ratio constraints. \\ \hline
+
+\end{tabular}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\caption{Experimental Setup \& Evaluation}
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\textbf{Field} & \textbf{Details} \\ \hline
+
+Metrics Used &
+• CLIP cosine similarity (SVG <-> text alignment)  
+• R-Precision (SVG matches correct prompt among distractors)  
+• Qualitative comparisons  \\ \hline
+
+Baselines Compared &
+VectorFusion, SVGDreamer, Text-to-Vector and NiVEL. \\ \hline
+
+Evaluation Types &
+Quantitative metrics (CLIP, R-Precision) and qualitative results. \\ \hline
+
+General Performance &
+NeuralSVG outperforms baselines in text alignment (CLIP), improves recognizability,  
+and produces cleaner vector shapes and achieve accurate visual with less shapes. \\ \hline
+
+\end{tabular}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\caption{Ablation Study}
+
+Ablation study in NeuralSVG is limited:the only quantitative comparison provided is between model trained with and without the dropout technique. Even in this case, the difference in cumulative CLIP similarity scores is relatively small (e.g., 0.26 vs. 0.27), suggesting that the impact of dropout on semantic alignment, while visually noticeable, is minor according to this metric. But qualitatively diff. is recognazible. Other design choices, such as using separate MLPs for geometry and color or directly optimizing control points, are only discussed qualitatively.
+\end{table}
+\begin{table}[h!]
+\centering
+\caption{Limitations}
+No limitations mentioned.
+
+
+\end{table}

@@ -11,8 +11,7 @@ selecting, and synthesizing studies in areas where research outputs are often
 heterogeneous—such as algorithmic models, machine learning architectures, or engineering 
 pipelines. Unlike biomedical-focused protocols such as PRISMA 
 \cite{moher_preferred_2009}, which were designed primarily for clinical trials 
-and human-subject research with standardized quantitative outcomes, Kitchenham explicitly 
-addresses challenges unique to computational research: diversity of study designs, 
+and human-subject research with standardized quantitative outcomes, Kitchenham addresses challenges unique to computational research: diversity of study designs, 
 inconsistent terminology, non-uniform evaluation metrics, and the frequent presence of 
 code-based or algorithmic artifacts instead of comparable statistical datasets. 
 Similarly, frameworks like SALSA \cite{noauthor_typology_nodate} emphasize high-level 
@@ -24,14 +23,9 @@ generation—a Kitchenham-style SLR is needed because the literature consists of
 model architectures, varied input modalities, and different evaluation criteria. 
 Kitchenham’s protocol supports this complexity by providing structured phases (planning, 
 conducting, and reporting) that guide the reviewer through formulating rigorous research 
-questions, defining search strategies, operationalizing selection criteria, assessing 
-methodological quality, and performing narrative synthesis. This structure minimizes 
+questions, defining search strategies, conducting selection criteria, assessing quality, data extraction and performing narrative synthesis. This structure minimizes 
 bias, increases reproducibility, and ensures that the review captures the full range of 
-relevant deep-learning and vectorization approaches. Consequently, Kitchenham offers the 
-most appropriate methodological foundation for achieving a systematic, transparent, and 
-technically robust synthesis of current research on SVG-related generative models 
-\cite{kitchenham_systematic_2009}.
-
+relevant deep-learning and vectorization approaches. 
 
 \section{Phase 1 — Planning}
 
@@ -200,17 +194,17 @@ technically robust synthesis of current research on SVG-related generative model
             \item text-to-SVG generation,
             \item multimodal SVG generation,
         \end{itemize}
-    \item \textbf{Architectural Transparency:} Provides sufficient technical detail to extract the model architecture or internal SVG representation (e.g., decoder design, transformer layers, vector tokenization, differentiable rasterization, or geometric parameterization).
-    \item \textbf{Evaluation:} Provides quantitative metrics and/or qualitative SVG examples that allow analysis of structural quality and editability.
+    \item \textbf{Architectural Transparency:} Provides sufficient technical detail to extract the model architecture and internal SVG representation (e.g., decoder design, transformer layers, vector tokenization, differentiable rasterization, or geometric parameterization).
+    \item \textbf{Evaluation:} Provides quantitative metrics and qualitative SVG examples that allow analysis of structural quality and editability.
 \end{itemize}
 
 \subparagraph{Exclusion Criteria:}
 \begin{itemize}
     \item \textbf{No Vector Output:} The method does not generate vector or SVG outputs (pixel-only image generation).
     \item \textbf{Non-ML Methods:} Purely rule-based or classical algorithmic vectorization methods without machine learning or deep learning.
-    \item \textbf{Closed-Source Systems:} No publicly available code, weights, or sufficient technical detail for reproduction.
-    \item \textbf{Insufficient Evaluation:} Papers lacking SVG evaluation, qualitative vector examples, or any structural analysis of outputs.
-    \item \textbf{Out-of-Scope Vector Work:} Studies focused solely on vector editing, rendering, compression, markup optimization, or stylistic modification without SVG generation.
+    \item \textbf{Closed-Source Systems:} No publicly available code, weights or sufficient technical detail for reproduction.
+    \item \textbf{Insufficient Evaluation:} Papers lacking SVG evaluation, qualitative vector examples or structural analysis of outputs.
+    \item \textbf{Out-of-Scope Vector Work:} Studies focused on vector editing, rendering, compression, markup optimization, or stylistic modification without SVG generation.
     \item \textbf{Domain Mismatch:} 
         \begin{itemize}
             \item handwriting synthesis,
@@ -269,7 +263,7 @@ or low quality.
 
 \paragraph{Result Validity}
 \begin{itemize}
-    \item Quantitative metrics or qualitative SVG examples are provided and interpretable.
+    \item Quantitative metrics or qualitative SVG examples are provided.
 \end{itemize}
 
 \paragraph{Scoring and Classification}
@@ -284,7 +278,7 @@ score determined the study’s quality classification:
 
 Kitchenham recommends that “studies should be classified as high, medium or low 
 quality based on quality criteria” \cite{kitchenham_procedures_2004}.
-
+% reproducibility -> from scratch or just run in the local?!
 
     % \paragraph{Quality Assessment Criteria}
 
@@ -355,71 +349,71 @@ generation models.
 
 
 
-\begin{table}[H]
-\centering
-\caption{Data Extraction Form for Included Studies}
-\label{tab:data-extraction-template}
-\begin{tabular}{p{4cm} p{10cm}}
-\hline
-\textbf{Field} & \textbf{Extracted Information} \\
-\hline
+% \begin{table}[H]
+% \centering
+% \caption{Data Extraction Form for Included Studies}
+% \label{tab:data-extraction-template}
+% \begin{tabular}{p{4cm} p{10cm}}
+% \hline
+% \textbf{Field} & \textbf{Extracted Information} \\
+% \hline
 
-\textbf{Bibliographic Information} & \\
-Title & \\
-Authors & \\
-Year & \\
-Venue & \\
+% \textbf{Bibliographic Information} & \\
+% Title & \\
+% Authors & \\
+% Year & \\
+% Venue & \\
 
-\hline
-\textbf{Study Aim (RQ1)} & 
-What the paper aims to achieve; problem being solved; contribution. \\
+% \hline
+% \textbf{Study Aim (RQ1)} & 
+% What the paper aims to achieve; problem being solved; contribution. \\
 
-\hline
-\textbf{Input Modality (RQ2)} & 
-Image-to-SVG, Text-to-SVG, Multimodal, Sketch-to-SVG, or other. \\
+% \hline
+% \textbf{Input Modality (RQ2)} & 
+% Image-to-SVG, Text-to-SVG or Multimodal. \\
 
-\hline
-\textbf{Model Architecture (RQ3)} & 
-Core model type (Transformer, Diffusion, VAE, autoregressive decoder, DiT, implicit model, VLM/LLM, etc.); 
-training strategy; important modules; optimization method. \\
+% \hline
+% \textbf{Model Architecture (RQ3)} & 
+% Core model type (Transformer, Diffusion, VAE, autoregressive decoder, DiT, implicit model, VLM/LLM, etc.); 
+% training strategy; important modules; optimization method. \\
 
-\hline
-\textbf{Internal SVG Representation (RQ4)} & 
-How the model represents vector graphics internally:
-paths, Bézier curves, control points, strokes, layers, hierarchy, tokens, neural implicit representation, etc. \\
+% \hline
+% \textbf{Internal SVG Representation (RQ4)} & 
+% How the model represents vector graphics internally:
+% paths, Bézier curves, control points, strokes, layers, hierarchy, tokens, neural implicit representation, etc. \\
 
-\hline
-\textbf{SVG Output Structure (RQ4)} & 
-Description of the output SVG structure: number of shapes, path types, hierarchy, style constraints, editability features. \\
+% \hline
+% \textbf{SVG Output Structure (RQ4)} & 
+% Description of the output SVG structure: number of shapes, path types, hierarchy, style constraints, editability features. \\
 
-\hline
-\textbf{Evaluation Metrics (RQ5)} & 
-Quantitative metrics (e.g., FID, CLIP, PSNR, LPIPS, SSIM, MSE, R-Precision);  
-Qualitative evaluation (figures, examples). \\
+% \hline
+% \textbf{Evaluation Metrics (RQ5)} & 
+% Quantitative metrics;  
+% Qualitative evaluation. \\
 
-\hline
-\textbf{Editability Assessment (RQ1 \& RQ5)} & 
-Any information on path simplicity, layer structure, number of Bézier curves, redundancy, cleanliness, or user-editability. \\
+% \hline
+% \textbf{Editability Assessment (RQ1 \& RQ5)} & 
+% Any information on path simplicity, layer structure, number of Bézier curves, redundancy, cleanliness, or user-editability. \\
 
-\hline
-\textbf{Results Summary (RQ6)} & 
-Key results: performance vs baselines, strengths, weaknesses, notable findings. \\
+% \hline
+% \textbf{Results Summary (RQ6)} & 
+% Key results: performance vs baselines, strengths, weaknesses, notable findings. \\
 
-\hline
-\textbf{Open-Source Availability (RQ7)} & 
-Code URL; availability of pretrained weights; reproducibility details. \\
+% \hline
+% \textbf{Open-Source Availability (RQ7)} & 
+% Code URL; availability of pretrained weights; reproducibility details. \\
 
-\hline
-\textbf{Suitability for Testing (RQ8)} & 
-Is this model appropriate for downstream testing and comparison? Why? \\
+% \hline
+% \textbf{Suitability for Testing (RQ8)} & 
+% Is this model appropriate for downstream testing and comparison? Why? \\
 
-\hline
-\textbf{Additional Notes} & 
-Any extra information relevant for synthesis. \\
+% \hline
+% \textbf{Additional Notes} & 
+% Any extra information relevant for synthesis. \\
 
-\hline
-\end{tabular}
-\end{table}
+% \hline
+% \end{tabular}
+% \end{table}
 
 
 % \begin{itemize}
@@ -465,13 +459,13 @@ summarises the number of studies returned by each search group and database.
 \hline
 \textbf{Search Group} & \textbf{Google Scholar} & \textbf{arXiv} & \textbf{ACM DL} & \textbf{Total} \\
 \hline
-SVG Generation & 18 & 15 & 4 & 37 \\
-Raster-to-Vector & 10 & 8 & 2 & 20 \\
-Text-to-SVG / Multimodal & 7 & 10 & 5 & 22 \\
+SVG Generation & 14 & 12 & 4 & 30 \\
+Raster-to-Vector & 7 & 10 & 2 & 19 \\
+Text-to-SVG  & 7 & 6 & 5 & 18 \\
 Surveys/Benchmarks/Reviews & 6 & 3 & 1 & 10 \\
 SVG Fundamentals / Background & 3 & 3 & 2 & 8 \\
 \hline
-\textbf{Total Hits} & \textbf{44} & \textbf{39} & \textbf{12} & \textbf{95} \\
+\textbf{Total Initial findings} & \textbf{37} & \textbf{34} & \textbf{14} & \textbf{85} \\
 \hline
 \end{tabular}
 \end{table}
@@ -531,7 +525,7 @@ Purely rule-based vectorization method & 2 \\
 \hline
 \textbf{Selection Stage} & \textbf{Number of Studies} \\
 \hline
-Initial search results (all databases) & 95 \\
+Initial search results (all databases) & 8  5 \\
 After duplicate removal & 72 \\
 After title and abstract screening & 37 \\
 After full-text screening & 27 \\
@@ -543,97 +537,22 @@ After full-text screening & 27 \\
 
 
 
+
+
+
+
 % \subsection{Quality Assessment}
 
 
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.3}
-\caption{Data Extraction Summary for NeuralSVG (2025)}
-\label{tab:data-extraction-neuralsvg}
-\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.27\textwidth} >{\raggedright\arraybackslash}X}
-\hline
-\textbf{Field} & \textbf{Extracted Information} \\
-\hline
+% \subsection{8. Data Synthesis}
 
-\textbf{Title} & NeuralSVG: An Implicit Representation for Text-to-Vector Generation \\
+% \paragraph{8.1 Narrative Synthesis}
+% Summarize findings, patterns, and categories.
 
-\textbf{Authors} & Sagi Polaczek, Yuval Alaluf, Elad Richardson, Yael Vinker, Daniel Cohen-Or \\
+% \paragraph{8.2 Sensitivity Analysis}
+% Remove low-quality studies and reassess.
 
-\textbf{Year} & 2025 \\
+% \section{Phase 3 — Reporting}
 
-\textbf{Venue} & Not reported \\
-
-\hline
-\textbf{Study Aim (RQ1)} &
-NeuralSVG introduces an implicit neural representation for generating vector graphics from text. 
-It aims to produce ordered, layered, simple, and editable SVGs, addressing issues of 
-over-parameterization and disorganized structures in previous methods. \\
-
-\hline
-\textbf{Input Modality (RQ2)} &
-Text-to-SVG \\
-
-\hline
-\textbf{Model Architecture (RQ3)} &
-Implicit neural representation encoded in MLP weights. Uses positional encoding and two MLP 
-branches (control points and color). Optimized using Score Distillation Sampling (SDS) guided 
-by Stable Diffusion. Dropout regularization encourages meaningful layered structure. \\
-
-\hline
-\textbf{Internal SVG Representation (RQ4)} &
-Each index $i$ maps to a shape $z_i$ defined by control points $p_i$ and fill color $c_i$. 
-All shapes are produced from the implicit function $f_\theta$. \\
-
-\hline
-\textbf{SVG Output Structure (RQ4)} &
-Typically 16 shapes in a layered, ordered hierarchy. Each shape is a closed Bézier form with 
-four cubic curves (12 control points plus a fill color). Outputs are designed for human 
-editability. \\
-
-\hline
-\textbf{Evaluation Metrics (RQ5)} &
-CLIP cosine similarity, R-Precision (R-Prec), and cumulative CLIP similarity (for ordering). \\
-
-\hline
-\textbf{Editability Assessment (RQ1 \& RQ5)} &
-Produces semantically meaningful, standalone shapes with low redundancy, enabling practical editing. \\
-
-\hline
-\textbf{Results Summary (RQ6)} &
-Outperforms VectorFusion and SVGDreamer under the same 16-shape constraint. Baselines require 
-4--16$\times$ more shapes for comparable fidelity. NeuralSVG learns meaningful ordering: early 
-shapes capture core semantics. \\
-
-\hline
-\textbf{Open-Source Availability (RQ7)} &
-Project page: \url{https://sagipolaczek.github.io/NeuralSVG/} \\
-
-\hline
-\textbf{Suitability for Testing (RQ8 \& RQ9)} &
-Yes. Evaluated on the standard 128-prompt VectorFusion benchmark with strong quantitative and 
-qualitative comparisons. Suitable for downstream tests. \\
-
-\hline
-\textbf{Additional Notes} &
-Implicit representation allows inference-time control (e.g., colors, aspect ratio) and can 
-produce vector sketches at multiple abstraction levels. \\
-
-\hline
-\end{tabularx}
-\end{table}
-
-
-
-\subsection{8. Data Synthesis}
-
-\paragraph{8.1 Narrative Synthesis}
-Summarize findings, patterns, and categories.
-
-\paragraph{8.2 Sensitivity Analysis}
-Remove low-quality studies and reassess.
-
-\section{Phase 3 — Reporting}
-
-\subsection{9. Prepare the SLR Report}
-Document all methodology, results, synthesis, and identified gaps.
+% \subsection{9. Prepare the SLR Report}
+% Document all methodology, results, synthesis, and identified gaps.
