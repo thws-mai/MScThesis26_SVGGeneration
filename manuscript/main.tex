@@ -1,69 +1,76 @@
-% Magda Gregorova, 2025-01-10
-% Non-binding template for MSc thesis in THWS/MAI submitted to Magda Gregorova
-% The template is provided "as is" without any guarantees.
-% You are free to use and modify as you see fit.
+    % Magda Gregorova, 2025-01-10
+    % Non-binding template for MSc thesis in THWS/MAI submitted to Magda Gregorova
+    % The template is provided "as is" without any guarantees.
+    % You are free to use and modify as you see fit.
 
-\documentclass[12pt,twoside=false,a4paper,parskip]{scrbook} % koma-script book environment for cleaner typesetting and more flexibility
-% \documentclass[12pt,twoside,a4paper,parskip,openright]{scrbook} % use this for double-sided printing
+    \documentclass[12pt,twoside=false,a4paper,parskip]{scrbook} % koma-script book environment for cleaner typesetting and more flexibility
+    % \documentclass[12pt,twoside,a4paper,parskip,openright]{scrbook} % use this for double-sided printing
 
-%% ========== preamble ========== %%
+    %% ========== preamble ========== %%
 
-\input{package_list.tex}
+    \input{package_list.tex}
 
-% biblatex settings for better referencing
-\usepackage[backend=biber, % more flexible than bibtex
-            % citestyle=authoryear,
-            citestyle=numeric,
-            % style=authoryear,
-            style=numeric,
-            sorting=none,
-            maxbibnames = 10,
-            % date = year,
-            doi=false,
-            isbn=false,
-            url=false,
-            eprint=false
-            ]{biblatex}
-\DeclareDelimFormat{nameyeardelim}{\addcomma\space} % comma to separate name and year in cite command
-\addbibresource{refs.bib} 
+    % biblatex settings for better referencing
+    \usepackage[backend=biber, % more flexible than bibtex
+                % citestyle=authoryear,
+                citestyle=numeric,
+                % style=authoryear,
+                style=numeric,
+                sorting=none,
+                maxbibnames = 10,
+                % date = year,
+                doi=false,
+                isbn=false,
+                url=false,
+                eprint=false
+                ]{biblatex}
+    \DeclareDelimFormat{nameyeardelim}{\addcomma\space} % comma to separate name and year in cite command
+    \addbibresource{refs.bib} 
 
-\input{custom_commands.tex}
+    \input{custom_commands.tex}
 
-%% ========== main part ========== %%
-\AtBeginBibliography{\renewcommand*{\finalnamedelim}{\addcomma\space}}
-\renewcommand*{\nameyeardelim}{\addcomma\space}
-\DefineBibliographyStrings{english}{andothers = {et\addabbrvspace al\adddot}}
+    %% ========== main part ========== %%
+    \AtBeginBibliography{\renewcommand*{\finalnamedelim}{\addcomma\space}}
+    \renewcommand*{\nameyeardelim}{\addcomma\space}
+    \DefineBibliographyStrings{english}{andothers = {et\addabbrvspace al\adddot}}
 
-\begin{document}
+    \begin{document}
 
-\frontmatter
+    \frontmatter
 
-\input{title_page}
+    \input{title_page}
 
-\input{abstract}
+    \input{abstract}
 
-\tableofcontents
+    \tableofcontents
 
-\mainmatter
+    \mainmatter
 
-\input{ch_intro}
-\input{ch_methodology.tex}
+    \input{ch_intro}
+    \input{ch_methodology.tex}
+    \input{ch_background.tex}
+    \input{ch_taxonomy.tex}
+    %\input{ch_analysis.tex}
 
-\input{papers_data_extraction.tex}
+    \addcontentsline{toc}{chapter}{Bibliography}
+    \printbibliography
 
-\addcontentsline{toc}{chapter}{Bibliography}
-\printbibliography
+    \backmatter
 
-\backmatter
+    \listoffigures
+    \addcontentsline{toc}{chapter}{List of Figures}
 
-\listoffigures
-\addcontentsline{toc}{chapter}{List of Figures}
+    \appendix
+    \addchap{Appendix}
 
-\appendix
-\addchap{Appendix}
+    \input{appendix}
+    %\input{papers_data_extraction.tex}
+    
+    
+    \newpage
+    \input{table_of_chosen_models.tex}
+    \newpage
 
-\input{appendix}
-
-% this you need to sign and include the signed pdf
-\input{declaration_oath}
-\end{document}
+    % this you need to sign and include the signed pdf
+    \input{declaration_oath}
+    \end{document}

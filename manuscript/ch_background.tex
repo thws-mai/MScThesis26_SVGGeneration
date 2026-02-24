@@ -1,0 +1,101 @@
+\chapter{Background}\label{ch:Background}
+
+\section{Vector Graphics Fundamentals}
+
+Images can be represented in different formats, such as raster images (e.g., JPEG, PNG) and vector graphics (e.g., SVG). These formats serve different purposes, and no single format is optimal for all use cases. To understand why vector graphics are important, it is useful to first examine the most common and widely used image format: raster images.
+
+\textbf{Raster Images: Pixels as the Building Blocks}
+
+Raster images are the most widely used image format, especially for photorealistic content. When a photo is taken with a camera, downloaded from the internet, or captured as a screenshot, it is stored as a raster image unless a different format is explicitly chosen. To explain this intuitively, a raster image can be thought of as a grid, similar to a spreadsheet or a Sudoku board, where each cell corresponds to a single pixel. Every pixel stores color information, most commonly in the form of RGB values.
+
+Because raster images may contain millions of pixels, small inaccuracies at individual pixels are usually imperceptible, and neighboring pixels visually compensate for each other. However, this representation also leads to fundamental limitations. Pixels do not carry semantic meaning. For example, if an image contains a table and chairs, moving a chair independently from the table is not possible in a raster image. A pixel does not know whether it belongs to a chair, a table, or the background; it is simply a colored point at a fixed location. The chair is therefore not stored as an object, but as a collection of pixels mixed with pixels from shadows, textures, and surrounding elements. As a result, raster images are difficult to edit in a structured way.
+
+Another limitation arises when raster images are scaled. Raster images have a fixed resolution. When an image is enlarged, new pixels are created through interpolation, meaning the system predicts colors between existing pixels. This process inevitably introduces blur or jagged edges. When an image is reduced in size, pixels are merged or discarded, leading to a loss of detail. In both cases, visual information is lost because the original pixel grid cannot adapt to the new resolution.
+
+\textbf{Vector Graphics: Shapes Instead of Pixels}
+
+Vector graphics take a fundamentally different approach compared to raster images. Instead of storing images as pixels, vector graphics describe images as collections of geometric primitives such as lines, curves, shapes, and text. These primitives are defined mathematically using coordinates and parameters. Using the same table-and-chair example, a vector graphic represents the top, legs, and other parts of the table and chairs as separate shapes or paths. Each component has its own parameters, such as position, size, and color.
+
+Because these components are explicit objects, they can be edited independently. If all parts of a chair are grouped together, the entire chair can be moved, recolored, resized, or removed without affecting the rest of the image. Grouping is discussed in more detail later in this chapter.
+
+This object-based structure also explains why vector graphics scale without loss of quality. When a vector image is resized, the underlying mathematical descriptions are simply interpreted at the new scale. Paths and shapes remain sharp and smooth regardless of resolution, and no interpolation is required. For these reasons, vector graphics are widely used in domains where editability and scalability are important. Graphic and web designers rely on vector formats for logos, icons, and layouts. Data visualization systems use vector graphics to represent charts and plots that must remain clear at different sizes. Game development, user interface design, technical illustration, and marketing materials also heavily depend on vector representations. According to recent W3Techs data from January, SVG has become a web staple, with 65.3\% of all websites now relying on it for their graphics.
+
+\textbf{SVG: A Text-Based Vector Graphics Format}
+
+Scalable Vector Graphics (SVG) is a standard format for representing two-dimensional vector graphics. Unlike many other vector formats, SVG is based on XML and stored as plain text. This means that an SVG file is not merely an image, but a readable and editable document describing how the image should be drawn. At its core, an SVG file consists of textual instructions such as drawing a line between two points, defining curves using control points, and filling shapes with specific colors. Even complex shapes are encoded as text-based commands.
+
+This textual structure is one of the main reasons SVG is well suited for computational approaches. SVG files can be generated, parsed, and modified programmatically without relying on opaque binary encodings.
+
+SVG supports different types of graphic elements, including basic shapes (such as lines and circles), text, raster images, and, most importantly, paths. Paths are flexible SVG elements that allow complex shapes to be defined using sequences of commands, such as moving a virtual pen to a new position, drawing straight lines, and creating smooth curves.
+
+Rather than consisting only of individual shapes, SVG also supports grouping and layered organization of graphic elements. Multiple shapes can be combined into groups that behave as a single unit for styling and editing. For example, the legs and surface of a table can be grouped together so that the entire table can be moved or scaled without affecting its internal structure. This hierarchy improves both human editability and computational manipulation.
+
+Grouping also introduces an implicit structure into SVG documents. Elements are rendered in a defined order, and later elements visually appear on top of earlier ones. As a result, layering becomes part of the vector representation. While many current generative models ignore hierarchical grouping, understanding this structure is important when analyzing the limitations of existing methods and when aiming to produce well-structured vector graphics.
+
+\textbf{Paths and Bézier Curves}
+
+Most SVG graphics are built using paths. A path consists of a sequence of commands such as \emph{move to}, \emph{line to}, and \emph{curve to}. Curved segments are represented using Bézier curves, which are smooth curves controlled by a set of control points.
+
+SVG supports both quadratic and cubic Bézier curves. Quadratic Bézier curves use a single control point and allow the creation of simple, smooth arcs. Cubic Bézier curves use two control points and provide greater flexibility, enabling the representation of more complex shapes. Importantly, these control points do not lie on the curve itself; instead, they influence the direction and curvature of the curve. This parametric representation makes Bézier curves particularly useful, as complex shapes can be adjusted by modifying only a small number of parameters.
+
+From the perspective of this thesis, paths and Bézier curves form the core representation on which many generation and vectorization models operate. Regardless of whether SVG parameters are optimized directly or generated by neural networks, these parameters define the geometry of the final vector graphic.
+
+\textbf{Coordinate Systems and Transformations}
+
+SVG graphics are drawn within a coordinate system defined by a viewport. By default, the origin is located at the top-left corner, with the x-axis pointing to the right and the y-axis pointing downward. SVG allows this coordinate system to be transformed through translation, scaling, rotation, and skewing.
+
+Transformations can be applied to individual shapes as well as to groups of elements. This allows collections of paths to be moved or resized together while preserving their relative structure. SVG also supports hierarchical coordinate systems, where nested groups define local coordinate frames. This hierarchical structure is especially relevant for complex graphics and layered compositions.
+
+\textbf{Focus on SVG}
+
+While SVG includes many advanced features such as clipping, masking, compositing, and filter effects, these mechanisms primarily affect how graphics are rendered rather than how they are structurally represented. Since the focus of this thesis is on generating and vectorizing geometric structure, such rendering-level effects are not considered further.
+
+In summary, SVG provides a structured, editable, and resolution-independent representation of visual content. Its reliance on explicit geometric primitives, parametric curves, and textual descriptions makes it a natural target for both optimization-based and learning-based approaches to vector graphics generation, which are explored in the following sections.
+
+
+
+\section{Vector Representations}
+
+In the previous section, we discussed how vector graphics and are fundamentally different from raster images. SVG graphics are text-based descriptions of geometric shapes defined by mathematical parameters. As the final image, a vector graphic can be seen as a collection of primitives such as lines, curves, paths and shapes.
+
+Based on the chosen models in this paper, vector graphics can be represented internally in three different ways: parametric, sequential, and implicit representations. Should mention that, no matter of how a vector graphic is represented inside a generation or vectorization system, the final output is a SVG file. That SVG file is text, editable and follows the same standard. What changes is not the output format, but the internal representation used by the model during learning or optimization. These internal representations are important because they directly affect what kinds of algorithms can be applied, how stable learning becomes, how editable the result is and how well geometric structure and topology are maintained. 
+
+\textbf{Parametric Representation}
+
+The most direct way to represent a vector graphic is through explicit geometric parameters. As the obvious from the name, parametric representations describe vector graphics as collections of shapes, such as lines, curves and paths. Each of them is defined by continuous parameters. These parameters include coordinates, control points, stroke widths and colors. This representation closely matches how SVG itself is defined. An SVG file can be viewed as a list of shapes and paths, where each element is fully described by a set of numeric parameters. Complex graphics may appear by combining many primitives. Vector graphics are simply structured sets of parameters that can be modified independently.
+
+Parametric representations are highly interpretable and easy to edit manually. Each parameter controls a specific visual property, such as the curvature of a path or the position of a shape, which makes changes predictable. Because of this, parametric representations are commonly used in optimization-based approaches, where vector graphics are refined by directly adjusting geometric parameters to better match a target image or a textual description. At the same time, this representation can be challenging for learning-based models. The number of parameters can be different across graphics and small parameter changes can produce disproportionately large visual effects, making learning less stable. For complex images, explicit vector representations may overfit visual detail by introducing many fragmented paths, leading to cluttered structures that lack semantic coherence.
+
+\textbf{Sequential Representation}
+
+Another way to represent vector graphics is to view them as sequences of drawing commands. In this representation, a vector graphic is encoded as commands, such as moving a pen to a position, drawing a line, or creating a curve. This representation closely follows how paths are written in SVG, with commands and their arguments appearing in sequence. Sequential representations turn vector graphics into a format that looks alike a sentence. The order of commands defines drawing order and layering, while the commands themselves describe how the graphic is built step by step. This makes sequential representations well suited for models that operate on autoregressive or sequence-to-sequence models. But, it has also its own limitations. Long command sequences can be difficult to model and small errors early in the sequence may ruin the entire graphic. w
+
+\textbf{Implicit Representation}
+
+Another approach is to represent vector graphics implicitly using neural networks. In this case, geometry is not stored explicitly as shapes, paths or command sequences. Instead, a neural network represents the graphic by its learned weights. The vector is defined implicitly as a function over continuous space, for example by mapping spatial coordinates to colors, layers or shape indicators. Implicit representations change the focus from explicit geometric primitives to continuous functional descriptions. They provide a fixed-size representation no matter of visual complexity and integrate well with gradient-based optimization. This makes them suitable for models that rely on iterative refinement or semantic supervision from pretrained networks. However, implicit representations are generally less interpretable than others. Because the weights of the neural network do not map onto specific shapes. Instead, they altogether define a continuous function that determines the properties of the graphic at each spatial location. For this reason, shapes emerge from evaluating this function over space rather than being stored explicitly as separate components. It is one of the main limitations oimplicit representations.
+
+
+
+
+
+\section{Differentiable Rendering}
+DiffVG
+
+\section{Latent Representations of Vector Graphics}
+Latent Repr. 
+
+\section{Reconstruction-Based Supervision}
+    - Pixel-wise losses (L2, L1)
+    - Perceptual losses
+    - IoU / mask losses
+
+\section{Semantic Guidance Models}
+CLIP(Confirmed line item performance)
+Diffusion Models + Score Distillation
+
+
+
+
+
+
+
