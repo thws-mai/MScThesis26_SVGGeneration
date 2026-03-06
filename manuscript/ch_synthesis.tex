@@ -1,0 +1,196 @@
+\chapter{Comparative synthesis}
+
+\section{Structure Patterns}
+
+One of the most consistent observations across the analyzed models is that the internal representation of vector graphics strongly influences the structural properties of the resulting SVG. While different approaches aim to generate visually convincing graphics, the way vector content is represented inside the model often determines whether the output is fragmented, layered, editable, or difficult to interpret.
+
+Parametric representations, commonly used in optimization-based methods, directly operate on explicit SVG primitives such as Bézier control points, colors, and stroke parameters. This representation provides clear control over geometry and allows gradients to update shapes directly. However, the analysis shows that this directness can also lead to structural instability. When supervision is applied primarily in raster space, models may increase the number of primitives to minimize visual error, resulting in redundant paths and fragmented structure. Methods such as LIVE or diffusion-guided optimization approaches frequently exhibit this behavior, where visual fidelity improves at the cost of structural simplicity.
+
+Sequential representations introduce a different structural pattern. By modeling SVG graphics as ordered command sequences, these approaches capture procedural drawing logic rather than static geometry. Models like DeepSVG demonstrate that hierarchical sequence modeling can produce coherent icon-level structure, especially in constrained datasets. However, sequential representations often struggle when scenes become complex, as long command chains amplify error propagation and make global structural consistency difficult to maintain. As a result, sequence-based methods tend to produce clean structure in simple settings but face scalability limitations.
+
+Implicit representations shift the representation from explicit primitives to neural parameter space. Instead of directly optimizing paths, models such as NeuralSVG or NIVeL learn neural functions that define shapes or layered compositions. This representation introduces an important structural effect: layering emerges as part of the representation itself rather than as an optimization artifact. Because the number of layers is often constrained, implicit approaches can produce SVGs with fewer primitives and clearer decomposition. The analysis suggests that this constraint acts as an implicit structural regularizer, encouraging simpler and more interpretable outputs. At the same time, the mapping between neural parameters and explicit SVG primitives becomes less direct, which may complicate fine-grained manual editing.
+
+Latent representations introduce another structural behavior by separating generation from explicit geometry construction. In models such as SVGFusion or T2V-NPR, vector graphics are generated through latent embeddings that encode structural patterns learned from datasets. This allows the model to inherit dataset-level regularities, often producing more coherent path organization compared to purely optimization-driven methods. However, because structure is mediated through a learned latent space, direct control over primitive composition may be reduced. This creates a trade-off between structural coherence and explicit controllability.
+
+Across these representation families, a recurring pattern emerges: representations that constrain structure tend to produce cleaner SVGs, while representations that maximize flexibility often increase structural complexity. Explicit parametric optimization provides strong geometric control but risks path redundancy. Sequential approaches capture procedural structure but face scalability challenges. Implicit and layered neural representations encourage compact structure through architectural constraints. Latent representations inherit structural priors from data but reduce direct interpretability.
+
+Importantly, these observations suggest that representation choice does not merely affect how SVGs are generated, but also what kinds of structures are possible. In other words, structural quality is not only an optimization outcome but a representational property. This insight provides a foundation for understanding why certain models produce outputs that appear more editable or design-like, even when visual fidelity across methods is comparable.
+
+The next section builds on this perspective by examining how supervision signals interact with representation choices, further shaping geometric behavior and structural outcomes.
+
+
+
+
+
+
+
+\section{Supervision → Geometry Behavior}
+
+While representation determines what structural forms are possible, supervision determines which of those forms are encouraged during generation. Across the reviewed literature, supervision signals play a central role in shaping geometry, influencing not only visual similarity but also primitive count, curve stability, and layer organization.
+
+Reconstruction-based supervision, commonly used in dataset-trained methods, encourages models to reproduce observed examples as closely as possible. When paired with sequential or latent representations, this often leads to stable and coherent geometry within the distribution of the training data. For instance, models trained on icon datasets tend to produce clean paths and consistent decomposition because the supervision signal implicitly encodes structural regularities present in the dataset. However, this form of supervision can limit generalization, as geometry quality may degrade when models encounter scenes outside the training distribution.
+
+Optimization-based supervision introduces a different geometric behavior. Methods that rely on pixel reconstruction losses optimize SVG parameters directly against a target image. This encourages accurate boundary alignment but does not penalize redundant primitives. As a result, geometry may become fragmented as additional paths are introduced to reduce visual error. The analysis of vectorization approaches suggests that pixel-driven supervision prioritizes local accuracy over global structure, which explains why visually precise results may still exhibit cluttered SVG representations.
+
+Semantic supervision, particularly through CLIP guidance, shifts the focus from pixel-level accuracy to concept-level alignment. CLIP-based signals provide gradients that encourage the rendered SVG to match textual semantics rather than exact geometry. This often produces stable global composition but leaves fine geometric details underconstrained. Consequently, CLIP-guided methods may capture object identity while relying on additional optimization steps to refine boundaries and path quality.
+
+Diffusion-based supervision further amplifies this semantic influence by providing strong distributional priors. Through SDS or related techniques, diffusion models guide optimization toward visually plausible images consistent with the prompt. This enables text-to-SVG generation without paired vector data, but it also introduces characteristic geometric effects. Because diffusion supervision operates in raster space and prioritizes realism, optimization may increase primitive count to approximate high-frequency details. This behavior explains why diffusion-guided approaches frequently achieve strong visual results while producing structurally dense SVGs.
+
+Hybrid supervision strategies attempt to balance these effects by combining semantic guidance with structural constraints or learned representations. Models that integrate layered representations, neural initialization, or latent path spaces often exhibit more stable geometry because supervision acts within a constrained representation domain. Rather than freely adding primitives, optimization is restricted to a predefined structural space, which can improve interpretability and reduce redundancy.
+
+Across methods, a consistent pattern emerges: supervision determines how aggressively geometry is refined. Pixel-based supervision promotes accuracy but may fragment structure. Semantic and diffusion-based supervision promote realism but may increase complexity. Dataset-based supervision promotes coherence within known distributions. Hybrid strategies introduce constraints that help regulate geometric behavior.
+
+These observations highlight that geometry quality cannot be attributed to representation alone. Instead, structural outcomes emerge from the interaction between representation and supervision. Understanding this interaction is essential for explaining why models with similar visual performance may differ substantially in editability and structural cleanliness.
+
+The next section builds on this interaction by examining a central trade-off observed across methods: the tension between visual realism and editability.
+
+
+\section{Editability versus Visual Realism Trade-off}
+
+A central pattern emerging from the comparative analysis is the tension 
+between visual realism and editability. While many recent methods aim to 
+maximize visual quality, the resulting SVGs do not always preserve the 
+properties required for practical editing. This reveals that realism and 
+editability are related but fundamentally distinct objectives.
+
+Methods driven by strong semantic or diffusion-based supervision often 
+achieve visually convincing outputs by refining geometry until the 
+rendered image aligns with learned image priors. However, this 
+refinement frequently increases structural complexity in ways that 
+undermine usability. This tension is not merely theoretical: LIVE, 
+following the optimization protocol also adopted by VectorFusion, 
+represents a single image using up to 160 paths distributed across 
+multiple layers~\cite{xingSVGDreamer2024}. At this scale, individual 
+path manipulation becomes impractical in standard design tools such as 
+Figma or Illustrator. Objects become entangled across paths, meaning 
+that selecting or modifying a single visual component requires 
+identifying and adjusting dozens of overlapping primitives. 
+SVGDreamer++ explicitly acknowledges this failure mode in earlier 
+methods, noting that optimization-based approaches produce outputs 
+where objects are entangled across paths, making component-level 
+editing effectively impossible~\cite{xingSVGDreamerpp2025}.
+
+It should be noted that this structural cost comes with a genuine 
+visual benefit. Optimization-based methods, particularly 
+VectorFusion~\cite{jainVectorFusion2022} and 
+SVGDreamer~\cite{xingSVGDreamer2024}, consistently produce the most 
+visually rich and semantically detailed outputs among the methods 
+analyzed in this thesis. The same mechanism that fragments 
+structure --- unconstrained primitive growth guided by strong 
+diffusion priors --- is precisely what enables photorealistic 
+rendering quality. This confirms that the trade-off is genuine: 
+neither side is simply better, and the appropriate choice depends 
+on whether the intended use prioritizes visual output quality or 
+downstream editability.
+
+This behavior follows directly from how optimization-based supervision 
+operates. By continuously adjusting parameters to match semantic 
+guidance, these approaches introduce many small primitives that capture 
+texture, shading, or fine boundary detail. Although the rendered result 
+appears realistic, the underlying SVG reflects optimization dynamics 
+rather than design logic. The structure is shaped by what minimizes the 
+loss, not by what makes the graphic interpretable or modifiable.
+
+In contrast, models that explicitly constrain representation tend to 
+produce outputs that are easier to edit, even when visual abstraction 
+is introduced. Implicit layered approaches, for example, typically 
+limit the number of shapes and enforce decomposition into interpretable 
+components. As demonstrated in NeuralSVG~\cite{polaczekNeuralSVG2025}, 
+complex scenes can be represented using a small fixed number of layers, 
+which improves usability despite reduced photorealistic detail. 
+Similarly, dataset-trained icon generation models such as 
+DeepSVG~\cite{carlierDeepSVG2020} and DeepIcon~\cite{bingDeepIcon2024} 
+inherit structural simplicity from their training data, producing 
+outputs that are more directly editable but constrained to the style 
+distribution of the dataset.
+
+LayerTracer~\cite{songLayerTracerCognitiveAlignedLayered2025} represents a different route 
+to the same goal. Rather than constraining an optimization process, 
+the model is trained directly on layered construction sequences that 
+reflect how designers build SVG graphics step by step. As a result, 
+editability is not an emergent property but a learned one --- the 
+model produces layered outputs because it was explicitly supervised 
+to construct graphics in that manner, making it structurally closer 
+to designer workflows than any optimization-based approach analyzed 
+in this thesis.
+
+The analysis suggests that the realism--editability trade-off is not 
+accidental but emerges from how models balance supervision strength 
+against representational constraints. When supervision strongly 
+prioritizes visual similarity without structural regularization, 
+primitive counts tend to increase and editability degrades. When 
+representation enforces decomposition or limits complexity, editability 
+improves but visual detail is reduced.
+
+Importantly, this trade-off should not be interpreted as a strict 
+opposition. Hybrid approaches suggest that combining semantic guidance 
+with constrained representations can move toward both objectives 
+simultaneously. Methods that integrate structural priors, layered 
+representations, or latent constraints into the generation process 
+appear most promising for bridging the gap between visual realism and 
+practical usability. Recognizing this distinction helps explain why no 
+single approach consistently dominates across evaluation dimensions, 
+and why different methods are suited to different application contexts.
+
+\section{Complexity vs Control: Computational Implications}
+
+Beyond structural and visual properties, SVG generation methods differ significantly in computational behavior. The analysis indicates that the level of control a model provides over geometry and structure is closely related to its computational cost. This introduces another recurring trade-off: approaches that offer fine-grained control over primitives often require iterative optimization, while methods that generate outputs in a forward pass typically sacrifice direct control.
+
+Optimization-based methods illustrate the high-control regime. Because these approaches update vector parameters iteratively, they allow precise adjustments to geometry and enable flexible integration of supervision signals. Designers and researchers can influence primitive count, initialization, or structural constraints during generation. However, this flexibility comes at the cost of inference time and computational resources. Iterative refinement, diffusion guidance, and repeated rasterization steps increase runtime, making such methods less suitable for interactive workflows without additional acceleration.
+
+Implicit neural representations introduce a related but distinct computational profile. Although these models also rely on optimization, part of the structural reasoning is embedded in neural parameter space. This can reduce the need for large numbers of explicit primitives but may shift complexity toward evaluating neural functions and performing gradient updates. As a result, generation may remain computationally expensive even when outputs appear structurally compact. The analysis suggests that implicit approaches trade primitive complexity for optimization complexity.
+
+Dataset-trained models occupy a different point in this spectrum. By learning structural patterns during training, they enable faster inference at generation time. Forward decoding eliminates iterative parameter updates, which improves efficiency and reproducibility. However, this shift reduces per-instance controllability. Adjusting structure after training may require latent manipulation rather than direct geometric editing, which can limit fine-grained control.
+
+System-oriented pipelines further illustrate this balance between efficiency and control. Approaches that incorporate segmentation, layered reasoning, or diffusion transformers often distribute complexity across multiple stages. While this can improve structural quality and automation, it may also introduce dependencies on pretrained components and specialized hardware. Consequently, computational feasibility becomes an important factor when comparing methods beyond visual performance.
+
+Across these approaches, a consistent pattern emerges: increased control over primitives and structure typically requires iterative optimization, while faster generation often relies on learned structural priors. This relationship highlights that computational complexity is not merely an implementation detail but a characteristic linked to representation and supervision choices.
+
+Recognizing this connection is important when interpreting evaluation results. A method producing highly editable outputs may incur higher computational cost, while a fast generation pipeline may rely on stronger structural assumptions learned from data. Understanding these trade-offs helps position methods within practical design contexts and clarifies why different approaches target different usage scenarios.
+
+The next section builds on these observations to synthesize the key conditions that tend to produce clean and editable SVG graphics across model families.
+
+
+
+
+
+\section{Structurally Clean and Editable SVG Generation}
+
+Bringing together the previous analyses, a central question emerges: what conditions consistently lead to clean and editable SVG outputs? Rather than attributing this property to a single model family, the comparative perspective suggests that editability arises from a combination of representational constraints, supervision design, and structural priors.
+
+A first recurring condition is explicit or implicit control over primitive count. Methods that allow primitives to grow freely during optimization often produce visually detailed but structurally dense SVGs. In contrast, approaches that limit the number of shapes, enforce layered decomposition, or operate within constrained latent spaces tend to produce outputs that are easier to interpret. This suggests that primitive budgeting functions as an important structural regularizer, even when it is not explicitly framed as an evaluation objective.
+
+A second condition concerns decomposition aligned with semantic structure. SVGs become more editable when objects correspond to meaningful components rather than arbitrary geometric fragments. Layered representations, neural scene decomposition, and designer-inspired pipelines often encourage this alignment. The resulting graphics exhibit clearer separation between elements, which supports localized edits such as recoloring, repositioning, or shape refinement.
+
+Another important factor is the domain in which supervision is applied. When supervision operates exclusively in raster space, optimization may prioritize pixel-level accuracy without preserving geometric simplicity. In contrast, approaches that introduce supervision within constrained representations — for example through latent path spaces or neural layer parameterization — tend to regulate how geometry evolves during generation. This suggests that supervision domain influences not only realism but also structural stability.
+
+Initialization strategies also appear to affect editability. Random initialization combined with unconstrained optimization can lead to unstable structure, while informed initialization — such as segmentation, saliency, or learned latent embeddings — provides a starting point closer to meaningful decomposition. This reduces the need for excessive primitive refinement and can improve structural coherence.
+
+Finally, architectural bias toward design logic plays an increasingly visible role. Methods that incorporate notions of layering, sequential construction, or scene composition often produce outputs that resemble human design workflows. While these approaches do not guarantee minimal structure, they introduce priors that favor interpretability. The presence of such priors suggests that editability is partly an architectural property rather than solely an optimization outcome.
+
+Taken together, these observations indicate that clean and editable SVG generation emerges when models balance flexibility with structural constraints. Primitive count control, semantically aligned decomposition, supervision within structured representation spaces, informed initialization, and design-aware architectural choices all contribute to this outcome.
+
+Importantly, these conditions are not exclusive to a single method category. Instead, they represent recurring patterns across model families. Recognizing these patterns provides a foundation for understanding why certain approaches produce SVGs that are not only visually convincing but also practically usable.
+
+The following section concludes the synthesis by translating these observations into broader design implications for future SVG generation research.
+
+
+
+
+\section{Design Implications for Future SVG Generation}
+
+The cross-model analysis presented in this chapter suggests that progress in SVG generation is not determined solely by improvements in visual realism, but by how models integrate structural reasoning into the generation process. Rather than identifying a single dominant paradigm, the synthesis highlights several design implications that may guide future research.
+
+First, representation should be treated as a structural decision rather than only a modeling choice. The findings indicate that representations which constrain decomposition — such as layered, hierarchical, or latent path-based formulations — tend to produce outputs that are easier to interpret and modify. This suggests that future models may benefit from incorporating structural priors directly into representation design, instead of relying on optimization dynamics to discover structure implicitly.
+
+Second, supervision strategies should balance semantic guidance with structural regularization. Strong raster-space supervision, particularly from diffusion models, enables realistic outputs but may encourage geometric complexity. Introducing constraints within the representation domain — for example through limited primitive budgets, layer consistency objectives, or path-level latent spaces — appears to moderate this effect. This indicates that supervision design plays a key role not only in realism but also in structural quality.
+
+Third, evaluation practices may need to expand beyond visual metrics. The multi-dimensional framework proposed earlier emphasizes that editability, structural cleanliness, and geometric stability are central properties of vector graphics. Future benchmarks that explicitly measure these dimensions could enable more consistent comparison across methods and reduce the current reliance on qualitative inspection.
+
+Another implication concerns the integration of design logic into generation pipelines. Several recent approaches move toward modeling construction processes rather than final appearance alone. This trend suggests that incorporating designer-inspired decomposition, layering strategies, or sequential construction priors may provide a pathway toward SVG outputs that are both realistic and editable.
+
+Finally, the relationship between computational complexity and controllability highlights an important practical consideration. Methods that offer fine-grained control often require iterative optimization, while efficient forward models depend on learned structural priors. Future systems may therefore focus on hybrid designs that combine fast generation with mechanisms for controllable refinement, enabling both scalability and usability.
+
+Overall, these implications reinforce a central conclusion of this thesis: generating high-quality SVG graphics requires aligning representation, supervision, and evaluation with the structural nature of vector graphics. Approaches that treat SVG generation as a structured design problem — rather than solely an image synthesis task — appear best positioned to advance the field.
+
+The next chapter concludes the thesis by summarizing the main findings, reflecting on limitations, and outlining directions for future research.

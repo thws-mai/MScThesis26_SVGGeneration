@@ -1,0 +1,173 @@
+\chapter{Architectural Landscape of SVG Generation}\label{ch:Landscape}
+
+In the previous chapters, SVG generation was introduced as a problem that extends beyond visual synthesis. Unlike raster image generation, SVG generation requires models to construct structured representations that remain interpretable and editable. This structural requirement creates a fundamental tension: approaches that achieve high visual realism do not necessarily produce vector graphics that can be reused or modified by designers.
+
+The rapid growth of SVG generation research has led to a wide variety of models addressing this problem from different perspectives. Some methods learn SVG structure directly from datasets, others treat vector graphics as optimization variables, while more recent approaches rely on diffusion priors or neural implicit representations. Although these methods are often presented individually in the literature, analyzing them in isolation makes it difficult to understand what architectural choices actually influence structural quality.
+
+For this reason, this thesis does not organize the analysis around individual models. Instead, the selected approaches are examined through model families that share common assumptions about representation, supervision, and optimization. Grouping models in this way allows recurring design patterns to become visible and makes it possible to compare how different architectural strategies affect the resulting SVG structure.
+
+The thirteen models selected in this work were chosen to cover the main directions of modern SVG generation. The selection reflects diversity across supervision strategies, internal representations, and inference regimes, while maintaining a focus on approaches whose architectures remain interpretable. In particular, the models span optimization-based vectorization, diffusion-guided generation, neural implicit representations, dataset-trained generative models, and neural vectorization systems. This coverage enables analysis of how different combinations of representation and supervision lead to different trade-offs between realism, editability, and computational cost.
+
+Another motivation for introducing model families is to avoid treating SVG generation as a single unified problem. In practice, the goals of generation vary significantly. Some approaches aim to approximate raster images as accurately as possible, others focus on text-driven synthesis, while a smaller subset explicitly targets layered and editable outputs. These differences are reflected in architectural design choices, including how primitives are initialized, how gradients are propagated, and whether structure is learned from data or emerges through optimization.
+
+The family-based perspective therefore serves as a bridge between the descriptive overview of existing methods and the analytical chapters that follow. Rather than describing models as isolated contributions, this chapter introduces the architectural landscape within which they operate. Each family highlights a distinct strategy for constructing vector graphics and reveals implicit assumptions about what constitutes a successful SVG representation.
+
+Importantly, this taxonomy is not intended as a rigid classification but as an analytical tool. Many recent methods combine ideas from multiple families, blurring the boundaries between optimization, learning, and generative modeling. However, the grouping remains useful because it exposes which components of a pipeline are responsible for structural decisions. This perspective is essential for addressing the central question of this thesis: which architectural choices lead to SVG outputs that are not only visually convincing but also structurally meaningful and editable.
+
+The following sections introduce the five model families considered in this work. Each section presents the shared design principles of the family, highlights representative models, and outlines the structural implications of the underlying approach. This overview establishes the conceptual foundation required for the subsequent analysis of representation, supervision, and editability across SVG generation methods.
+
+
+\section{Optimization-Based SVG Generation}
+
+One of the most influential paradigms in modern SVG generation treats 
+vector graphics not as outputs predicted by a model, but as variables 
+to be optimized. In this formulation, the SVG itself becomes the 
+parameter space of the problem. Instead of generating vector primitives 
+directly, the system initializes a set of shapes and iteratively refines 
+their parameters so that the rendered result matches a target image or 
+structural signal.
+
+This approach became practical with the introduction of differentiable 
+rasterization. As introduced in Chapter~\ref{ch:Background}, DiffVG~\cite{liDifferentiableVectorGraphics2020a} 
+provides a bridge between vector parameter space and pixel space by 
+making the rasterization step differentiable. In the optimization-based 
+paradigm, this means that a loss defined on the rendered image --- 
+whether a pixel reconstruction loss or a semantic similarity score --- 
+can propagate gradients directly back to vector parameters such as 
+Bézier control points, stroke widths, and colors. Without this 
+capability, iterative refinement of vector primitives using 
+gradient-based methods would not be possible. DiffVG therefore 
+functions not as a generation model in itself, but as the foundational 
+rendering mechanism on which the entire optimization-based family 
+depends.
+
+Methods in this family share several defining characteristics.
+Supervision is typically defined through reconstruction or structural 
+objectives rather than dataset-level learning.  
+They rely on explicit parametric representations of vector 
+graphics, meaning that primitives are theoretically accessible for 
+editing throughout the generation process. In practice, however, 
+the number of paths produced by optimization-based methods often 
+makes meaningful editing difficult, as primitives tend to become 
+entangled or fragmented when supervision operates primarily in 
+raster space~\cite{xingSVGDreamer2024, zhuSAMVGMultistageImage2023}.
+
+LIVE~\cite{maLayerwiseImageVectorization2022} represents a canonical example 
+of this paradigm. The method introduces a layer-wise optimization 
+strategy in which vector primitives are refined progressively, allowing 
+structure to emerge gradually instead of being predicted at once. This 
+coarse-to-fine refinement encourages hierarchical organization and often 
+leads to SVG outputs that remain interpretable and editable. However, 
+because optimization focuses primarily on visual reconstruction, the 
+resulting graphics may contain redundant paths or fragmented geometry 
+when structural constraints are not explicitly enforced.
+
+SAMVG~\cite{zhuSAMVGMultistageImage2023} extends this optimization 
+formulation by introducing semantic initialization through segmentation 
+masks. As illustrated in \includegraphics[width=0.85\textwidth]{LIVEnSAM.png}, rather than 
+starting from random primitives, the method leverages the Segment 
+Anything Model to guide the initial placement and grouping of vector 
+elements. Both LIVE and SAMVG share the same core optimization loop --- 
+initialized SVG parameters are passed through DiffVG, rendered to an 
+image, and updated via pixel reconstruction loss against a target. The 
+critical difference lies in initialization: where LIVE begins from 
+randomly placed paths, SAMVG uses semantically meaningful regions 
+derived from segmentation. This highlights a central insight within this 
+family: initialization strategy strongly influences structural outcomes, 
+independent of the optimization mechanism itself.
+
+From an analytical perspective, optimization-based methods occupy an 
+important position in the SVG generation landscape. They provide the 
+strongest connection between vector parameters and final structure 
+because primitives remain explicit throughout the pipeline. This makes 
+them particularly relevant when editability is a primary objective. At 
+the same time, the reliance on iterative refinement introduces practical 
+limitations related to inference time, stability, and scalability to 
+complex scenes.
+
+More broadly, this family establishes a baseline for understanding 
+subsequent approaches. Many later methods retain the optimization 
+formulation while modifying supervision signals, representation spaces, 
+or initialization strategies. As a result, optimization-based vector 
+generation serves as a reference point for analyzing how additional 
+architectural components influence the balance between visual realism 
+and structural quality.
+
+
+\section{Diffusion-Guided Optimization-based SVG Generation}
+
+While classical optimization-based methods rely primarily on reconstruction objectives, more recent approaches extend this paradigm by introducing semantic supervision from pretrained diffusion models. Instead of matching a fixed target image, vector parameters are optimized so that the rendered SVG becomes consistent with the distribution learned by a text-conditioned generative model. This shift fundamentally changes the role of supervision in SVG generation.
+
+The key mechanism enabling this transition is Score Distillation Sampling (SDS), which allows gradients derived from diffusion models to guide optimization in vector parameter space. In practice, the SVG is rendered into a raster image, evaluated by a diffusion model conditioned on a text prompt, and then updated using gradients that encourage semantic alignment. As a result, vector graphics can be generated from textual descriptions without requiring paired SVG datasets.
+
+Methods such as VectorFusion, SVGDreamer, and SVGDreamer++ exemplify this family. These approaches retain the explicit parametric representation of vector graphics introduced by classical optimization methods but replace reconstruction losses with semantic priors. This combination enables the generation of visually rich and diverse SVG outputs that reflect the expressive capabilities of modern diffusion models.
+
+However, this improvement in visual realism introduces new structural challenges. Because diffusion models operate in raster space, the gradients they provide do not explicitly enforce geometric consistency or hierarchy. Optimization therefore prioritizes appearance, often leading to redundant primitives, unstable paths, or overly dense representations. This reveals a central trade-off in diffusion-guided vector optimization: stronger semantic guidance improves realism but may degrade structural clarity and editability.
+
+Different models within this family attempt to address this limitation through architectural refinements. SVGDreamer introduces strategies for primitive control and structured optimization, while SVGDreamer++ further explores hierarchical refinement mechanisms that adapt the number and organization of vector elements during generation. These efforts reflect an emerging recognition that semantic supervision alone is insufficient for producing high-quality vector structure and must be complemented by mechanisms that regulate geometry.
+
+From a broader perspective, diffusion-guided optimization represents a transitional paradigm in SVG generation. It demonstrates that strong generative priors can be transferred from raster models into vector domains, dramatically improving visual expressiveness. At the same time, it exposes the limitations of supervision that is detached from vector structure. Understanding this tension is essential for analyzing why some methods achieve photorealistic SVG outputs while still struggling to produce representations that remain easily editable.
+
+This family therefore plays a critical role in the architectural landscape. It highlights how changes in supervision can reshape optimization behavior and directly influence structural outcomes, setting the stage for approaches that move beyond explicit parameter optimization toward alternative representation strategies.
+
+
+\section{Neural Implicit and Hybrid SVG Generation}
+
+An alternative direction in SVG generation moves away from directly optimizing explicit vector primitives and instead represents graphics through neural functions. In this formulation, geometry is not stored as a fixed set of paths but is defined implicitly by the parameters of a neural network. Vector structure therefore emerges from evaluating a learned function rather than being explicitly specified from the beginning.
+
+Methods such as NeuralSVG, NiVeL, and T2V-NPR exemplify this paradigm. These approaches combine optimization with neural parameterization, where the weights of a neural network — typically a multilayer perceptron — define shape boundaries, layers, or path distributions. Instead of adjusting Bézier control points directly, optimization occurs in neural parameter space, and the resulting function is interpreted as a vector graphic.
+
+This shift introduces an important conceptual difference compared to classical optimization-based methods. While parametric approaches treat primitives as independent elements, neural implicit representations encourage global coherence because all geometry is generated through a shared function. As a result, structure may emerge in a more stable and organized manner, often producing layered outputs that are easier to interpret and manipulate.
+
+NeuralSVG illustrates this idea by encoding scene structure within neural weights that are optimized using semantic guidance. NiVeL further explores decomposable layered representations, allowing graphics to be constructed as combinations of implicit components. T2V-NPR introduces neural path representations that operate in a learned latent space, providing additional constraints that improve optimization stability and path validity.
+
+From the perspective of structural quality, this family highlights a key insight: representation itself can act as a structural prior. When geometry is produced through a continuous neural function, the model implicitly restricts how primitives can be arranged, which may reduce fragmentation and encourage consistent layering. This contrasts with purely parametric optimization, where primitives can drift independently.
+
+At the same time, this approach introduces new trade-offs. Because optimization occurs in neural parameter space, inference typically remains iterative and may require substantial computation to converge. The computational cost is therefore influenced not only by representation but also by supervision signals, optimization strategy, and rendering complexity. In practice, these methods often balance improved structural coherence with increased inference time.
+
+More broadly, neural implicit and hybrid approaches represent an attempt to bridge the gap between explicit vector optimization and learned generative structure. They suggest that achieving editable SVG outputs may depend not only on supervision strength but also on how structure is encoded within the representation itself. This observation plays an important role in the subsequent analysis of representation–supervision interactions across SVG generation methods.
+
+
+
+\section{Dataset-Trained SVG Generation}
+
+In contrast to optimization-based approaches, another line of research treats SVG generation as a learning problem in which structure is acquired from data rather than constructed through iterative refinement. In this paradigm, models are trained on collections of vector graphics to learn statistical regularities in geometry, composition, and drawing structure. Generation then occurs through a forward decoding process, where a learned representation is transformed directly into SVG primitives.
+
+Models such as DeepSVG and DeepIcon illustrate this dataset-driven formulation. These approaches learn latent spaces over vector graphics, allowing SVG commands or path sequences to be generated through autoregressive decoding or hierarchical prediction. Because structural patterns are learned from data, the resulting outputs often exhibit consistent geometry and stylistic coherence without requiring explicit optimization during inference.
+
+SVGFusion extends this idea by combining latent representation learning with diffusion modeling. Instead of optimizing vector parameters per instance, the model first learns a continuous latent space of SVG graphics from a dataset and then applies a diffusion transformer to generate new samples in that space. SVG generation therefore becomes a process of sampling and decoding rather than iterative parameter refinement. This distinguishes SVGFusion from diffusion-guided optimization methods, which rely on semantic gradients rather than learned vector distributions.
+
+From a structural perspective, dataset-trained methods offer a different set of advantages. Because the model learns common drawing patterns, generated SVGs may exhibit more regular organization and fewer redundant primitives compared to unconstrained optimization approaches. Latent representations can also encourage smooth interpolation and variation, making these methods well suited for icon generation and style-consistent vector synthesis.
+
+However, this reliance on training data introduces its own limitations. Structural quality is bounded by the diversity and characteristics of the dataset, which may restrict the ability to generalize to complex scenes or highly detailed compositions. Furthermore, although inference is typically faster than iterative optimization, forward generation reduces direct control over individual primitives, which can affect editability.
+
+This family therefore highlights an alternative route toward structured SVG generation: rather than enforcing structure through optimization constraints, models attempt to internalize it through learning. Understanding this distinction is essential for analyzing how representation and supervision jointly influence the balance between consistency, realism, and user-level control.
+
+
+
+\section{Neural Vectorization and Generative Systems}
+
+A related but distinct direction in SVG research focuses on vectorization, where the objective is to translate raster images or multimodal inputs into structured vector representations. Unlike generative models that aim to sample new graphics, vectorization approaches emphasize reconstructing existing visual content while preserving geometric structure. This shifts the problem from distribution modeling toward representation inference.
+
+Im2Vec represents one of the earlier neural formulations of this task, where models learn to predict parametric vector primitives directly from images using reconstruction-based supervision. In this setting, vector graphics are treated as outputs of an encoder–decoder pipeline, and generation occurs through a single forward pass. This approach enables efficient inference and supports large-scale vectorization, but it also introduces challenges related to structural ambiguity, since multiple vector representations may correspond to the same raster image.
+
+More recent systems such as LayerTracer extend this idea by modeling the construction process of vector graphics rather than predicting primitives independently. Instead of producing a flat set of paths, the model learns layered representations that approximate how designers build graphics step by step. Diffusion-based architectures are used to generate intermediate structures that guide vector formation, allowing the system to capture relationships between elements and improve hierarchical organization.
+
+This distinction between primitive prediction and construction modeling is particularly relevant for editability. When vectorization is framed as a direct regression problem, outputs may approximate appearance effectively but lack meaningful grouping. By contrast, approaches that model layered structure attempt to embed designer logic into the generation process, potentially producing SVG outputs that are easier to modify and reuse.
+
+From a broader perspective, neural vectorization systems highlight the importance of task formulation. While generative models prioritize diversity and semantic alignment, vectorization approaches prioritize fidelity and structural reconstruction. This often leads to different trade-offs in representation choice, supervision design, and inference behavior. Forward prediction enables faster generation compared to iterative optimization, but structural guarantees depend heavily on how the model encodes relationships between elements.
+
+This family therefore acts as a bridge between traditional algorithmic vectorization and modern generative pipelines. It demonstrates how learning-based methods can incorporate procedural knowledge and layered reasoning, offering insights into how designer-oriented SVG structure might be modeled directly within neural architectures.
+
+
+\section{Synthesis and Transition to Analytical Dimensions}
+
+The model families introduced in this chapter illustrate that SVG generation is not a single unified problem but a collection of design strategies that differ in how structure is represented, how supervision is defined, and how geometry is constructed. Each family highlights a distinct perspective on vector graphics generation, revealing implicit assumptions about what constitutes a successful SVG output.
+
+Optimization-based methods emphasize direct control over geometry by treating vector parameters as optimization variables, often producing editable but computationally expensive representations. Diffusion-guided approaches demonstrate how strong semantic priors can dramatically improve visual realism, while simultaneously exposing the limitations of supervision that is detached from vector structure. Neural implicit methods shift structural decisions into representation space, suggesting that how geometry is encoded can influence stability and layering. Dataset-trained generative models instead learn structural regularities from data, trading explicit control for consistency and efficiency. Finally, neural vectorization systems illustrate how modeling the construction process itself can affect hierarchical organization and designer usability.
+
+Taken together, these families reveal that structural properties of generated SVGs do not emerge from a single architectural component. Instead, they arise from the interaction between representation, supervision, and inference strategy. Similar visual outcomes may therefore be produced through fundamentally different pipelines, while small changes in supervision or representation can lead to significant differences in editability, redundancy, and computational cost.
+
+This observation motivates the analytical perspective adopted in the following chapters. Rather than comparing models solely at the level of outputs, the remainder of this thesis examines the architectural dimensions that shape SVG structure. In particular, the analysis focuses on internal representation, supervision signals, optimization regimes, and their combined influence on editability and structural coherence.
+
+By shifting the discussion from model families to architectural dimensions, the thesis aims to identify recurring design patterns and clarify which combinations of representation and supervision are most likely to produce SVG outputs that are both visually convincing and practically usable. This transition establishes the foundation for a comparative analysis that moves beyond individual methods toward a deeper understanding of how SVG generation systems are designed

@@ -1,0 +1,1286 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{liDifferentiableVectorGraphics2020a}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=400be2435a452c00ff39c4e92801c123}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Tzu-Mao},
+           giveni={T\bibinithyphendelim M\bibinitperiod}}}%
+        {{hash=891348f95bef6f34922c0adc61b1c9bc}{%
+           family={Lukáč},
+           familyi={L\bibinitperiod},
+           given={Michal},
+           giveni={M\bibinitperiod}}}%
+        {{hash=cf328c7709824ba16def9d391e8f4a0f}{%
+           family={Gharbi},
+           familyi={G\bibinitperiod},
+           given={Michaël},
+           giveni={M\bibinitperiod}}}%
+        {{hash=cf453bb48b58aa99f010a78745b2a5a4}{%
+           family={{Ragan-Kelley}},
+           familyi={R\bibinitperiod},
+           given={Jonathan},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{0c6cf4ac4eefb728d0a2a60aadd12fa4}
+      \strng{fullhash}{bf3663a8d58b8d55c11e759829d0fe64}
+      \strng{fullhashraw}{bf3663a8d58b8d55c11e759829d0fe64}
+      \strng{bibnamehash}{bf3663a8d58b8d55c11e759829d0fe64}
+      \strng{authorbibnamehash}{bf3663a8d58b8d55c11e759829d0fe64}
+      \strng{authornamehash}{0c6cf4ac4eefb728d0a2a60aadd12fa4}
+      \strng{authorfullhash}{bf3663a8d58b8d55c11e759829d0fe64}
+      \strng{authorfullhashraw}{bf3663a8d58b8d55c11e759829d0fe64}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We introduce a differentiable rasterizer that bridges the vector graphics and raster image domains, enabling powerful raster-based loss functions, optimization procedures, and machine learning techniques to edit and generate vector content. We observe that vector graphics rasterization is differentiable after pixel prefiltering. Our differentiable rasterizer offers two prefiltering options: an analytical prefiltering technique and a multisampling anti-aliasing technique. The analytical variant is faster but can suffer from artifacts such as conflation. The multisampling variant is still efficient, and can render high-quality images while computing unbiased gradients for each pixel with respect to curve parameters.We demonstrate that our rasterizer enables new applications, including a vector graphics editor guided by image metrics, a painterly rendering algorithm that fits vector primitives to an image by minimizing a deep perceptual loss function, new vector graphics editing algorithms that exploit well-known image processing methods such as seam carving, and deep generative models that generate vector content from raster-only supervision under a VAE or GAN training objective.}
+      \field{issn}{0730-0301}
+      \field{journaltitle}{ACM Trans. Graph.}
+      \field{month}{11}
+      \field{number}{6}
+      \field{title}{Differentiable Vector Graphics Rasterization for Editing and Learning}
+      \field{urlday}{1}
+      \field{urlmonth}{12}
+      \field{urlyear}{2025}
+      \field{volume}{39}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \field{pages}{193:1\bibrangedash 193:15}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1145/3414685.3417871
+      \endverb
+      \verb{file}
+      \verb C:\Users\fikre\Zotero\storage\FN5T3NQP\Li et al. - 2020 - Differentiable vector graphics rasterization for e.pdf
+      \endverb
+    \endentry
+    \entry{kingmaAutoEncodingVariationalBayes2014}{inproceedings}{}{}
+      \name{author}{2}{}{%
+        {{hash=b6fbd171848aad4edf3925543f1f1522}{%
+           family={Kingma},
+           familyi={K\bibinitperiod},
+           given={Diederik\bibnamedelima P.},
+           giveni={D\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=53d2880ad8047b61cdae2c6b2803e763}{%
+           family={Welling},
+           familyi={W\bibinitperiod},
+           given={Max},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \strng{fullhash}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \strng{fullhashraw}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \strng{bibnamehash}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \strng{authorbibnamehash}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \strng{authornamehash}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \strng{authorfullhash}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \strng{authorfullhashraw}{aabdd5db7a1ed298b1dfb6824d032c66}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{International Conference on Learning Representations (ICLR)}
+      \field{title}{Auto-Encoding Variational Bayes}
+      \field{year}{2014}
+    \endentry
+    \entry{carlierDeepSVGHierarchicalGenerative2020}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=05655935226e351ea29b0800fec91c87}{%
+           family={Carlier},
+           familyi={C\bibinitperiod},
+           given={Alexandre},
+           giveni={A\bibinitperiod}}}%
+        {{hash=d677155b50f1f1836c11fe2ffcf82285}{%
+           family={Danelljan},
+           familyi={D\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+        {{hash=a8f4774fb7f40d7bca42099c3ffcc3f8}{%
+           family={Alahi},
+           familyi={A\bibinitperiod},
+           given={Alexandre},
+           giveni={A\bibinitperiod}}}%
+        {{hash=740c788a36355395a6809932b5f84ab5}{%
+           family={Timofte},
+           familyi={T\bibinitperiod},
+           given={Radu},
+           giveni={R\bibinitperiod}}}%
+      }
+      \name{editor}{5}{}{%
+        {{hash=6c15b92d4ebdbfae091f6548dc7543ae}{%
+           family={Larochelle},
+           familyi={L\bibinitperiod},
+           given={H.},
+           giveni={H\bibinitperiod}}}%
+        {{hash=6cb5af0e649387de5bbfdb150cc7a786}{%
+           family={Ranzato},
+           familyi={R\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=ae95119be0d9d86ffdec9f3142af353e}{%
+           family={Hadsell},
+           familyi={H\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+        {{hash=20f36d8aae4f5467e0c03ccdaee4076a}{%
+           family={Balcan},
+           familyi={B\bibinitperiod},
+           given={M.\bibnamedelimi F.},
+           giveni={M\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+        {{hash=006d527428ae3b86c2093d6d28e16072}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={H.},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Curran Associates, Inc.}%
+      }
+      \strng{namehash}{0f42958ce8035e981dc3d7b3403f67b9}
+      \strng{fullhash}{3aa2c2279b6c61ce4198cee191fec18e}
+      \strng{fullhashraw}{3aa2c2279b6c61ce4198cee191fec18e}
+      \strng{bibnamehash}{3aa2c2279b6c61ce4198cee191fec18e}
+      \strng{authorbibnamehash}{3aa2c2279b6c61ce4198cee191fec18e}
+      \strng{authornamehash}{0f42958ce8035e981dc3d7b3403f67b9}
+      \strng{authorfullhash}{3aa2c2279b6c61ce4198cee191fec18e}
+      \strng{authorfullhashraw}{3aa2c2279b6c61ce4198cee191fec18e}
+      \strng{editorbibnamehash}{01684a8bcecde64514068030e781dc4f}
+      \strng{editornamehash}{1bb757b97fffae621331dd700b5a7ca9}
+      \strng{editorfullhash}{01684a8bcecde64514068030e781dc4f}
+      \strng{editorfullhashraw}{01684a8bcecde64514068030e781dc4f}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Advances in {{Neural Information Processing Systems}}}
+      \field{title}{{{DeepSVG}}: {{A Hierarchical Generative Network}} for {{Vector Graphics Animation}}}
+      \field{volume}{33}
+      \field{year}{2020}
+      \field{pages}{16351\bibrangedash 16361}
+      \range{pages}{11}
+    \endentry
+    \entry{xingSVGFusionScalableTexttoSVG2025}{misc}{}{}
+      \name{author}{5}{}{%
+        {{hash=b3ef19ae556e8a41de94f06ae45bdd2d}{%
+           family={Xing},
+           familyi={X\bibinitperiod},
+           given={Ximing},
+           giveni={X\bibinitperiod}}}%
+        {{hash=22a97f40c3a8db4f774cecaf8f488e47}{%
+           family={Hu},
+           familyi={H\bibinitperiod},
+           given={Juncheng},
+           giveni={J\bibinitperiod}}}%
+        {{hash=948f26b38fba102b6f820808e554bc53}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Jing},
+           giveni={J\bibinitperiod}}}%
+        {{hash=be17c750657847fd489802d414210d61}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Dong},
+           giveni={D\bibinitperiod}}}%
+        {{hash=8ab702659b3089e159e874774c37aac7}{%
+           family={Yu},
+           familyi={Y\bibinitperiod},
+           given={Qian},
+           giveni={Q\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{e4d11e7e05d8bf000338e3ad27e0c732}
+      \strng{fullhash}{bfb91722185efb2c8f6e25464c6a328a}
+      \strng{fullhashraw}{bfb91722185efb2c8f6e25464c6a328a}
+      \strng{bibnamehash}{bfb91722185efb2c8f6e25464c6a328a}
+      \strng{authorbibnamehash}{bfb91722185efb2c8f6e25464c6a328a}
+      \strng{authornamehash}{e4d11e7e05d8bf000338e3ad27e0c732}
+      \strng{authorfullhash}{bfb91722185efb2c8f6e25464c6a328a}
+      \strng{authorfullhashraw}{bfb91722185efb2c8f6e25464c6a328a}
+      \field{extraname}{1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{In this work, we introduce SVGFusion, a Text-to-SVG model capable of scaling to real-world SVG data without relying on text-based discrete language models or prolonged Score Distillation Sampling (SDS) optimization. The core idea of SVGFusion is to utilize a popular Text-to-Image framework to learn a continuous latent space for vector graphics. Specifically, SVGFusion comprises two key modules: a Vector-Pixel Fusion Variational Autoencoder (VP-VAE) and a Vector Space Diffusion Transformer (VS-DiT). The VP-VAE processes both SVG codes and their corresponding rasterizations to learn a continuous latent space, while the VS-DiT generates latent codes within this space based on the input text prompt. Building on the VP-VAE, we propose a novel rendering sequence modeling strategy which enables the learned latent space to capture the inherent creation logic of SVGs. This allows the model to generate SVGs with higher visual quality and more logical construction, while systematically avoiding occlusion in complex graphic compositions. Additionally, the scalability of SVGFusion can be continuously enhanced by adding more VS-DiT blocks. To effectively train and evaluate SVGFusion, we construct SVGX-Dataset, a large-scale, high-quality SVG dataset that addresses the scarcity of high-quality vector data. Extensive experiments demonstrate the superiority of SVGFusion over existing SVG generation methods, establishing a new framework for SVG content creation. Code, model, and data will be released at: https://ximinng.github.io/SVGFusionProject/}
+      \field{eprintclass}{cs}
+      \field{eprinttype}{arXiv}
+      \field{month}{3}
+      \field{number}{arXiv:2412.10437}
+      \field{shorttitle}{{{SVGFusion}}}
+      \field{title}{{{SVGFusion}}: {{Scalable Text-to-SVG Generation}} via {{Vector Space Diffusion}}}
+      \field{urlday}{22}
+      \field{urlmonth}{10}
+      \field{urlyear}{2025}
+      \field{year}{2025}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.48550/arXiv.2412.10437
+      \endverb
+      \verb{eprint}
+      \verb 2412.10437
+      \endverb
+      \verb{file}
+      \verb C\:\\Users\\fikre\\Zotero\\storage\\P2LS6L2J\\Xing et al. - 2025 - SVGFusion Scalable Text-to-SVG Generation via Vec.pdf;C\:\\Users\\fikre\\Zotero\\storage\\5JZ2YBK8\\2412.html
+      \endverb
+    \endentry
+    \entry{zhangTexttoVectorGenerationNeural2024}{misc}{}{}
+      \name{author}{3}{}{%
+        {{hash=70a1b4e01fddba91ababbdbb449903c5}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Peiying},
+           giveni={P\bibinitperiod}}}%
+        {{hash=81de6e36221820357d3a103816c9c79d}{%
+           family={Zhao},
+           familyi={Z\bibinitperiod},
+           given={Nanxuan},
+           giveni={N\bibinitperiod}}}%
+        {{hash=a778b7252835f98d1580a95f269000d5}{%
+           family={Liao},
+           familyi={L\bibinitperiod},
+           given={Jing},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{1991b9069f9a06c7c545a7565cd1088f}
+      \strng{fullhash}{1991b9069f9a06c7c545a7565cd1088f}
+      \strng{fullhashraw}{1991b9069f9a06c7c545a7565cd1088f}
+      \strng{bibnamehash}{1991b9069f9a06c7c545a7565cd1088f}
+      \strng{authorbibnamehash}{1991b9069f9a06c7c545a7565cd1088f}
+      \strng{authornamehash}{1991b9069f9a06c7c545a7565cd1088f}
+      \strng{authorfullhash}{1991b9069f9a06c7c545a7565cd1088f}
+      \strng{authorfullhashraw}{1991b9069f9a06c7c545a7565cd1088f}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Vector graphics are widely used in digital art and highly favored by designers due to their scalability and layer-wise properties. However, the process of creating and editing vector graphics requires creativity and design expertise, making it a time-consuming task. Recent advancements in text-to-vector (T2V) generation have aimed to make this process more accessible. However, existing T2V methods directly optimize control points of vector graphics paths, often resulting in intersecting or jagged paths due to the lack of geometry constraints. To overcome these limitations, we propose a novel neural path representation by designing a dual-branch Variational Autoencoder (VAE) that learns the path latent space from both sequence and image modalities. By optimizing the combination of neural paths, we can incorporate geometric constraints while preserving expressivity in generated SVGs. Furthermore, we introduce a two-stage path optimization method to improve the visual and topological quality of generated SVGs. In the first stage, a pre-trained text-to-image diffusion model guides the initial generation of complex vector graphics through the Variational Score Distillation (VSD) process. In the second stage, we refine the graphics using a layer-wise image vectorization strategy to achieve clearer elements and structure. We demonstrate the effectiveness of our method through extensive experiments and showcase various applications. The project page is https://intchous.github.io/T2V-NPR.}
+      \field{eprintclass}{cs}
+      \field{eprinttype}{arXiv}
+      \field{month}{5}
+      \field{number}{arXiv:2405.10317}
+      \field{title}{Text-to-{{Vector Generation}} with {{Neural Path Representation}}}
+      \field{urlday}{23}
+      \field{urlmonth}{11}
+      \field{urlyear}{2025}
+      \field{year}{2024}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.48550/arXiv.2405.10317
+      \endverb
+      \verb{eprint}
+      \verb 2405.10317
+      \endverb
+      \verb{file}
+      \verb C\:\\Users\\fikre\\Zotero\\storage\\S33JDZ2Y\\Zhang et al. - 2024 - Text-to-Vector Generation with Neural Path Represe.pdf;C\:\\Users\\fikre\\Zotero\\storage\\T2I6MDT8\\2405.html
+      \endverb
+      \keyw{Editable}
+    \endentry
+    \entry{goodfellow2016deep}{book}{}{}
+      \name{author}{3}{}{%
+        {{hash=5d2585c11210cf1d4512e6e0a03ec315}{%
+           family={Goodfellow},
+           familyi={G\bibinitperiod},
+           given={Ian},
+           giveni={I\bibinitperiod}}}%
+        {{hash=40a8e4774982146adc2688546f54efb2}{%
+           family={Bengio},
+           familyi={B\bibinitperiod},
+           given={Yoshua},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=ccec1ccd2e1aa86960eb2e872c6b7020}{%
+           family={Courville},
+           familyi={C\bibinitperiod},
+           given={Aaron},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {MIT Press}%
+      }
+      \strng{namehash}{3ae53fe582e8a815b118d26947eaa326}
+      \strng{fullhash}{3ae53fe582e8a815b118d26947eaa326}
+      \strng{fullhashraw}{3ae53fe582e8a815b118d26947eaa326}
+      \strng{bibnamehash}{3ae53fe582e8a815b118d26947eaa326}
+      \strng{authorbibnamehash}{3ae53fe582e8a815b118d26947eaa326}
+      \strng{authornamehash}{3ae53fe582e8a815b118d26947eaa326}
+      \strng{authorfullhash}{3ae53fe582e8a815b118d26947eaa326}
+      \strng{authorfullhashraw}{3ae53fe582e8a815b118d26947eaa326}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Deep Learning}
+      \field{year}{2016}
+    \endentry
+    \entry{johnson2016perceptual}{inproceedings}{}{}
+      \name{author}{3}{}{%
+        {{hash=90edc587e1d523d4e173b1fe6e733445}{%
+           family={Johnson},
+           familyi={J\bibinitperiod},
+           given={Justin},
+           giveni={J\bibinitperiod}}}%
+        {{hash=a8f4774fb7f40d7bca42099c3ffcc3f8}{%
+           family={Alahi},
+           familyi={A\bibinitperiod},
+           given={Alexandre},
+           giveni={A\bibinitperiod}}}%
+        {{hash=cd00ce5bc45f687c432e52e0fa1a7aa6}{%
+           family={Fei-Fei},
+           familyi={F\bibinithyphendelim F\bibinitperiod},
+           given={Li},
+           giveni={L\bibinitperiod}}}%
+      }
+      \strng{namehash}{94367b137ee9669deef5e991ea564050}
+      \strng{fullhash}{94367b137ee9669deef5e991ea564050}
+      \strng{fullhashraw}{94367b137ee9669deef5e991ea564050}
+      \strng{bibnamehash}{94367b137ee9669deef5e991ea564050}
+      \strng{authorbibnamehash}{94367b137ee9669deef5e991ea564050}
+      \strng{authornamehash}{94367b137ee9669deef5e991ea564050}
+      \strng{authorfullhash}{94367b137ee9669deef5e991ea564050}
+      \strng{authorfullhashraw}{94367b137ee9669deef5e991ea564050}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{ECCV}
+      \field{title}{Perceptual Losses for Real-Time Style Transfer and Super-Resolution}
+      \field{year}{2016}
+    \endentry
+    \entry{simonyan2015very}{inproceedings}{}{}
+      \name{author}{2}{}{%
+        {{hash=9d16b7284df92c9adaee86c37ab992df}{%
+           family={Simonyan},
+           familyi={S\bibinitperiod},
+           given={Karen},
+           giveni={K\bibinitperiod}}}%
+        {{hash=c72fc39e94030f67717052309266a44d}{%
+           family={Zisserman},
+           familyi={Z\bibinitperiod},
+           given={Andrew},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{25d2f3c4577a6632d37f0126cc781232}
+      \strng{fullhash}{25d2f3c4577a6632d37f0126cc781232}
+      \strng{fullhashraw}{25d2f3c4577a6632d37f0126cc781232}
+      \strng{bibnamehash}{25d2f3c4577a6632d37f0126cc781232}
+      \strng{authorbibnamehash}{25d2f3c4577a6632d37f0126cc781232}
+      \strng{authornamehash}{25d2f3c4577a6632d37f0126cc781232}
+      \strng{authorfullhash}{25d2f3c4577a6632d37f0126cc781232}
+      \strng{authorfullhashraw}{25d2f3c4577a6632d37f0126cc781232}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{ICLR}
+      \field{title}{Very Deep Convolutional Networks for Large-Scale Image Recognition}
+      \field{year}{2015}
+    \endentry
+    \entry{everingham2010pascal}{inproceedings}{}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{1}{}{%
+        {{hash=655191b4f54a942147b118da2f50aeed}{%
+           family={Everingham},
+           familyi={E\bibinitperiod},
+           given={Mark},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{235de32ba219ebb749c8820ac16ff118}
+      \strng{fullhash}{235de32ba219ebb749c8820ac16ff118}
+      \strng{fullhashraw}{235de32ba219ebb749c8820ac16ff118}
+      \strng{bibnamehash}{235de32ba219ebb749c8820ac16ff118}
+      \strng{authorbibnamehash}{235de32ba219ebb749c8820ac16ff118}
+      \strng{authornamehash}{235de32ba219ebb749c8820ac16ff118}
+      \strng{authorfullhash}{235de32ba219ebb749c8820ac16ff118}
+      \strng{authorfullhashraw}{235de32ba219ebb749c8820ac16ff118}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{IJCV}
+      \field{title}{The PASCAL Visual Object Classes (VOC) Challenge}
+      \field{year}{2010}
+    \endentry
+    \entry{radford2021learning}{inproceedings}{}{}
+      \name{author}{2}{}{%
+        {{hash=a812c46caad94fc8701be37871f303ba}{%
+           family={Radford},
+           familyi={R\bibinitperiod},
+           given={Alec},
+           giveni={A\bibinitperiod}}}%
+        {{hash=38026ba4ee6b102b47bf3ffb41325c8f}{%
+           family={al.},
+           familyi={a\bibinitperiod},
+           prefix={et},
+           prefixi={e\bibinitperiod}}}%
+      }
+      \strng{namehash}{2b14c2059e81aaf6c1653e181fec40e4}
+      \strng{fullhash}{2b14c2059e81aaf6c1653e181fec40e4}
+      \strng{fullhashraw}{2b14c2059e81aaf6c1653e181fec40e4}
+      \strng{bibnamehash}{2b14c2059e81aaf6c1653e181fec40e4}
+      \strng{authorbibnamehash}{2b14c2059e81aaf6c1653e181fec40e4}
+      \strng{authornamehash}{2b14c2059e81aaf6c1653e181fec40e4}
+      \strng{authorfullhash}{2b14c2059e81aaf6c1653e181fec40e4}
+      \strng{authorfullhashraw}{2b14c2059e81aaf6c1653e181fec40e4}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{ICML}
+      \field{title}{Learning Transferable Visual Models From Natural Language Supervision}
+      \field{year}{2021}
+    \endentry
+    \entry{ho2020denoising}{inproceedings}{}{}
+      \name{author}{3}{}{%
+        {{hash=2ac2ca10b22e4d13af1767e87495412f}{%
+           family={Ho},
+           familyi={H\bibinitperiod},
+           given={Jonathan},
+           giveni={J\bibinitperiod}}}%
+        {{hash=31ac0835ffc3ba6d612252522a6a2011}{%
+           family={Jain},
+           familyi={J\bibinitperiod},
+           given={Ajay},
+           giveni={A\bibinitperiod}}}%
+        {{hash=e28d4ee199593959d8c29980a64f1974}{%
+           family={Abbeel},
+           familyi={A\bibinitperiod},
+           given={Pieter},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{1ef17e0fed8d834b029ebb1c6adf76b4}
+      \strng{fullhash}{1ef17e0fed8d834b029ebb1c6adf76b4}
+      \strng{fullhashraw}{1ef17e0fed8d834b029ebb1c6adf76b4}
+      \strng{bibnamehash}{1ef17e0fed8d834b029ebb1c6adf76b4}
+      \strng{authorbibnamehash}{1ef17e0fed8d834b029ebb1c6adf76b4}
+      \strng{authornamehash}{1ef17e0fed8d834b029ebb1c6adf76b4}
+      \strng{authorfullhash}{1ef17e0fed8d834b029ebb1c6adf76b4}
+      \strng{authorfullhashraw}{1ef17e0fed8d834b029ebb1c6adf76b4}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{NeurIPS}
+      \field{title}{Denoising Diffusion Probabilistic Models}
+      \field{year}{2020}
+    \endentry
+    \entry{rombach2022high}{inproceedings}{}{}
+      \name{author}{2}{}{%
+        {{hash=0921e3810ca1ba112b5f374d82f0735f}{%
+           family={Rombach},
+           familyi={R\bibinitperiod},
+           given={Robin},
+           giveni={R\bibinitperiod}}}%
+        {{hash=38026ba4ee6b102b47bf3ffb41325c8f}{%
+           family={al.},
+           familyi={a\bibinitperiod},
+           prefix={et},
+           prefixi={e\bibinitperiod}}}%
+      }
+      \strng{namehash}{53711ddbf725ae5d9ddb1f482b745a1f}
+      \strng{fullhash}{53711ddbf725ae5d9ddb1f482b745a1f}
+      \strng{fullhashraw}{53711ddbf725ae5d9ddb1f482b745a1f}
+      \strng{bibnamehash}{53711ddbf725ae5d9ddb1f482b745a1f}
+      \strng{authorbibnamehash}{53711ddbf725ae5d9ddb1f482b745a1f}
+      \strng{authornamehash}{53711ddbf725ae5d9ddb1f482b745a1f}
+      \strng{authorfullhash}{53711ddbf725ae5d9ddb1f482b745a1f}
+      \strng{authorfullhashraw}{53711ddbf725ae5d9ddb1f482b745a1f}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{CVPR}
+      \field{title}{High-Resolution Image Synthesis with Latent Diffusion Models}
+      \field{year}{2022}
+    \endentry
+    \entry{poole2022dreamfusion}{misc}{}{}
+      \name{author}{2}{}{%
+        {{hash=e528fda20644135dfae4f481a342148f}{%
+           family={Poole},
+           familyi={P\bibinitperiod},
+           given={Ben},
+           giveni={B\bibinitperiod}}}%
+        {{hash=38026ba4ee6b102b47bf3ffb41325c8f}{%
+           family={al.},
+           familyi={a\bibinitperiod},
+           prefix={et},
+           prefixi={e\bibinitperiod}}}%
+      }
+      \strng{namehash}{ac9d1412541c4016bc4ed8a188e5dde9}
+      \strng{fullhash}{ac9d1412541c4016bc4ed8a188e5dde9}
+      \strng{fullhashraw}{ac9d1412541c4016bc4ed8a188e5dde9}
+      \strng{bibnamehash}{ac9d1412541c4016bc4ed8a188e5dde9}
+      \strng{authorbibnamehash}{ac9d1412541c4016bc4ed8a188e5dde9}
+      \strng{authornamehash}{ac9d1412541c4016bc4ed8a188e5dde9}
+      \strng{authorfullhash}{ac9d1412541c4016bc4ed8a188e5dde9}
+      \strng{authorfullhashraw}{ac9d1412541c4016bc4ed8a188e5dde9}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprinttype}{arXiv}
+      \field{title}{DreamFusion: Text-to-3D using 2D Diffusion}
+      \field{year}{2022}
+      \verb{eprint}
+      \verb 2209.14988
+      \endverb
+    \endentry
+    \entry{jainVectorFusionTexttoSVGAbstracting2022}{misc}{}{}
+      \name{author}{3}{}{%
+        {{hash=31ac0835ffc3ba6d612252522a6a2011}{%
+           family={Jain},
+           familyi={J\bibinitperiod},
+           given={Ajay},
+           giveni={A\bibinitperiod}}}%
+        {{hash=e4f1cedc8c0c28631afd2fcdaa5f1f30}{%
+           family={Xie},
+           familyi={X\bibinitperiod},
+           given={Amber},
+           giveni={A\bibinitperiod}}}%
+        {{hash=e28d4ee199593959d8c29980a64f1974}{%
+           family={Abbeel},
+           familyi={A\bibinitperiod},
+           given={Pieter},
+           giveni={P\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{dd4d781926f0b08d94a0d466cabc6c3c}
+      \strng{fullhash}{dd4d781926f0b08d94a0d466cabc6c3c}
+      \strng{fullhashraw}{dd4d781926f0b08d94a0d466cabc6c3c}
+      \strng{bibnamehash}{dd4d781926f0b08d94a0d466cabc6c3c}
+      \strng{authorbibnamehash}{dd4d781926f0b08d94a0d466cabc6c3c}
+      \strng{authornamehash}{dd4d781926f0b08d94a0d466cabc6c3c}
+      \strng{authorfullhash}{dd4d781926f0b08d94a0d466cabc6c3c}
+      \strng{authorfullhashraw}{dd4d781926f0b08d94a0d466cabc6c3c}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Diffusion models have shown impressive results in text-to-image synthesis. Using massive datasets of captioned images, diffusion models learn to generate raster images of highly diverse objects and scenes. However, designers frequently use vector representations of images like Scalable Vector Graphics (SVGs) for digital icons or art. Vector graphics can be scaled to any size, and are compact. We show that a text-conditioned diffusion model trained on pixel representations of images can be used to generate SVG-exportable vector graphics. We do so without access to large datasets of captioned SVGs. By optimizing a differentiable vector graphics rasterizer, our method, VectorFusion, distills abstract semantic knowledge out of a pretrained diffusion model. Inspired by recent text-to-3D work, we learn an SVG consistent with a caption using Score Distillation Sampling. To accelerate generation and improve fidelity, VectorFusion also initializes from an image sample. Experiments show greater quality than prior work, and demonstrate a range of styles including pixel art and sketches. See our project webpage at https://ajayj.com/vectorfusion .}
+      \field{eprintclass}{cs}
+      \field{eprinttype}{arXiv}
+      \field{month}{11}
+      \field{number}{arXiv:2211.11319}
+      \field{shorttitle}{{{VectorFusion}}}
+      \field{title}{{{VectorFusion}}: {{Text-to-SVG}} by {{Abstracting Pixel-Based Diffusion Models}}}
+      \field{urlday}{22}
+      \field{urlmonth}{10}
+      \field{urlyear}{2025}
+      \field{year}{2022}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.48550/arXiv.2211.11319
+      \endverb
+      \verb{eprint}
+      \verb 2211.11319
+      \endverb
+      \verb{file}
+      \verb C\:\\Users\\fikre\\Zotero\\storage\\WU3NQ3PR\\Jain et al. - 2022 - VectorFusion Text-to-SVG by Abstracting Pixel-Bas.pdf;C\:\\Users\\fikre\\Zotero\\storage\\X4ZJQ3DN\\2211.html
+      \endverb
+    \endentry
+    \entry{bingDeepIconHierarchicalNetwork2024}{misc}{}{}
+      \name{author}{3}{}{%
+        {{hash=761e8bc130474cd58d5d42a949bdb580}{%
+           family={Bing},
+           familyi={B\bibinitperiod},
+           given={Qi},
+           giveni={Q\bibinitperiod}}}%
+        {{hash=7b3c1dd7deb9eb46f69963f4abe8a2da}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Chaoyi},
+           giveni={C\bibinitperiod}}}%
+        {{hash=2db91d39a2862e4b53a2bcd958d6f8b5}{%
+           family={Cai},
+           familyi={C\bibinitperiod},
+           given={Weidong},
+           giveni={W\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{2860e9b7439d946a5ef08db95eab55cc}
+      \strng{fullhash}{2860e9b7439d946a5ef08db95eab55cc}
+      \strng{fullhashraw}{2860e9b7439d946a5ef08db95eab55cc}
+      \strng{bibnamehash}{2860e9b7439d946a5ef08db95eab55cc}
+      \strng{authorbibnamehash}{2860e9b7439d946a5ef08db95eab55cc}
+      \strng{authornamehash}{2860e9b7439d946a5ef08db95eab55cc}
+      \strng{authorfullhash}{2860e9b7439d946a5ef08db95eab55cc}
+      \strng{authorfullhashraw}{2860e9b7439d946a5ef08db95eab55cc}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{In contrast to the well-established technique of rasterization, vectorization of images poses a significant challenge in the field of computer graphics. Recent learning-based methods for converting raster images to vector formats frequently suffer from incomplete shapes, redundant path prediction, and a lack of accuracy in preserving the semantics of the original content. These shortcomings severely hinder the utility of these methods for further editing and manipulation of images. To address these challenges, we present DeepIcon, a novel hierarchical image vectorization network specifically tailored for generating variable-length icon vector graphics based on the raster image input. Our experimental results indicate that DeepIcon can efficiently produce Scalable Vector Graphics (SVGs) directly from raster images, bypassing the need for a differentiable rasterizer while also demonstrating a profound understanding of the image contents.}
+      \field{eprintclass}{cs}
+      \field{eprinttype}{arXiv}
+      \field{month}{10}
+      \field{number}{arXiv:2410.15760}
+      \field{shorttitle}{{{DeepIcon}}}
+      \field{title}{{{DeepIcon}}: {{A Hierarchical Network}} for {{Layer-wise Icon Vectorization}}}
+      \field{urlday}{23}
+      \field{urlmonth}{11}
+      \field{urlyear}{2025}
+      \field{year}{2024}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.48550/arXiv.2410.15760
+      \endverb
+      \verb{eprint}
+      \verb 2410.15760
+      \endverb
+      \verb{file}
+      \verb C\:\\Users\\fikre\\Zotero\\storage\\U6Q8E2Y5\\Bing et al. - 2024 - DeepIcon A Hierarchical Network for Layer-wise Ic.pdf;C\:\\Users\\fikre\\Zotero\\storage\\XN5K4Q4E\\2410.html
+      \endverb
+      \keyw{Editable}
+    \endentry
+    \entry{eisenbergSVGEssentialsProducing20}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=e8ccbfaa7866e3e97f9abe0a63eaa988}{%
+           family={Eisenberg},
+           familyi={E\bibinitperiod},
+           given={J.\bibnamedelimi David},
+           giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Beijing Köln}%
+      }
+      \list{publisher}{1}{%
+        {O'Reilly}%
+      }
+      \strng{namehash}{e8ccbfaa7866e3e97f9abe0a63eaa988}
+      \strng{fullhash}{e8ccbfaa7866e3e97f9abe0a63eaa988}
+      \strng{fullhashraw}{e8ccbfaa7866e3e97f9abe0a63eaa988}
+      \strng{bibnamehash}{e8ccbfaa7866e3e97f9abe0a63eaa988}
+      \strng{authorbibnamehash}{e8ccbfaa7866e3e97f9abe0a63eaa988}
+      \strng{authornamehash}{e8ccbfaa7866e3e97f9abe0a63eaa988}
+      \strng{authorfullhash}{e8ccbfaa7866e3e97f9abe0a63eaa988}
+      \strng{authorfullhashraw}{e8ccbfaa7866e3e97f9abe0a63eaa988}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{edition}{Repr.}
+      \field{isbn}{978-0-596-00223-7}
+      \field{langid}{english}
+      \field{shorttitle}{{{SVG}} Essentials}
+      \field{title}{{{SVG}} Essentials: Producing Scalable Vector Graphics with {{XML}}}
+      \field{year}{20}
+      \true{nocite}
+      \verb{file}
+      \verb C:\Users\fikre\Zotero\storage\P86T8JXJ\Eisenberg - SVG essentials producing scalable vector graphics.pdf
+      \endverb
+    \endentry
+    \entry{maLayerwiseImageVectorization2022}{misc}{}{}
+      \name{author}{8}{}{%
+        {{hash=62d86406f04ae9009f7c16a444e6dbe4}{%
+           family={Ma},
+           familyi={M\bibinitperiod},
+           given={Xu},
+           giveni={X\bibinitperiod}}}%
+        {{hash=a493198ade3ac7ff3168b478a82d1615}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Yuqian},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=26b58ec6662c6545e07937b57dff4679}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Xingqian},
+           giveni={X\bibinitperiod}}}%
+        {{hash=e9a87cd1e75c288c7553dad00ec6ba7c}{%
+           family={Sun},
+           familyi={S\bibinitperiod},
+           given={Bin},
+           giveni={B\bibinitperiod}}}%
+        {{hash=851eefe76cde8904070c53aa310d7783}{%
+           family={Filev},
+           familyi={F\bibinitperiod},
+           given={Valerii},
+           giveni={V\bibinitperiod}}}%
+        {{hash=2ab5ff31c820a4fecc7e6e7f33eaf4db}{%
+           family={Orlov},
+           familyi={O\bibinitperiod},
+           given={Nikita},
+           giveni={N\bibinitperiod}}}%
+        {{hash=af5bb174cec505de4887d6186d3823ae}{%
+           family={Fu},
+           familyi={F\bibinitperiod},
+           given={Yun},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=81d65bc4502134b1ebce663ddcdc52cf}{%
+           family={Shi},
+           familyi={S\bibinitperiod},
+           given={Humphrey},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{a4d95f105d9df95fcf8303c05b6e53ff}
+      \strng{fullhash}{7ca5c24a154333cfac85baefe7845855}
+      \strng{fullhashraw}{7ca5c24a154333cfac85baefe7845855}
+      \strng{bibnamehash}{7ca5c24a154333cfac85baefe7845855}
+      \strng{authorbibnamehash}{7ca5c24a154333cfac85baefe7845855}
+      \strng{authornamehash}{a4d95f105d9df95fcf8303c05b6e53ff}
+      \strng{authorfullhash}{7ca5c24a154333cfac85baefe7845855}
+      \strng{authorfullhashraw}{7ca5c24a154333cfac85baefe7845855}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Image rasterization is a mature technique in computer graphics, while image vectorization, the reverse path of rasterization, remains a major challenge. Recent advanced deep learning-based models achieve vectorization and semantic interpolation of vector graphs and demonstrate a better topology of generating new figures. However, deep models cannot be easily generalized to out-of-domain testing data. The generated SVGs also contain complex and redundant shapes that are not quite convenient for further editing. Specifically, the crucial layer-wise topology and fundamental semantics in images are still not well understood and thus not fully explored. In this work, we propose Layer-wise Image Vectorization, namely LIVE, to convert raster images to SVGs and simultaneously maintain its image topology. LIVE can generate compact SVG forms with layer-wise structures that are semantically consistent with human perspective. We progressively add new bezier paths and optimize these paths with the layer-wise framework, newly designed loss functions, and component-wise path initialization technique. Our experiments demonstrate that LIVE presents more plausible vectorized forms than prior works and can be generalized to new images. With the help of this newly learned topology, LIVE initiates human editable SVGs for both designers and other downstream applications. Codes are made available at https://github.com/Picsart-AI-Research/LIVE-Layerwise-Image-Vectorization.}
+      \field{eprintclass}{cs}
+      \field{eprinttype}{arXiv}
+      \field{month}{6}
+      \field{number}{arXiv:2206.04655}
+      \field{title}{Towards {{Layer-wise Image Vectorization}}}
+      \field{urlday}{22}
+      \field{urlmonth}{10}
+      \field{urlyear}{2025}
+      \field{year}{2022}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.48550/arXiv.2206.04655
+      \endverb
+      \verb{eprint}
+      \verb 2206.04655
+      \endverb
+      \verb{file}
+      \verb C\:\\Users\\fikre\\Zotero\\storage\\AWRHFKIP\\Ma et al. - 2022 - Towards Layer-wise Image Vectorization.pdf;C\:\\Users\\fikre\\Zotero\\storage\\39MS9WG6\\2206.html
+      \endverb
+      \keyw{Editable}
+    \endentry
+    \entry{polaczekNeuralSVGImplicitRepresentation2025}{misc}{}{}
+      \name{author}{5}{}{%
+        {{hash=0e73435d67e1038f873c9bf1da43c607}{%
+           family={Polaczek},
+           familyi={P\bibinitperiod},
+           given={Sagi},
+           giveni={S\bibinitperiod}}}%
+        {{hash=b0f3130816096ed324656d246cf676cb}{%
+           family={Alaluf},
+           familyi={A\bibinitperiod},
+           given={Yuval},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=89364e2db8972659a668cbdc092b95af}{%
+           family={Richardson},
+           familyi={R\bibinitperiod},
+           given={Elad},
+           giveni={E\bibinitperiod}}}%
+        {{hash=c52fd6d00a516cbad432632c2cf0f1f4}{%
+           family={Vinker},
+           familyi={V\bibinitperiod},
+           given={Yael},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=cdf44d78713bc27a81394749a9d8bbdc}{%
+           family={{Cohen-Or}},
+           familyi={C\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{f01172c51396b9aa408aa191523c6546}
+      \strng{fullhash}{353f09c3b11470e32061507c27da10c8}
+      \strng{fullhashraw}{353f09c3b11470e32061507c27da10c8}
+      \strng{bibnamehash}{353f09c3b11470e32061507c27da10c8}
+      \strng{authorbibnamehash}{353f09c3b11470e32061507c27da10c8}
+      \strng{authornamehash}{f01172c51396b9aa408aa191523c6546}
+      \strng{authorfullhash}{353f09c3b11470e32061507c27da10c8}
+      \strng{authorfullhashraw}{353f09c3b11470e32061507c27da10c8}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Vector graphics are essential in design, providing artists with a versatile medium for creating resolution-independent and highly editable visual content. Recent advancements in vision-language and diffusion models have fueled interest in text-to-vector graphics generation. However, existing approaches often suffer from over-parameterized outputs or treat the layered structure - a core feature of vector graphics - as a secondary goal, diminishing their practical use. Recognizing the importance of layered SVG representations, we propose NeuralSVG, an implicit neural representation for generating vector graphics from text prompts. Inspired by Neural Radiance Fields (NeRFs), NeuralSVG encodes the entire scene into the weights of a small MLP network, optimized using Score Distillation Sampling (SDS). To encourage a layered structure in the generated SVG, we introduce a dropout-based regularization technique that strengthens the standalone meaning of each shape. We additionally demonstrate that utilizing a neural representation provides an added benefit of inference-time control, enabling users to dynamically adapt the generated SVG based on user-provided inputs, all with a single learned representation. Through extensive qualitative and quantitative evaluations, we demonstrate that NeuralSVG outperforms existing methods in generating structured and flexible SVG.}
+      \field{shorttitle}{{{NeuralSVG}}}
+      \field{title}{{{NeuralSVG}}: {{An Implicit Representation}} for {{Text-to-Vector Generation}}}
+      \field{urlday}{30}
+      \field{urlmonth}{11}
+      \field{urlyear}{2025}
+      \field{year}{2025}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.48550/ARXIV.2501.03992
+      \endverb
+      \keyw{Editable}
+    \endentry
+    \entry{quintScalableVectorGraphics2003}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=3c010528828abc79f2158f043604f1ab}{%
+           family={Quint},
+           familyi={Q\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{3c010528828abc79f2158f043604f1ab}
+      \strng{fullhash}{3c010528828abc79f2158f043604f1ab}
+      \strng{fullhashraw}{3c010528828abc79f2158f043604f1ab}
+      \strng{bibnamehash}{3c010528828abc79f2158f043604f1ab}
+      \strng{authorbibnamehash}{3c010528828abc79f2158f043604f1ab}
+      \strng{authornamehash}{3c010528828abc79f2158f043604f1ab}
+      \strng{authorfullhash}{3c010528828abc79f2158f043604f1ab}
+      \strng{authorfullhashraw}{3c010528828abc79f2158f043604f1ab}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1070-986X}
+      \field{journaltitle}{IEEE Multimedia}
+      \field{langid}{english}
+      \field{month}{7}
+      \field{number}{3}
+      \field{title}{Scalable Vector Graphics}
+      \field{urlday}{3}
+      \field{urlmonth}{11}
+      \field{urlyear}{2025}
+      \field{volume}{10}
+      \field{year}{2003}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \field{pages}{99\bibrangedash 102}
+      \range{pages}{4}
+      \verb{doi}
+      \verb 10.1109/MMUL.2003.1218261
+      \endverb
+      \verb{file}
+      \verb C:\Users\fikre\Zotero\storage\B4GQ6IRH\Quint - 2003 - Scalable vector graphics.pdf
+      \endverb
+    \endentry
+    \entry{reddyIm2VecSynthesizingVector2021}{misc}{}{}
+      \name{author}{4}{}{%
+        {{hash=0c7e97b2f4ffc7ec502d39927ae105b6}{%
+           family={Reddy},
+           familyi={R\bibinitperiod},
+           given={Pradyumna},
+           giveni={P\bibinitperiod}}}%
+        {{hash=288088f613113e38836030dd489d4c51}{%
+           family={Gharbi},
+           familyi={G\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod}}}%
+        {{hash=f7651b4ccfc79bb6f0b3e4aef3c0eeca}{%
+           family={Lukac},
+           familyi={L\bibinitperiod},
+           given={Michal},
+           giveni={M\bibinitperiod}}}%
+        {{hash=5936c7e9f97b4d7d7fa6e85bb9daa65d}{%
+           family={Mitra},
+           familyi={M\bibinitperiod},
+           given={Niloy\bibnamedelima J.},
+           giveni={N\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{d061cd7a0580256e20e74c0145671220}
+      \strng{fullhash}{64ccc31e27a38609c84c175c66d76a75}
+      \strng{fullhashraw}{64ccc31e27a38609c84c175c66d76a75}
+      \strng{bibnamehash}{64ccc31e27a38609c84c175c66d76a75}
+      \strng{authorbibnamehash}{64ccc31e27a38609c84c175c66d76a75}
+      \strng{authornamehash}{d061cd7a0580256e20e74c0145671220}
+      \strng{authorfullhash}{64ccc31e27a38609c84c175c66d76a75}
+      \strng{authorfullhashraw}{64ccc31e27a38609c84c175c66d76a75}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Vector graphics are widely used to represent fonts, logos, digital artworks, and graphic designs. But, while a vast body of work has focused on generative algorithms for raster images, only a handful of options exists for vector graphics. One can always rasterize the input graphic and resort to image-based generative approaches, but this negates the advantages of the vector representation. The current alternative is to use specialized models that require explicit supervision on the vector graphics representation at training time. This is not ideal because large-scale high quality vector-graphics datasets are difficult to obtain. Furthermore, the vector representation for a given design is not unique, so models that supervise on the vector representation are unnecessarily constrained. Instead, we propose a new neural network that can generate complex vector graphics with varying topologies, and only requires indirect supervision from readily-available raster training images (i.e., with no vector counterparts). To enable this, we use a differentiable rasterization pipeline that renders the generated vector shapes and composites them together onto a raster canvas. We demonstrate our method on a range of datasets, and provide comparison with state-of-the-art SVG-VAE and DeepSVG, both of which require explicit vector graphics supervision. Finally, we also demonstrate our approach on the MNIST dataset, for which no groundtruth vector representation is available. Source code, datasets, and more results are available at geometry.cs.ucl.ac.uk/projects/2021/Im2Vec/}
+      \field{eprintclass}{cs}
+      \field{eprinttype}{arXiv}
+      \field{month}{4}
+      \field{number}{arXiv:2102.02798}
+      \field{shorttitle}{{{Im2Vec}}}
+      \field{title}{{{Im2Vec}}: {{Synthesizing Vector Graphics}} without {{Vector Supervision}}}
+      \field{urlday}{22}
+      \field{urlmonth}{10}
+      \field{urlyear}{2025}
+      \field{year}{2021}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.48550/arXiv.2102.02798
+      \endverb
+      \verb{eprint}
+      \verb 2102.02798
+      \endverb
+      \verb{file}
+      \verb C\:\\Users\\fikre\\Zotero\\storage\\9DWI2KLB\\Reddy et al. - 2021 - Im2Vec Synthesizing Vector Graphics without Vecto.pdf;C\:\\Users\\fikre\\Zotero\\storage\\LFB5LDIG\\2102.html
+      \endverb
+    \endentry
+    \entry{songLayerTracerCognitiveAlignedLayered2025}{misc}{}{}
+      \name{author}{3}{}{%
+        {{hash=b1e76028868b82b1eeced7a36a5ba48a}{%
+           family={Song},
+           familyi={S\bibinitperiod},
+           given={Yiren},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=fcc5a7fad86fa0cadfb04b6d88692115}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Danze},
+           giveni={D\bibinitperiod}}}%
+        {{hash=b2808cc4100eda648ca39e1199d6bfea}{%
+           family={Shou},
+           familyi={S\bibinitperiod},
+           given={Mike\bibnamedelima Zheng},
+           giveni={M\bibinitperiod\bibinitdelim Z\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{bba90ce149c23c511fa43f487e19aec9}
+      \strng{fullhash}{bba90ce149c23c511fa43f487e19aec9}
+      \strng{fullhashraw}{bba90ce149c23c511fa43f487e19aec9}
+      \strng{bibnamehash}{bba90ce149c23c511fa43f487e19aec9}
+      \strng{authorbibnamehash}{bba90ce149c23c511fa43f487e19aec9}
+      \strng{authornamehash}{bba90ce149c23c511fa43f487e19aec9}
+      \strng{authorfullhash}{bba90ce149c23c511fa43f487e19aec9}
+      \strng{authorfullhashraw}{bba90ce149c23c511fa43f487e19aec9}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Generating cognitive-aligned layered SVGs remains challenging due to existing methods' tendencies toward either oversimplified single-layer outputs or optimization-induced shape redundancies. We propose LayerTracer, a diffusion transformer based framework that bridges this gap by learning designers' layered SVG creation processes from a novel dataset of sequential design operations. Our approach operates in two phases: First, a text-conditioned DiT generates multi-phase rasterized construction blueprints that simulate human design workflows. Second, layer-wise vectorization with path deduplication produces clean, editable SVGs. For image vectorization, we introduce a conditional diffusion mechanism that encodes reference images into latent tokens, guiding hierarchical reconstruction while preserving structural integrity. Extensive experiments demonstrate LayerTracer's superior performance against optimization-based and neural baselines in both generation quality and editability, effectively aligning AI-generated vectors with professional design cognition.}
+      \field{eprintclass}{cs}
+      \field{eprinttype}{arXiv}
+      \field{month}{8}
+      \field{number}{arXiv:2502.01105}
+      \field{shorttitle}{{{LayerTracer}}}
+      \field{title}{{{LayerTracer}}: {{Cognitive-Aligned Layered SVG Synthesis}} via {{Diffusion Transformer}}}
+      \field{urlday}{23}
+      \field{urlmonth}{11}
+      \field{urlyear}{2025}
+      \field{year}{2025}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.48550/arXiv.2502.01105
+      \endverb
+      \verb{eprint}
+      \verb 2502.01105
+      \endverb
+      \verb{file}
+      \verb C\:\\Users\\fikre\\Zotero\\storage\\AXUZF6FD\\Song et al. - 2025 - LayerTracer Cognitive-Aligned Layered SVG Synthes.pdf;C\:\\Users\\fikre\\Zotero\\storage\\WNC8T2QS\\2502.html
+      \endverb
+      \keyw{Editable}
+    \endentry
+    \entry{thamizharasanNIVeLNeuralImplicit2024}{misc}{}{}
+      \name{author}{6}{}{%
+        {{hash=b9b5ed0213d8c5d03698009e4ba34ff0}{%
+           family={Thamizharasan},
+           familyi={T\bibinitperiod},
+           given={Vikas},
+           giveni={V\bibinitperiod}}}%
+        {{hash=29675366837ddf19fc08a30f34eea555}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Difan},
+           giveni={D\bibinitperiod}}}%
+        {{hash=c6a9851e2e9aaa398d8559793bfca200}{%
+           family={Fisher},
+           familyi={F\bibinitperiod},
+           given={Matthew},
+           giveni={M\bibinitperiod}}}%
+        {{hash=81de6e36221820357d3a103816c9c79d}{%
+           family={Zhao},
+           familyi={Z\bibinitperiod},
+           given={Nanxuan},
+           giveni={N\bibinitperiod}}}%
+        {{hash=b1412d0c805188499cfdc5f303262266}{%
+           family={Kalogerakis},
+           familyi={K\bibinitperiod},
+           given={Evangelos},
+           giveni={E\bibinitperiod}}}%
+        {{hash=f7651b4ccfc79bb6f0b3e4aef3c0eeca}{%
+           family={Lukac},
+           familyi={L\bibinitperiod},
+           given={Michal},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{06bd5b474e7df1dc535ba1ff1907726f}
+      \strng{fullhash}{dcffc29c1aa203e1045fa11f1d03b565}
+      \strng{fullhashraw}{dcffc29c1aa203e1045fa11f1d03b565}
+      \strng{bibnamehash}{dcffc29c1aa203e1045fa11f1d03b565}
+      \strng{authorbibnamehash}{dcffc29c1aa203e1045fa11f1d03b565}
+      \strng{authornamehash}{06bd5b474e7df1dc535ba1ff1907726f}
+      \strng{authorfullhash}{dcffc29c1aa203e1045fa11f1d03b565}
+      \strng{authorfullhashraw}{dcffc29c1aa203e1045fa11f1d03b565}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{The success of denoising diffusion models in representing rich data distributions over 2D raster images has prompted research on extending them to other data representations, such as vector graphics. Unfortunately due to their variable structure and scarcity of vector training data, directly applying diffusion models on this domain remains a challenging problem. Using workarounds like optimization via Score Distillation Sampling (SDS) is also fraught with difficulty, as vector representations are non trivial to directly optimize and tend to result in implausible geometries such as redundant or self-intersecting shapes. NIVeL addresses these challenges by reinterpreting the problem on an alternative, intermediate domain which preserves the desirable properties of vector graphics -- mainly sparsity of representation and resolution-independence. This alternative domain is based on neural implicit fields expressed in a set of decomposable, editable layers. Based on our experiments, NIVeL produces text-to-vector graphics results of significantly better quality than the state-of-the-art.}
+      \field{eprintclass}{cs}
+      \field{eprinttype}{arXiv}
+      \field{month}{5}
+      \field{number}{arXiv:2405.15217}
+      \field{shorttitle}{{{NIVeL}}}
+      \field{title}{{{NIVeL}}: {{Neural Implicit Vector Layers}} for {{Text-to-Vector Generation}}}
+      \field{urlday}{22}
+      \field{urlmonth}{10}
+      \field{urlyear}{2025}
+      \field{year}{2024}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.48550/arXiv.2405.15217
+      \endverb
+      \verb{eprint}
+      \verb 2405.15217
+      \endverb
+      \verb{file}
+      \verb C\:\\Users\\fikre\\Zotero\\storage\\38NMNQUW\\Thamizharasan et al. - 2024 - NIVeL Neural Implicit Vector Layers for Text-to-V.pdf;C\:\\Users\\fikre\\Zotero\\storage\\F5S5496B\\2405.html
+      \endverb
+      \keyw{Editable}
+    \endentry
+    \entry{xingSVGDreamerAdvancingEditability2025}{article}{}{}
+      \name{author}{6}{}{%
+        {{hash=b3ef19ae556e8a41de94f06ae45bdd2d}{%
+           family={Xing},
+           familyi={X\bibinitperiod},
+           given={Ximing},
+           giveni={X\bibinitperiod}}}%
+        {{hash=8ab702659b3089e159e874774c37aac7}{%
+           family={Yu},
+           familyi={Y\bibinitperiod},
+           given={Qian},
+           giveni={Q\bibinitperiod}}}%
+        {{hash=5f314f633295db632e90990a3f8297a1}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Chuang},
+           giveni={C\bibinitperiod}}}%
+        {{hash=c199ecbe7374f3df841e5e34c154876a}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Haitao},
+           giveni={H\bibinitperiod}}}%
+        {{hash=948f26b38fba102b6f820808e554bc53}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Jing},
+           giveni={J\bibinitperiod}}}%
+        {{hash=be17c750657847fd489802d414210d61}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Dong},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{e4d11e7e05d8bf000338e3ad27e0c732}
+      \strng{fullhash}{76a70330000c75a2dac4995a4a411af3}
+      \strng{fullhashraw}{76a70330000c75a2dac4995a4a411af3}
+      \strng{bibnamehash}{76a70330000c75a2dac4995a4a411af3}
+      \strng{authorbibnamehash}{76a70330000c75a2dac4995a4a411af3}
+      \strng{authornamehash}{e4d11e7e05d8bf000338e3ad27e0c732}
+      \strng{authorfullhash}{76a70330000c75a2dac4995a4a411af3}
+      \strng{authorfullhashraw}{76a70330000c75a2dac4995a4a411af3}
+      \field{extraname}{2}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{issn}{0162-8828, 2160-9292, 1939-3539}
+      \field{journaltitle}{IEEE Transactions on Pattern Analysis and Machine Intelligence}
+      \field{month}{7}
+      \field{number}{7}
+      \field{shorttitle}{{{SVGDreamer}}++}
+      \field{title}{{{SVGDreamer}}++: {{Advancing Editability}} and {{Diversity}} in {{Text-Guided SVG Generation}}}
+      \field{urlday}{22}
+      \field{urlmonth}{10}
+      \field{urlyear}{2025}
+      \field{volume}{47}
+      \field{year}{2025}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \field{pages}{5397\bibrangedash 5413}
+      \range{pages}{17}
+      \verb{doi}
+      \verb 10.1109/TPAMI.2025.3547889
+      \endverb
+      \verb{file}
+      \verb C:\Users\fikre\Zotero\storage\RWDJJGEV\Xing et al. - 2025 - SVGDreamer++ Advancing Editability and Diversity .pdf
+      \endverb
+    \endentry
+    \entry{xingSVGDreamerTextGuided2024}{misc}{}{}
+      \name{author}{6}{}{%
+        {{hash=b3ef19ae556e8a41de94f06ae45bdd2d}{%
+           family={Xing},
+           familyi={X\bibinitperiod},
+           given={Ximing},
+           giveni={X\bibinitperiod}}}%
+        {{hash=c199ecbe7374f3df841e5e34c154876a}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Haitao},
+           giveni={H\bibinitperiod}}}%
+        {{hash=5f314f633295db632e90990a3f8297a1}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Chuang},
+           giveni={C\bibinitperiod}}}%
+        {{hash=948f26b38fba102b6f820808e554bc53}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Jing},
+           giveni={J\bibinitperiod}}}%
+        {{hash=be17c750657847fd489802d414210d61}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Dong},
+           giveni={D\bibinitperiod}}}%
+        {{hash=8ab702659b3089e159e874774c37aac7}{%
+           family={Yu},
+           familyi={Y\bibinitperiod},
+           given={Qian},
+           giveni={Q\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{e4d11e7e05d8bf000338e3ad27e0c732}
+      \strng{fullhash}{f0f5b35be7f6d2bd5b18df668c7b7f66}
+      \strng{fullhashraw}{f0f5b35be7f6d2bd5b18df668c7b7f66}
+      \strng{bibnamehash}{f0f5b35be7f6d2bd5b18df668c7b7f66}
+      \strng{authorbibnamehash}{f0f5b35be7f6d2bd5b18df668c7b7f66}
+      \strng{authornamehash}{e4d11e7e05d8bf000338e3ad27e0c732}
+      \strng{authorfullhash}{f0f5b35be7f6d2bd5b18df668c7b7f66}
+      \strng{authorfullhashraw}{f0f5b35be7f6d2bd5b18df668c7b7f66}
+      \field{extraname}{3}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Recently, text-guided scalable vector graphics (SVGs) synthesis has shown promise in domains such as iconography and sketch. However, existing text-to-SVG generation methods lack editability and struggle with visual quality and result diversity. To address these limitations, we propose a novel text-guided vector graphics synthesis method called SVGDreamer. SVGDreamer incorporates a semantic-driven image vectorization (SIVE) process that enables the decomposition of synthesis into foreground objects and background, thereby enhancing editability. Specifically, the SIVE process introduces attention-based primitive control and an attention-mask loss function for effective control and manipulation of individual elements. Additionally, we propose a Vectorized Particle-based Score Distillation (VPSD) approach to address issues of shape over-smoothing, color over-saturation, limited diversity, and slow convergence of the existing text-to-SVG generation methods by modeling SVGs as distributions of control points and colors. Furthermore, VPSD leverages a reward model to re-weight vector particles, which improves aesthetic appeal and accelerates convergence. Extensive experiments are conducted to validate the effectiveness of SVGDreamer, demonstrating its superiority over baseline methods in terms of editability, visual quality, and diversity. Project page: https://ximinng.github.io/SVGDreamer-project/}
+      \field{eprintclass}{cs}
+      \field{eprinttype}{arXiv}
+      \field{month}{12}
+      \field{number}{arXiv:2312.16476}
+      \field{shorttitle}{{{SVGDreamer}}}
+      \field{title}{{{SVGDreamer}}: {{Text Guided SVG Generation}} with {{Diffusion Model}}}
+      \field{urlday}{22}
+      \field{urlmonth}{10}
+      \field{urlyear}{2025}
+      \field{year}{2024}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.48550/arXiv.2312.16476
+      \endverb
+      \verb{eprint}
+      \verb 2312.16476
+      \endverb
+      \verb{file}
+      \verb C\:\\Users\\fikre\\Zotero\\storage\\C2U46WXG\\Xing et al. - 2024 - SVGDreamer Text Guided SVG Generation with Diffus.pdf;C\:\\Users\\fikre\\Zotero\\storage\\A2GN2MVS\\2312.html
+      \endverb
+    \endentry
+    \entry{zhuSAMVGMultistageImage2023}{misc}{}{}
+      \name{author}{6}{}{%
+        {{hash=122fb7dd93a75fef55888b8b0c6e8f48}{%
+           family={Zhu},
+           familyi={Z\bibinitperiod},
+           given={Haokun},
+           giveni={H\bibinitperiod}}}%
+        {{hash=1ee577d8dd8c4f3b28321af591cced12}{%
+           family={Chong},
+           familyi={C\bibinitperiod},
+           given={Juang\bibnamedelima Ian},
+           giveni={J\bibinitperiod\bibinitdelim I\bibinitperiod}}}%
+        {{hash=469071746c4094415dc090ce9892a6dd}{%
+           family={Hu},
+           familyi={H\bibinitperiod},
+           given={Teng},
+           giveni={T\bibinitperiod}}}%
+        {{hash=700f97d056ba2c6811dffa3f5eba1694}{%
+           family={Yi},
+           familyi={Y\bibinitperiod},
+           given={Ran},
+           giveni={R\bibinitperiod}}}%
+        {{hash=4bb63a56d1c146994bcd32b61ecddbf9}{%
+           family={Lai},
+           familyi={L\bibinitperiod},
+           given={Yu-Kun},
+           giveni={Y\bibinithyphendelim K\bibinitperiod}}}%
+        {{hash=318256184a8d62de8947fc90a4366c3a}{%
+           family={Rosin},
+           familyi={R\bibinitperiod},
+           given={Paul\bibnamedelima L.},
+           giveni={P\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{5b9d673624d971754e62a77557b182fa}
+      \strng{fullhash}{7598754d360930ce244fe9b546b9b0d3}
+      \strng{fullhashraw}{7598754d360930ce244fe9b546b9b0d3}
+      \strng{bibnamehash}{7598754d360930ce244fe9b546b9b0d3}
+      \strng{authorbibnamehash}{7598754d360930ce244fe9b546b9b0d3}
+      \strng{authornamehash}{5b9d673624d971754e62a77557b182fa}
+      \strng{authorfullhash}{7598754d360930ce244fe9b546b9b0d3}
+      \strng{authorfullhashraw}{7598754d360930ce244fe9b546b9b0d3}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Vector graphics are widely used in graphical designs and have received more and more attention. However, unlike raster images which can be easily obtained, acquiring high-quality vector graphics, typically through automatically converting from raster images remains a significant challenge, especially for more complex images such as photos or artworks. In this paper, we propose SAMVG, a multi-stage model to vectorize raster images into SVG (Scalable Vector Graphics). Firstly, SAMVG uses general image segmentation provided by the Segment-Anything Model and uses a novel filtering method to identify the best dense segmentation map for the entire image. Secondly, SAMVG then identifies missing components and adds more detailed components to the SVG. Through a series of extensive experiments, we demonstrate that SAMVG can produce high quality SVGs in any domain while requiring less computation time and complexity compared to previous state-of-the-art methods.}
+      \field{eprintclass}{cs}
+      \field{eprinttype}{arXiv}
+      \field{month}{12}
+      \field{number}{arXiv:2311.05276}
+      \field{shorttitle}{{{SAMVG}}}
+      \field{title}{{{SAMVG}}: {{A Multi-stage Image Vectorization Model}} with the {{Segment-Anything Model}}}
+      \field{urlday}{22}
+      \field{urlmonth}{10}
+      \field{urlyear}{2025}
+      \field{year}{2023}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.48550/arXiv.2311.05276
+      \endverb
+      \verb{eprint}
+      \verb 2311.05276
+      \endverb
+      \verb{file}
+      \verb C\:\\Users\\fikre\\Zotero\\storage\\73A2NE3G\\Zhu et al. - 2023 - SAMVG A Multi-stage Image Vectorization Model wit.pdf;C\:\\Users\\fikre\\Zotero\\storage\\BYU94RSA\\Zhu et al. - 2023 - SAMVG A Multi-stage Image Vectorization Model wit.pdf;C\:\\Users\\fikre\\Zotero\\storage\\C2NIYLW4\\Zhu et al. - 2023 - SAMVG A Multi-stage Image Vectorization Model wit.pdf;C\:\\Users\\fikre\\Zotero\\storage\\HGKSYTME\\2311.html
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

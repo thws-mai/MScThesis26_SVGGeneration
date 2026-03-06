@@ -1,0 +1,177 @@
+\chapter{Evaluation}
+
+Evaluating SVG generation methods is fundamentally different from evaluating raster image generation. While visual realism remains an important criterion, vector graphics introduce additional dimensions related to structure, editability, and usability. As a result, evaluation in SVG generation cannot rely solely on traditional image-based metrics and must instead be understood as a multi-dimensional design problem.
+
+In raster image generation, evaluation typically focuses on perceptual similarity, distribution alignment, or semantic correctness. Metrics such as FID, CLIP score, or perceptual similarity are widely used to quantify visual quality. However, SVG graphics are not only visual artifacts but also structured representations composed of geometric primitives, hierarchical relationships, and editable components. This means that two SVGs with similar visual appearance may differ significantly in their internal structure and practical usability.
+
+This distinction creates a gap between how SVG generation methods are commonly evaluated and what makes generated vector graphics useful in practice. Many works emphasize visual fidelity because it is easier to measure quantitatively, while structural aspects such as hierarchy, redundancy, or editability are often assessed qualitatively through visual inspection. Consequently, evaluation practices may overlook properties that are critical for downstream design workflows.
+
+Another challenge arises from the diversity of generation paradigms. Dataset-trained models, optimization-based approaches, and hybrid pipelines produce outputs with different characteristics. Some methods prioritize compact structure, while others favor visual realism even if this leads to complex geometry. Without clearly defined evaluation dimensions, comparisons across models become inconsistent and may depend on selective qualitative examples or task-specific metrics.
+
+Evaluation is therefore not a neutral reporting step but a design decision that reflects what researchers consider important. Choosing metrics implicitly prioritizes certain properties of generated SVGs over others. Metrics focused on appearance reward perceptual realism, whereas metrics that capture geometric or structural properties would emphasize editability and interpretability. The absence of standardized structural metrics explains why visually impressive results may still produce SVGs that are difficult to modify.
+
+This issue is closely related to the broader research gap identified in this thesis. Although a growing number of SVG generation methods have been proposed, systematic evaluation frameworks that consider both visual and structural dimensions remain limited. Existing benchmarks primarily adopt image-generation metrics, which do not fully reflect the characteristics that distinguish vector graphics from raster outputs.
+
+From this perspective, evaluation should be treated as a design problem rather than a purely technical procedure. Defining evaluation criteria requires clarifying the intended use of generated SVGs, whether for illustration, icon design, vectorization, or interactive editing. Different applications may prioritize different properties, suggesting that evaluation must account for multiple dimensions rather than a single aggregate score.
+
+For these reasons, this chapter examines evaluation practices in SVG generation through several complementary dimensions. The following sections analyze visual quality metrics, structural quality indicators, editability considerations, and practical constraints such as computational cost. Together, these perspectives form a foundation for a multi-dimensional evaluation framework that better reflects the goals and trade-offs of modern SVG generation methods.
+
+
+
+\section{Evaluation of Visual Quality}
+
+Visual quality remains the most commonly reported evaluation dimension in SVG generation research. Because generated vector graphics are ultimately rendered as images, many works adopt metrics originally developed for raster image generation to quantify realism, semantic alignment, and perceptual similarity. This practice provides a convenient way to compare methods but also introduces important limitations when applied to structured vector outputs.
+
+A widely used metric is the Fréchet Inception Distance (FID), which measures the similarity between distributions of generated and real images in a learned feature space. In SVG generation, outputs are rasterized before computing FID, allowing comparison with raster datasets or rendered SVG references. Lower FID scores indicate that generated samples resemble the target distribution more closely. As a result, several recent works report FID as evidence of improved visual realism.
+
+However, FID primarily evaluates appearance rather than structure. Two SVGs that render to visually similar images may have very different geometric complexity, path counts, or hierarchical organization. Consequently, improvements in FID do not necessarily correspond to improvements in editability or structural clarity. This limitation is particularly relevant for optimization-based methods, which may achieve strong perceptual alignment by introducing many primitives.
+
+Another commonly used evaluation signal is CLIP-based similarity. CLIP score measures the semantic alignment between rendered SVG images and textual prompts, making it useful for text-to-SVG tasks. Because CLIP captures high-level semantic relationships, it complements FID by evaluating conceptual correctness rather than distribution similarity. Nevertheless, like FID, CLIP operates in image space and does not directly reflect geometric properties of the vector representation.
+
+Perceptual similarity metrics, such as feature-based distances computed from pretrained networks, are also used to assess how closely generated SVGs match reference images. These metrics are particularly relevant for vectorization tasks, where reconstruction accuracy is important. While perceptual losses can encourage better visual fidelity during training, their use as evaluation metrics shares the same limitation: they measure rendered appearance rather than structural quality.
+
+Human evaluation remains an important complementary approach. Qualitative comparisons, user studies, or curated visual examples are frequently used to demonstrate improvements that are difficult to capture numerically. Researchers often highlight representative samples that illustrate stylistic diversity, realism, or prompt alignment. Although this provides valuable insight, qualitative evaluation introduces subjectivity and may emphasize best-case examples rather than typical outputs.
+
+This leads to an important observation about evaluation practices in the literature. Visual metrics are often reported selectively, and different works adopt different combinations of metrics depending on the task. In some cases, quantitative results are presented alongside carefully chosen qualitative examples that highlight strengths while structural limitations remain underreported. This does not imply incorrect evaluation, but it indicates that current practices emphasize visual performance more strongly than structural characteristics.
+
+Despite these limitations, visual quality evaluation remains essential. It provides a baseline for assessing realism, semantic correctness, and reconstruction performance, all of which are important aspects of SVG generation. However, visual metrics alone cannot fully characterize the usefulness of generated vector graphics. Recognizing this limitation motivates the need to examine additional evaluation dimensions that capture properties unique to vector representations, beginning with structural quality.
+
+
+
+\section{Evaluation of Structural Quality}
+
+While visual metrics assess how SVG outputs appear after rasterization, structural quality evaluates the internal organization of the vector graphic itself. This includes properties such as path redundancy, hierarchy, layering, grouping, and topology stability. Because SVG is a structured representation, these properties directly influence whether the generated output is interpretable, reusable, and suitable for downstream editing.
+
+Structural quality is rarely measured through standardized metrics. Instead, many works report structural observations qualitatively, for example by visualizing path counts or showing layered decompositions. Some papers discuss compactness by reporting the number of primitives used to represent a graphic, implicitly assuming that fewer paths correspond to cleaner structure. Although path count provides a useful signal, it does not fully capture hierarchy or grouping relationships between elements.
+
+Redundancy is one of the most common structural issues observed in optimization-based methods. When supervision emphasizes pixel-level accuracy, models may introduce overlapping or fragmented paths in order to match appearance. This can lead to vector graphics that render correctly but contain unnecessary geometric complexity. Structural evaluation therefore often involves inspecting whether primitives correspond to meaningful visual components rather than small corrective adjustments.
+
+Hierarchy and layering represent another important dimension of structural quality. Well-structured SVG graphics organize elements into groups and layers that reflect semantic relationships. Some recent methods explicitly model layered representations or hierarchical optimization strategies, which can improve structural clarity. However, the degree to which hierarchy is preserved varies widely across models and is rarely quantified in a consistent manner.
+
+Topology stability is also relevant when analyzing structural quality. Small changes in prompts or initialization may cause significant variations in primitive arrangement, even when visual appearance remains similar. This instability can make it difficult to interpret the generated structure or reuse it across related tasks. Evaluating topology stability therefore involves examining whether generated SVGs maintain consistent organization across variations.
+
+Dataset-trained models introduce a different structural behavior. Because they learn from examples, they may inherit typical path structures and grouping patterns present in the dataset. This can lead to more consistent geometry, especially for icon-style graphics. However, dataset bias may also restrict structural diversity or limit generalization to more complex scenes.
+
+Another challenge in structural evaluation is the absence of unified benchmarks. Unlike visual metrics, which can be computed automatically after rasterization, structural properties require parsing SVG files and defining criteria that capture meaningful organization. This makes evaluation more context-dependent and explains why structural quality is often discussed descriptively rather than measured quantitatively.
+
+Despite these challenges, structural evaluation is essential for understanding the practical value of generated SVGs. Graphics with clear hierarchy, limited redundancy, and stable topology are more likely to support editing and reuse. Conversely, structurally complex outputs may require manual cleanup before they can be integrated into design workflows.
+
+Recognizing structural quality as a distinct evaluation dimension highlights a key limitation of current evaluation practices. Visual similarity does not guarantee structural clarity, and improvements in perceptual metrics may coincide with increased geometric complexity. This motivates the need to consider editability as an explicit evaluation dimension, which is examined in the next section.
+
+
+
+\section{Editability}
+
+Editability is one of the defining characteristics that differentiates vector graphics from raster images, yet it is rarely formalized as an evaluation criterion in SVG generation research. In practice, the usefulness of a generated SVG is strongly determined by how easily a designer can modify it after generation. This includes the ability to move elements independently, change colors, adjust shapes, reorganize layers, and reuse components without extensive manual cleanup.
+
+Unlike visual quality, editability cannot be captured by a single numerical metric. Instead, it emerges from several structural properties, including meaningful grouping, limited path redundancy, stable topology, and clear separation between visual components. An SVG that renders correctly but contains hundreds of overlapping primitives may be visually convincing while remaining difficult to edit. Conversely, a slightly less detailed graphic with clean structure may be significantly more useful in practice.
+
+Several observable indicators can be used to assess editability. These include whether primitives correspond to semantic parts of the graphic, whether layers reflect meaningful organization, whether path counts remain manageable, and whether local edits affect only intended regions. Methods that explicitly model layers, incorporate structural priors, or learn from clean SVG datasets often produce outputs that score higher along these dimensions.
+
+Representation and supervision jointly influence editability outcomes. Parametric representations with explicit primitives generally support direct manipulation, but optimization-driven supervision may introduce redundant paths that reduce clarity. Implicit neural representations can produce coherent layered outputs, yet the conversion process into discrete primitives determines whether editing remains feasible. Dataset-trained approaches may inherit structured patterns from data, though they can also propagate dataset-specific limitations.
+
+Another important aspect of editability is predictability. Designers benefit from consistent structure across similar generations, enabling reuse and incremental refinement. Methods that produce highly variable primitive arrangements may hinder this workflow, even when individual outputs appear visually strong. This highlights that editability is closely linked to both structural stability and reproducibility.
+
+In real design environments, editability is often evaluated informally by importing generated SVGs into tools such as Figma or Illustrator and inspecting their structure. Designers assess whether elements can be selected individually, whether layers are organized logically, and whether modifications introduce unexpected visual artifacts. Although this evaluation is qualitative, it reflects practical requirements that are not captured by visual metrics alone.
+
+The lack of standardized editability metrics represents a notable gap in current research. While some works discuss compactness or layering qualitatively, few provide systematic criteria for assessing usability from a design perspective. This suggests that editability should be treated as a first-class evaluation dimension rather than an implicit byproduct of structural quality.
+
+Considering editability explicitly allows evaluation to better reflect the intended use of generated SVGs. For applications such as icon design, interface assets, and vector illustration, the ability to modify and reuse generated graphics is often more important than maximizing perceptual realism. Recognizing this distinction helps explain why different methods may be preferred depending on the application context.
+
+The next section extends the evaluation perspective beyond visual and structural properties by examining efficiency and practical constraints, which influence whether SVG generation methods can be deployed in interactive or resource-constrained settings.
+
+
+
+
+\section{Efficiency and Practical Usability}
+
+Beyond visual quality, representation, and structural properties, practical usability of SVG generation methods is strongly influenced by efficiency. In many real design scenarios, generation speed, computational cost, and hardware requirements determine whether a method can be integrated into interactive workflows or remain primarily research-oriented.
+
+SVG generation approaches differ significantly in inference behavior. Optimization-based methods typically require iterative refinement, where vector parameters are repeatedly updated using gradient signals from reconstruction or semantic guidance. This process can produce high-quality and flexible results, but it introduces latency. Generating a single SVG may take several minutes depending on the number of primitives, optimization steps, and guidance models involved. As a result, these methods are often less suitable for real-time interaction unless simplified or accelerated.
+
+Neural implicit approaches share similar efficiency challenges. Because geometry is encoded in neural network weights, generation involves iterative optimization in parameter space combined with repeated rendering. This increases computational cost compared to forward decoding models. While implicit representations can produce coherent layered structures, the need for continuous evaluation of neural fields and rasterization can limit scalability in practical applications.
+
+Dataset-trained feed-forward models generally offer faster inference. Once trained, these models generate SVG outputs in a single forward pass, making them more compatible with interactive tools. This property explains why sequential and latent-based methods are attractive for deployment scenarios, even when they may provide less control over structure compared to optimization-based approaches.
+
+However, efficiency is not determined solely by inference time. Hardware requirements also play an important role. Many recent methods rely on large pretrained models, including diffusion systems and multimodal encoders, which introduce significant memory and compute demands. High-VRAM GPUs may be required even when the SVG output itself is relatively simple. This creates a gap between conceptual feasibility and practical reproducibility.
+
+Another dimension of efficiency relates to scalability with graphic complexity. Methods that maintain a fixed representation size, such as latent models, may scale more gracefully as scene complexity increases. In contrast, approaches that directly optimize primitives may experience rapidly increasing computation as path counts grow. This trade-off reflects a broader tension between structural control and computational cost.
+
+Efficiency also interacts with editability. Iterative optimization allows fine-grained control but slows down generation, while fast feed-forward models may sacrifice structural refinement for speed. In practice, different application contexts prioritize different points along this spectrum. Interactive design tools require responsiveness, whereas offline generation pipelines may tolerate longer optimization.
+
+Reproducibility is another practical constraint highlighted across many SVG generation works. Public implementations, pretrained weights, and clear documentation significantly affect whether methods can be evaluated or adopted by other researchers and practitioners. The absence of reproducible pipelines limits comparative analysis and contributes to fragmented evaluation practices within the field.
+
+Considering efficiency alongside representation and structure provides a more complete understanding of SVG generation methods. Rather than treating computational cost as a secondary concern, it becomes part of the evaluation framework that explains why certain architectures are favored in applied settings.
+
+With representation, structure, editability, and efficiency discussed as complementary dimensions, the next chapter synthesizes these observations to analyze how architectural choices collectively influence SVG generation outcomes and to identify patterns that emerge across the selected models.
+
+
+
+
+
+
+\section{Quantitative vs Qualitative Evaluation Gap}
+
+Evaluation plays a central role in generative modeling, as it determines how progress is measured and how different methods are compared. In SVG generation research, evaluation typically combines quantitative metrics with qualitative visual analysis. However, a consistent mismatch exists between what is measured numerically and what matters for vector graphics in practice. This mismatch forms an important gap that directly motivates the analysis in this thesis.
+
+Most SVG generation papers report quantitative metrics adapted from raster image generation. Common examples include Fréchet Inception Distance (FID), reconstruction losses, perceptual similarity scores, and occasionally CLIP-based alignment metrics. These metrics evaluate how visually similar rendered SVG outputs are to reference images or how well generated images match textual prompts. Because SVGs are rendered into raster images before evaluation, the measurement process primarily reflects pixel-level appearance rather than vector structure.
+
+While such metrics provide useful signals about realism and semantic alignment, they do not capture key properties that define vector graphics quality. SVG outputs may achieve strong FID scores while containing redundant paths, fragmented geometry, unstable layering, or poor grouping. From a design perspective, these issues significantly affect editability and reuse, yet they remain largely invisible to standard quantitative metrics.
+
+Another limitation arises from how quantitative results are reported. Many papers highlight best-case metrics obtained under specific configurations, datasets, or prompt selections. This does not necessarily reflect typical performance or structural robustness across diverse scenarios. As a result, quantitative evaluation can sometimes function more as a comparative indicator within a narrow experimental setup than as a reliable measure of practical SVG quality.
+
+Qualitative evaluation, on the other hand, focuses on visual inspection and structural interpretation. Papers often include visual examples that illustrate layering behavior, path simplicity, or stylistic consistency. For vector graphics, these qualitative aspects are essential because they reveal whether the generated SVG behaves as an editable artifact rather than merely a rendered image.
+
+However, qualitative evaluation introduces its own challenges. Visual inspection is inherently subjective and difficult to standardize. Different works emphasize different aspects, such as realism, style diversity, icon clarity, or structural cleanliness. Without shared criteria, comparisons across methods become difficult, which contributes to fragmented understanding of model behavior.
+
+This gap between quantitative metrics and qualitative assessment is particularly important when considering the research questions of this thesis. The goal is not only to evaluate visual realism but to understand how representation and supervision choices influence structural outcomes. This requires evaluation perspectives that go beyond image similarity and explicitly consider properties such as path organization, hierarchy stability, editability, and computational cost.
+
+Several emerging works implicitly acknowledge this issue by introducing task-specific analyses, such as layer consistency studies, path simplification statistics, or user-centric editing demonstrations. Nevertheless, these approaches remain inconsistent and are rarely adopted as standard benchmarks.
+
+Therefore, the evaluation dimension in SVG generation should be understood as multi-layered. Quantitative metrics capture visual fidelity and semantic alignment, while qualitative analysis reveals structural correctness and usability. Neither perspective alone is sufficient.
+
+Recognizing this evaluation gap provides a conceptual bridge to the final synthesis chapter. By analyzing representation, supervision, structure, editability, efficiency, and evaluation together, it becomes possible to identify patterns that explain why certain architectural combinations produce SVG outputs that are not only visually convincing but also structurally meaningful.
+
+
+
+\section{Toward a Multi-Dimensional Framework for Evaluating SVG Quality}
+
+The analysis throughout this thesis suggests that evaluating SVG generation cannot rely on a single metric. Unlike raster images, SVG outputs must be interpreted not only visually but also structurally and functionally. In practice, a high-quality SVG is expected to be semantically correct, geometrically stable, structurally clean, and editable.
+
+Existing literature typically evaluates models using visual similarity metrics or qualitative examples. However, these signals do not fully capture the properties that determine whether an SVG is useful in real design workflows. Based on the reviewed methods and their outputs, this thesis proposes a multi-dimensional perspective describing what aspects of SVG quality should be measured.
+
+\paragraph{Semantic Alignment}
+
+A first dimension concerns whether the generated SVG matches the intended concept. In text-to-SVG settings, this corresponds to semantic alignment between the prompt and the rendered output. Most works approximate this using image-text similarity measures derived from pretrained models (e.g., CLIP) or diffusion-based guidance signals.
+
+From an evaluation perspective, semantic quality can therefore be approximated using a small number of alignment metrics, such as CLIP similarity or prompt-image matching scores. These metrics indicate whether the generated graphic represents the correct object or concept, but they do not reflect how the SVG is constructed internally.
+
+\paragraph{Structural Cleanliness}
+
+A second dimension relates to the internal organization of the SVG. Across optimization-based methods, a recurring issue is the emergence of redundant paths, fragmented shapes, or unstable geometry. Even visually convincing outputs may contain excessive primitives that reduce interpretability.
+
+Structural cleanliness can be approximated through measurable signals such as number of paths, presence of redundant primitives, layer consistency, and grouping coherence. Models that explicitly incorporate layered representations, such as NeuralSVG or LayerTracer, tend to produce outputs where structure more closely reflects design logic. This suggests that structural organization is not only an aesthetic property but an indicator of representation quality.
+
+\paragraph{Editability}
+
+Editability describes whether a generated SVG can be realistically modified by a designer. This property is rarely quantified but frequently illustrated qualitatively in model papers. In practice, editability is influenced by path decomposition, layering, parameter stability, and semantic grouping.
+
+Potential indicators of editability include primitive count relative to visual complexity, layer separability, stability of shapes under small parameter changes, and whether objects correspond to meaningful components. For example, results showing complex scenes constructed from a limited number of shapes (as demonstrated in NeuralSVG) suggest higher editability compared to outputs requiring hundreds of primitives.
+
+\paragraph{Geometric Quality}
+
+Another important dimension concerns geometric fidelity. Optimization-based methods may produce jagged curves, unstable boundaries, or small artifacts that are visually subtle but structurally problematic. These issues affect downstream editing and reuse.
+
+Geometric quality can be approximated by examining curve smoothness, continuity of paths, presence of self-intersections, and boundary accuracy relative to the rendered target. While many papers show qualitative comparisons, explicit geometric metrics remain underexplored.
+
+\paragraph{Complexity and Efficiency}
+
+Finally, SVG quality is related to representational efficiency. Two outputs with similar visual appearance may differ substantially in complexity, generation time, and computational requirements. Iterative optimization methods often trade efficiency for flexibility, whereas dataset-trained models shift complexity toward training.
+
+Indicators in this dimension include inference time, number of primitives, memory footprint, and reproducibility requirements. These signals are especially relevant when considering real design workflows where generation speed and controllability matter.
+
+\paragraph{Summary}
+
+Taken together, these observations suggest that SVG quality should be evaluated across multiple complementary dimensions rather than a single score. Semantic alignment reflects whether the correct concept is generated, structural cleanliness captures representation organization, editability reflects practical usability, geometric quality describes shape stability, and efficiency characterizes computational practicality.
+
+This framework does not introduce new quantitative metrics but instead clarifies what should be measured when comparing SVG generation methods. It provides a structured lens for interpreting results across different architectural choices and serves as a foundation for the cross-model synthesis presented in the next chapter.

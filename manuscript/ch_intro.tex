@@ -1,20 +1,92 @@
 \chapter{Introduction}\label{ch:Introduction}
- 
+
+
+Vector graphics differ fundamentally from raster images. Raster images represent visual content as grids of pixels, where each pixel stores color information without explicit semantic meaning. In contrast, vector graphics describe images using mathematical primitives such as lines, curves, shapes, and groups. Because these primitives are defined parametrically, vector graphics can be scaled, transformed, and edited without loss of quality.
+
+Among vector formats, Scalable Vector Graphics (SVG) has become a widely adopted standard. SVG is a text-based representation that encodes geometry, styling, and hierarchical relationships between graphic elements. As a structured format, SVG allows graphics to be programmatically generated and modified, which makes it particularly suitable for computational design workflows.
+
+From the perspective of generative modeling, these structural properties introduce additional challenges. Unlike raster images, SVG graphics explicitly encode geometry and topology. As a result, generating SVG graphics requires more than visual similarity. Generated outputs must also maintain structural correctness so that they remain interpretable. Graphics that contain redundant paths, broken hierarchy, or unstable geometry may appear visually plausible while being difficult to reuse in practical settings.
+
+!?Before learning-based approaches, vector graphics were primarily produced through algorithmic vectorization techniques that approximate raster images using geometric primitives. Although such methods remain widely used, they rely on heuristic rules and often struggle with complex scenes, stylized content, or semantic guidance from text. The emergence of learning-based approaches introduces new possibilities but also raises questions about how models construct vector structure internally.
+
+
 \section{Motivation}
 
-Scalable Vector Graphics (SVG) play an essential role in modern digital design due to their scalability, compactness, and support for semantic editing. Unlike raster images, SVGs describe visual content through structured, text-based geometry using paths, shapes, and hierarchical groupings, allowing for precise control, reusability, and easy modification.
+In recent years, generative models have significantly transformed the landscape of visual design and digital content creation. Diffusion models, large-scale multimodal systems such as CLIP, and transformer-based architectures have demonstrated that high-quality image synthesis from text is no longer a research prototype but a practical reality. Systems such as Stable Diffusion, DALL-E, and Midjourney are capable of producing visually convincing raster images that are sometimes difficult to distinguish from human-created content. Continuous improvements in realism, controllability, and semantic alignment have accelerated the adoption of generative models in creative workflows.
 
-In recent years, machine learning and deep learning models have been applied to the generation of SVGs from various input modalities, such as text prompts, raster images, and sketches. Open-source research has produced a variety of approaches, including sequence models, transformer-based architectures, and differentiable optimization methods, each proposing different strategies for representing and producing vector graphics.
+However, this progress has been much more pronounced in the raster image domain than in vector graphics. While research on vector graphics generation has grown rapidly, the reliability, controllability, and structural quality of generated vector graphics remain open challenges. At the same time, vector graphics continue to play a central role in modern digital design. Icons, logos, illustrations, user interface elements, and data visualizations are typically created and maintained in vector formats because they must remain editable and resolution independent.
 
-Given this diversity, it becomes relevant to study how these open-source models differ in their architectures, internal representations, and the structure of the SVGs they generate. Understanding these aspects can provide a clearer picture of how SVGs are represented and produced computationally, and what factors may influence the quality and editability of the resulting graphics.
+This importance is reflected not only in research but also in industry. Design tools such as Adobe Illustrator and Figma rely heavily on vector representations as the core format for interactive editing. Recent developments in design copilots and AI-assisted creative tools further highlight a shift toward generation systems that must produce editable graphics rather than static images. Emerging integrations between generative models and design platforms suggest that future workflows will require generation methods capable of producing structurally meaningful vector graphics that can be directly reused and modified by designers.
+
+These trends motivate the study of SVG generation not only as a generative modeling task but also as a representation problem, where the structure of the output is as important as its visual appearance.
 
 
-\section{Problem Statement}
-While multiple open-source models exist for SVG generation, they employ heterogeneous approaches in terms of architecture, data representation, and output structure. Some models treat SVGs as sequences of drawing commands, others as hierarchical objects, and still others as continuous geometric parameters optimized through differentiable rendering.
+\section{Research Problem}
 
-This diversity makes it challenging to compare how different approaches handle SVG generation and how these choices influence the final output. Furthermore, the evaluation of SVG quality often depends on various factors, such as path simplicity, structural organization, and editability, which are not always measured in the same way.
+Research on SVG generation has expanded across multiple directions, including sequence-based models, optimization-driven approaches, neural representations, and multimodal generation pipelines. These methods differ significantly in their internal representations, the supervision signals used during training or optimization, and the mechanisms through which these signals are translated into final SVG outputs. Representation choices influence optimization stability, geometric consistency, and editability, yet these relationships remain insufficiently understood.
 
-Therefore, the problem addressed in this research is to systematically describe, compare, and analyze open-source SVG generation methods, focusing on their architectures, internal representations, and output characteristics, in order to understand how these design choices relate to the quality and structure of the generated SVGs.
+A central difficulty is that many works emphasize visual similarity between generated outputs and reference images while structural properties of SVG graphics receive less systematic analysis. Generated graphics may achieve strong perceptual quality but still exhibit issues such as fragmented geometry, redundant paths, missing hierarchy, or limited editability. This creates a gap between visually convincing generation and practically usable vector graphics.
+
+In addition, evaluation practices for SVG generation remain inconsistent. Quantitative metrics commonly adapted from raster image synthesis, such as FID or reconstruction-based losses, primarily measure visual similarity rather than structural quality. While these metrics provide useful signals, they do not capture properties such as geometric consistency, topology, hierarchy, or editability. Consequently, quantitative results reported across different models may not fully reflect practical SVG quality, making comparison between approaches difficult.
+
+Furthermore, the diversity of internal representations — including parametric primitives, command sequences, latent embeddings, and neural implicit functions — complicates understanding how architectural design influences structural outcomes. There is currently no unified perspective that explains how representation and optimization strategies relate to the resulting vector structure.
+
+This lack of systematic analysis of representation, structure, and evaluation constitutes the central research gap addressed in this thesis.
+
+\section{Thesis Objective}
+
+This thesis investigates SVG generation and vectorization methods from the perspective of representation, optimization, and structural quality. Rather than proposing a new generation model, the goal is to develop a structured understanding of how existing architectures construct vector graphics and how these design choices influence the resulting SVG structure.
+
+Particular emphasis is placed on models whose generation process remains interpretable in terms of vector operations or clearly defined architectural components. While recent large language model–based approaches treat SVG generation as structured code synthesis, their internal generation process is less explicit with respect to geometric construction. For this reason, language-model-based SVG generation is considered primarily as an emerging direction, while the main analysis focuses on optimization-based, neural, and hybrid approaches where representation choices can be directly examined.
+
+To support systematic analysis, the thesis focuses on a selected set of open-source SVG generation models with available implementations and published descriptions. This enables comparative study across methods that differ in representation strategy, supervision signals, and optimization pipelines. The analysis aims to clarify how different approaches balance visual fidelity with structural correctness and to identify evaluation criteria relevant to real-world design workflows.
+
+
+
+
+
+
+
+
+
+
+% In recent years or even months, image generative models is changing the stones of visual design/art creation. Diffusion models, large-scale multimodal systems such as CLIP and transformer-based architectures have demonstrated high-level synthesis from text is a practical reality now. Specifically, raster image generations is in non-stop progress. We can see the example such as Stable Diff. DALL-E3, Midjourney, FLUX and etc. Those are image generation models which lead the field currently. Most of the generated raster images are not separatable from the original or human-made designs right now. But it does not start like that, over the time they were trying to minimize the error and they achieved it and it will be better. However, this progress has not reflected on domain of vector graphics. We can not say it is completely loss case, there are many websites/tools, e.g. Figma, Adobe Illustrator, SVGMaker.io, Kittle and etc. and also many generation models, which is built by using different approaches such as, optimization-based, neural feed-forward and transformer-based methods.
+
+% Why vector graphics are very important? We will explain detailly about vector graphics and SVG in the background chapter, but shortly saying, all the websites, apps, software, games and so on. most of them are relying on vector graphics in terms of design. Because rather than raster images which rely on pixels to create one image, vector graphics rely on mathematical foundations to generate image, that's making it easy to scale it or edit it by dragging somewhere or transform or changing the shape. Because of mathematical foundations, you can change the number to change view of shape or size without losing any resolution or quality. In pixel case, while each images has certain number of pixels, when its scaled either it needs to predict more pixels btw current ones or when you scaled downwards it will be discarded, so leading to loss of detail. For both cases, visual information is lost. So for that kind of reason, we mostly rely on vector graphics in terms of design of everything on the web?! According to recent W3Techs data from January, SVG has become a web staple, with 65.3% of all websites now relying on it for their graphics. SVG is 2D vector graphics. I think, we can say that SVG is structured representation of geometric primitives, their hierarchy and styling. Its capability on editability, modular structure makes SVG indispensable in web design, interface development, branding, data visualization, and iconography. But from aspect of generative modelling, those structure properties bring challenges with themselves. 
+
+% Unlike raster images, which can be represented as dense numerical grids, SVGs encode shapes, paths, layers and topology explicitly. Therefore, generation of SVG requires structural correctness. It may be hard to edit or reuse if there is output that contains, broken grouping or redundant paths. This structural dimension differentiates SVG generation from conventional image synthesis.
+
+% Long before AI, there was only algorithm-based vectorization tools, such as Adobe Illustrator, CorelDraw, Portrace, Inkspace and etc., to convert raster/pixel-based images into vector format, mainly SVG. How they are doing that? There were main techniques for it, such as edge detection, counter tracing and polygon approximation. Instead of explaining how they work one-by-one,I want to gather under them all one name, tracing. How it works? For example, you have a pixel-based image of a blue whale, and you want it in vector format. Those tools usually detect connected regions in the image (often after converting to a bitmap), extract their boundaries and then approximate those boundaries with polygons or Bézier curves, rather than just detecting edges and drawing lines on them. Or one famous way is converting images to bitmap and then detect the connected regions and their contours, which makes it easier. Those detection and approximation lines or figures are called tracing which is kind of following the contours of detected regions.
+
+% In this thesis, we will focus on SVG generation and vectorization models within domain of AI, Machine Learning and ANN. First known model which is generating vector-style drawings is SketchRNN by Google in 2017. Basically, model learns to produce vector drawings as sequences of pen strokes. However, those kind of methods represent drawings as temporal stroke sequences rather than structured vector graphics elements. They do not generate structed SVG representations, which is the primary focus of this research. 
+
+% Methods that generate SVG(vector graphics) can be categorized into several research directions, each of them addressing the structural challenges of vector representations in different ways. 
+
+% A first line of work focuses on sequence-generating approaches, where vector drawings are modelled as ordered sequences of commands or strokes. Inspired by language modelling, these methods learn to predict drawing operations step-by-step, typically using recurrent or transformer-based architectures. Early work which we mentioned before, SketchRNN [Ha and Eck 2017] demonstrated that neural networks can learn stroke dynamics and produce plausible vector-style sketches. Later models extend this idea to SVG command prediction, including DeepSVG [Carlier et al. 2020], Sketchformer [Ribeiro et al. 2020], and subsequent sequence-based vector generation works [Ganin et al. 2018; Lopes et al. 2019; Wang et al. 2023b; Wu et al. 2023]. However, when representing graphic as sequence, it can cause limitations, for example, long command chains make training difficult, keeping global visual coherence and structural correctness at the same time becomes challenging. At the same time, their dependence on vector datasets limited their generalization to more complex generations. Because there are not really datasets for complex images. We will talk about it later. Briefly, these approaches often struggle to scale to complex, layered SVG graphics. 
+
+% An alternative research direction is the learning process happening into the image domain through differentiable rasterization. In this method, we optimize randomly or learned initialization of vector parameters so that the rendered image of initialized SVG matches a target raster image or sometimes a textual description. Differentiable rasterizers(DiffVG) plays a huge role in this process. Several methods introduce SVG generation as an optimization problem. Models, such as LIVE iteratively refines layered Bezier paths to approximate images or VectorFusion and SVGDreamer combine differentiable rasterization with diffusion-based supervision to enable text-to-vector generation. Those kind of approaches despite having strong visual similarity or generating complex images, may produce unstable geometry, messy paths which leads to difficulty on editability. We will detailly explain its integration to vector graphics generation in the background chapter. 
+
+% Instead of explicitly predicting discrete primitives, some models shapes vector graphics as continuous neural fields or decomposable layered representations that behave similarly to vector graphics. By combining vector optimization with neural parameterization, frameworks such as NeuralSVG and NiVeL, model shapes of vector graphics through neural networks rather than directly optimizing primitive parameters. Such approaches produce vector representation by neural function, typically an MLP, which weights are optimized using image-space supervision. To explain simply, instead of updating Bezier control points, paths or shapes, optimization is happened in the neural parameter space. This can be classified as a hybrid approach that bridges vector optimization and neural representation learning. Difference between those approaches explained in that chapter.
+
+% More recent works has begun to shift toward large language model(LLM) and multimodal large language model (MLLM) approaches. As mentioned before, SVG is fundamentally a structured textual representation, so theoretically that suppose to be perfect match for language models. These methods formulate SVG generation as code synthesis, leveraging transformer architectures pretrained on large-scale text and multimodal data. The works such as Starvector, OmniSVG, LLM4SVG, LLM4SVG and InternSVG adopt MLLM designs that integrate visual encoders, based on Vision Transformers or CLIP-style approaches. Building on this idea, Language model-based pipelines work on SVG as a multimodal sequence that encodes both semantic and structural information. In this paradigm, SVGs are treated similarly to natural language, where models generate XML commands while conditioning on textual or visual inputs. Compared to earlier sequence-based models, these models focus on multimodal alignment and ability to handle multiple task, such as understanding, generation and editing. Despite their high-level results, length nature of SVG code makes it difficult for transformer models to maintain structural consistency over long sequences. In addition, these models are also less interpretable, in terms of generation process, which is distributed across large neural architectures rather than explicitly defined vector operations. For this reason, in this thesis, we did not focus on language-based model SVG generation. Instead, we focus on approaches where architectures provide clearer insight into how vector graphics are constructed and optimized. 
+
+
+
+% \section{Motivation}
+
+% Scalable Vector Graphics (SVG) play an essential role in modern digital design due to their scalability, compactness, and support for semantic editing. Unlike raster images, SVGs describe visual content through structured, text-based geometry using paths, shapes, and hierarchical groupings, allowing for precise control, reusability, and easy modification.
+
+% In recent years, machine learning and deep learning models have been applied to the generation of SVGs from various input modalities, such as text prompts, raster images, and sketches. Open-source research has produced a variety of approaches, including sequence models, transformer-based architectures, and differentiable optimization methods, each proposing different strategies for representing and producing vector graphics.
+
+% Given this diversity, it becomes relevant to study how these open-source models differ in their architectures, internal representations, and the structure of the SVGs they generate. Understanding these aspects can provide a clearer picture of how SVGs are represented and produced computationally, and what factors may influence the quality and editability of the resulting graphics.
+
+
+% \section{Problem Statement}
+% While multiple open-source models exist for SVG generation, they employ heterogeneous approaches in terms of architecture, data representation, and output structure. Some models treat SVGs as sequences of drawing commands, others as hierarchical objects, and still others as continuous geometric parameters optimized through differentiable rendering.
+
+% This diversity makes it challenging to compare how different approaches handle SVG generation and how these choices influence the final output. Furthermore, the evaluation of SVG quality often depends on various factors, such as path simplicity, structural organization, and editability, which are not always measured in the same way.
+
+% Therefore, the problem addressed in this research is to systematically describe, compare, and analyze open-source SVG generation methods, focusing on their architectures, internal representations, and output characteristics, in order to understand how these design choices relate to the quality and structure of the generated SVGs.
 \section{Research Goals}
 \begin{enumerate}
     \item To explain and analyze the core properties, structures, and components of SVG graphics as a foundation for understanding their representation and generation.
@@ -35,20 +107,11 @@ Therefore, the problem addressed in this research is to systematically describe,
     \item What kinds of structure do these models produce?
     \item How can the quality and editability of generated SVG be evaluated?
     \item What is the observed quality of SVG outputs across different models?
-
-    \item What makes open source model suitable for testing? 
-
-    \item Which open-source SVG generation models are most suitable for testing and comparison?
-
-    \item How do the selected open-source SVG generation models perform in terms of defined criteria (eg. editability, quality and practical usage)?
-    
-
 \end{enumerate}
 
 
-\section{What is contribution of the thesis to the field?}
-This thesis proposes a structured view of SVG generation and vectorization methods by classifying them according to how SVGs are produced at inference time, and examines how these design choices affect editability and practical usability.
     
+
 
 
 
@@ -71,6 +134,13 @@ This thesis proposes a structured view of SVG generation and vectorization metho
 %     \item Identify open challenges and suggest directions for more consistent and structure-aware evaluation methods.
 % \end{enumerate}
 
+The remainder of this thesis builds on the conceptual progression introduced above. The background chapter introduces the fundamental concepts required to understand vector graphics generation, including SVG structure, internal representation types, differentiable rendering, and supervision strategies used in learning-based methods.
+
+Building on this foundation, subsequent chapters review existing SVG generation approaches and analyze how architectural design choices influence vector structure. Particular attention is given to the relationship between representation strategy and the properties of generated graphics.
+
+Following the architectural analysis, the thesis introduces evaluation perspectives for SVG generation that extend beyond visual similarity. Both quantitative and qualitative criteria are considered, including measures related to editability, geometric consistency, and practical usability.
+
+These evaluation perspectives are then applied in a comparative analysis of selected open-source models, where strengths, limitations, and trade-offs between approaches are examined. The thesis concludes by summarizing key insights, discussing limitations, and outlining directions for future research in structured vector graphics generation.
 
 
 
