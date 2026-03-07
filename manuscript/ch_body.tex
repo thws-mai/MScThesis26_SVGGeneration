@@ -1,21 +1,116 @@
-\chapter{Architectural Landscape of SVG Generation}\label{ch:Landscape}
+\chapter{Architectural Landscape of SVG Generation}
+\label{ch:Landscape}
 
-In the previous chapters, SVG generation was introduced as a problem that extends beyond visual synthesis. Unlike raster image generation, SVG generation requires models to construct structured representations that remain interpretable and editable. This structural requirement creates a fundamental tension: approaches that achieve high visual realism do not necessarily produce vector graphics that can be reused or modified by designers.
+SVG generation is not a single problem with a single solution. 
+Some methods treat vector graphics as optimization targets and 
+adjust geometric parameters until a rendered image matches a 
+prompt or a reference. Others learn from datasets and generate 
+SVGs through a trained decoder. A smaller group avoids explicit 
+geometric primitives entirely and uses neural functions to 
+define shapes indirectly. These differences are not just 
+technical details --- they reflect fundamentally different 
+ideas about what a good SVG output should look like, and they 
+lead to very different trade-offs between visual quality, 
+structural organization, and editability.
 
-The rapid growth of SVG generation research has led to a wide variety of models addressing this problem from different perspectives. Some methods learn SVG structure directly from datasets, others treat vector graphics as optimization variables, while more recent approaches rely on diffusion priors or neural implicit representations. Although these methods are often presented individually in the literature, analyzing them in isolation makes it difficult to understand what architectural choices actually influence structural quality.
+To make these trade-offs visible, this thesis analyzes the 
+selected models across three dimensions: how they represent 
+vector graphics internally, how they supervise the generation 
+process, and what the results look like in terms of structure 
+and usability. This chapter introduces the thirteen models 
+that form the basis of that analysis, organized into five 
+families according to their shared design assumptions. Each 
+family represents a distinct way of thinking about SVG 
+generation, and understanding the differences between them 
+is what makes the later analysis possible.
 
-For this reason, this thesis does not organize the analysis around individual models. Instead, the selected approaches are examined through model families that share common assumptions about representation, supervision, and optimization. Grouping models in this way allows recurring design patterns to become visible and makes it possible to compare how different architectural strategies affect the resulting SVG structure.
+The five families cover optimization-based vectorization, 
+diffusion-guided generation, neural implicit representations, 
+dataset-trained generative models, and neural vectorization 
+systems. The boundaries between them are not always sharp --- 
+some recent models deliberately combine ideas from more than 
+one family. But the grouping is still useful because it keeps 
+the focus on what actually differs between approaches, rather 
+than treating each model as a separate contribution to be 
+described in isolation.
 
-The thirteen models selected in this work were chosen to cover the main directions of modern SVG generation. The selection reflects diversity across supervision strategies, internal representations, and inference regimes, while maintaining a focus on approaches whose architectures remain interpretable. In particular, the models span optimization-based vectorization, diffusion-guided generation, neural implicit representations, dataset-trained generative models, and neural vectorization systems. This coverage enables analysis of how different combinations of representation and supervision lead to different trade-offs between realism, editability, and computational cost.
 
-Another motivation for introducing model families is to avoid treating SVG generation as a single unified problem. In practice, the goals of generation vary significantly. Some approaches aim to approximate raster images as accurately as possible, others focus on text-driven synthesis, while a smaller subset explicitly targets layered and editable outputs. These differences are reflected in architectural design choices, including how primitives are initialized, how gradients are propagated, and whether structure is learned from data or emerges through optimization.
 
-The family-based perspective therefore serves as a bridge between the descriptive overview of existing methods and the analytical chapters that follow. Rather than describing models as isolated contributions, this chapter introduces the architectural landscape within which they operate. Each family highlights a distinct strategy for constructing vector graphics and reveals implicit assumptions about what constitutes a successful SVG representation.
+Methods that generate SVG graphics can be grouped into several 
+research directions, each addressing the structural challenges of 
+vector representations differently.
 
-Importantly, this taxonomy is not intended as a rigid classification but as an analytical tool. Many recent methods combine ideas from multiple families, blurring the boundaries between optimization, learning, and generative modeling. However, the grouping remains useful because it exposes which components of a pipeline are responsible for structural decisions. This perspective is essential for addressing the central question of this thesis: which architectural choices lead to SVG outputs that are not only visually convincing but also structurally meaningful and editable.
+A first line of work treats vector drawings as ordered sequences 
+of commands or strokes. Inspired by language modelling, these 
+methods learn to predict drawing operations step by step using 
+recurrent or transformer-based architectures. SketchRNN~\cite{haDrawTogetherNeural2017} 
+showed that neural networks can learn stroke dynamics and produce 
+plausible vector-style sketches. Later models extended this to SVG 
+command prediction, including DeepSVG~\cite{carlierDeepSVGHierarchicalGenerative2020}, 
+Sketchformer~\cite{ribeiroSketchformerTransformerbasedRepresentation2020}, 
+and subsequent sequence-based works~\cite{ganinSpiralGeneratingCurved2018, 
+lopesLearningRepresentationsSketch2019}. However, long command 
+chains make training difficult, and keeping global visual coherence 
+and structural correctness at the same time becomes challenging. 
+SVG datasets also tend to cover simple graphics --- icons, logos, 
+basic illustrations. There are no large-scale datasets for complex 
+scenes, which limits how far these models can generalize.
 
-The following sections introduce the five model families considered in this work. Each section presents the shared design principles of the family, highlights representative models, and outlines the structural implications of the underlying approach. This overview establishes the conceptual foundation required for the subsequent analysis of representation, supervision, and editability across SVG generation methods.
+A second direction moves the learning process into the image domain 
+through differentiable rasterization. Here, a set of vector 
+parameters is initialized and then iteratively optimized so that 
+the rendered image matches a target raster image or a textual 
+description. DiffVG~\cite{liDifferentiableVectorGraphics2020a} 
+makes this possible by allowing gradients to flow back from pixel 
+space to vector parameters. Models such as 
+LIVE~\cite{maLayerwiseImageVectorization2022} iteratively refine 
+layered Bézier paths to approximate images, while 
+VectorFusion~\cite{jainVectorFusionTexttoSVGSymbol2023} and 
+SVGDreamer~\cite{xingSVGDreamerTextGuided2024} combine 
+differentiable rasterization with diffusion-based supervision to 
+enable text-to-vector generation. These approaches can produce 
+visually strong results, but they may also produce unstable 
+geometry and messy paths, which makes editing difficult.
 
+A third direction avoids directly optimizing discrete primitives. 
+Instead of updating Bézier control points, paths, or shapes, 
+these methods model vector graphics through neural networks and 
+run optimization in neural parameter space. Frameworks such as 
+NeuralSVG~\cite{vinkerNeuralSVGInstancededbasedSVG2025} and 
+NiVeL~\cite{thamizharasanNIVeLNeuralImplicit2024} represent shape 
+boundaries through a neural function --- typically an MLP --- 
+whose weights are optimized using image-space supervision. This 
+can be thought of as a hybrid approach that bridges vector 
+optimization and neural representation learning.
+
+More recent work has shifted toward large language models (LLMs) 
+and multimodal large language models (MLLMs). Since SVG is 
+fundamentally a structured text format, language models are a 
+natural fit for this task. Methods such as 
+StarVector~\cite{rodriguezStarVectorGeneratingScalable2025}, 
+OmniSVG~\cite{yangOmniSVGUnifiedScalable2025}, 
+LLM4SVG~\cite{xingEmpoweringLLMsUnderstand2025}, and 
+InternSVG~\cite{wangInternSVGUnifiedSVG2025} treat SVG generation 
+as code synthesis, using transformer architectures pretrained on 
+large-scale text and image data to generate XML commands from 
+textual or visual inputs. Compared to earlier sequence-based 
+models, these approaches show stronger alignment between text 
+prompts and visual outputs and cover a wider range of tasks 
+including understanding, generation, and editing.
+
+However, this paradigm has a problem that is directly relevant to 
+this thesis. SVG files are long --- even simple graphics produce 
+hundreds of lines of XML --- and transformer models struggle to 
+maintain structural consistency across sequences of that length. 
+More fundamentally, generation is distributed across large neural 
+architectures rather than defined through explicit vector 
+operations, which makes it difficult to trace how geometric 
+structure emerges from architectural decisions. For these reasons, 
+LLM-based SVG generation is treated here as an emerging direction 
+rather than a primary subject of analysis. The following chapters 
+focus on optimization-based, neural, and hybrid approaches, where 
+the relationship between representation and structural outcomes 
+can be examined more directly.
 
 \section{Optimization-Based SVG Generation}
 
