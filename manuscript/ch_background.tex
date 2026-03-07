@@ -1,195 +1,315 @@
 \chapter{Background}\label{ch:Background}
 
+The models analyzed in this thesis draw on a shared set of 
+technical foundations: the structure of SVG itself, the 
+representations used to manipulate it during learning, the 
+rendering bridge that connects vector parameters to pixel 
+space, and the supervision signals that drive optimization. 
+Understanding these components is what makes it possible to 
+compare models not just by their outputs, but by the 
+structural choices that produce them.
+
+
 \section{Vector Graphics Fundamentals}
 
-Scalable Vector Graphics (SVG) is a standard format for representing two-dimensional vector graphics as structured text. Unlike many other vector formats, SVG is based on XML and stored as plain text, meaning an SVG file is a readable document that describes how an image should be drawn. At its core, an SVG file consists of instructions that define geometric primitives, styling, and hierarchical relationships between elements.
+Scalable Vector Graphics (SVG) is an XML-based standard for 
+representing two-dimensional graphics as structured 
+text~\cite{eisenbergSVGEssentialsProducing20}. Unlike raster formats, an SVG 
+file is a readable document that describes how an image should 
+be drawn rather than storing pixel values. At its core, an SVG 
+file consists of instructions that define geometric primitives, 
+styling, and hierarchical relationships between 
+elements~\cite{quintScalableVectorGraphics2003}.
 
-SVG supports different types of graphic elements, including basic shapes (such as lines and circles), text, raster images, and, most importantly, paths. Paths are flexible SVG elements that allow complex shapes to be defined using sequences of commands, such as moving a virtual pen, drawing straight lines, and creating smooth curves.
+SVG supports a range of graphic elements, including basic shapes 
+such as lines, rectangles, and circles, as well as text and 
+raster image embeds. The most expressive element is the path, 
+which allows complex shapes to be defined using sequences of 
+commands: moving a virtual pen, drawing straight lines, and 
+creating smooth curves~\cite{eisenbergSVGEssentialsProducing20}.
 
-Rather than consisting only of individual shapes, SVG also supports grouping and layered organization of graphic elements. Multiple shapes can be combined into groups that behave as a single unit for styling and editing. This hierarchical structure improves both human editability and computational manipulation and plays an important role when analyzing the outputs of SVG generation models.
-
-Grouping also introduces an implicit structure into SVG documents. Elements are rendered in a defined order, and later elements visually appear on top of earlier ones. As a result, layering becomes part of the vector representation. While many generative models focus primarily on geometry approximation, hierarchical organization is essential for producing editable graphics.
+SVG also supports grouping and layered organization of elements. 
+Multiple shapes can be combined into groups that behave as a 
+single unit for styling and editing~\cite{quintScalableVectorGraphics2003}. 
+Elements are rendered in a defined order, and later elements 
+appear on top of earlier ones, making layering an intrinsic 
+part of the representation. This hierarchical structure matters 
+for generation: models that produce only geometric approximations 
+without respecting layer organization generate outputs that are 
+visually plausible but difficult to edit.
 
 \subsection{Paths and Bézier Curves}
 
-Most SVG graphics are built using paths. A path consists of a sequence of commands such as \emph{move to}, \emph{line to}, and \emph{curve to}. Curved segments are represented using Bézier curves, which are smooth curves controlled by a set of control points.
+Most SVG graphics are built using paths. A path is a sequence 
+of commands --- \emph{move to}, \emph{line to}, \emph{curve to} 
+--- that define its shape~\cite{eisenbergSVGEssentialsProducing20}. Curved 
+segments use Bézier curves, which are smooth curves controlled 
+by a set of control points that influence curvature without 
+lying directly on the curve.
 
-SVG supports both quadratic and cubic Bézier curves. Quadratic Bézier curves use a single control point, while cubic Bézier curves use two control points and provide greater flexibility for representing complex shapes. These control points influence the curvature rather than lying directly on the curve, allowing shapes to be adjusted through a small number of parameters.
-
-From the perspective of SVG generation, Bézier curves form the core geometric representation. Many generation and vectorization models operate by predicting or optimizing these parameters, making them central to how geometry is constructed.
+SVG supports both quadratic Bézier curves, which use a single 
+control point, and cubic Bézier curves, which use two and offer 
+greater flexibility for complex shapes~\cite{eisenbergSVGEssentialsProducing20}. 
+From the perspective of SVG generation, these control points 
+are the core geometric parameters that most models either 
+predict directly or optimize iteratively.
 
 \subsection{Coordinate Systems and Transformations}
 
-SVG graphics are drawn within a coordinate system defined by a viewport. By default, the origin is located at the top-left corner, with the x-axis pointing to the right and the y-axis pointing downward. SVG allows this coordinate system to be transformed through translation, scaling, rotation, and skewing.
+SVG graphics are drawn within a coordinate system defined by a 
+viewport, with the origin at the top-left corner, the x-axis 
+pointing right, and the y-axis pointing 
+downward~\cite{quintScalableVectorGraphics2003}. Transformations --- 
+translation, scaling, rotation, skewing --- can be applied to 
+individual shapes or to groups, allowing collections of paths 
+to be moved or resized while preserving their internal 
+structure. Nested groups define local coordinate frames, which 
+is particularly relevant for layered compositions where 
+subgroups must maintain their relative geometry independently.
 
-Transformations can be applied to individual shapes as well as to groups of elements, allowing collections of paths to be moved or resized together while preserving their internal structure. SVG also supports hierarchical coordinate systems, where nested groups define local coordinate frames. This hierarchical organization is particularly relevant for layered compositions and structured graphics.
+\subsection{Scope of SVG in This Thesis}
 
-\subsection{Scope of SVG Structure in This Thesis}
+SVG includes additional features such as clipping, masking, 
+and filter effects. These primarily affect rendering appearance 
+rather than geometric structure, and are not considered further 
+here. This thesis treats SVG as a structured representation of 
+geometric primitives, paths, and hierarchical relationships. 
+Understanding these components is what allows the generation 
+models analyzed in Chapters~\ref{ch:Landscape} 
+through~\ref{ch:synthesis} to be compared on structural 
+grounds --- not just by their visual output.
 
-SVG includes additional features such as clipping, masking, compositing, and filter effects. However, these mechanisms primarily influence rendering appearance rather than geometric structure. Since this thesis focuses on generation and vectorization of geometric primitives and structural organization, rendering-level effects are not considered further.
 
-In this work, SVG is therefore treated primarily as a structured representation of geometric primitives, paths, and hierarchical relationships. Understanding these structural components is essential for analyzing how generation models construct, optimize, and evaluate vector graphics.
 
 \section{Vector Representations}
 
-In the previous section, we discussed how vector graphics and are fundamentally different from raster images. SVG graphics are text-based descriptions of geometric shapes defined by mathematical parameters. As the final image, a vector graphic can be seen as a collection of primitives such as lines, curves, paths and shapes.
-
-Based on the chosen models in this paper, vector graphics can be represented internally in three different ways: parametric, sequential, and implicit representations. Should mention that, no matter of how a vector graphic is represented inside a generation or vectorization system, the final output is a SVG file. That SVG file is text, editable and follows the same standard. What changes is not the output format, but the internal representation used by the model during learning or optimization. These internal representations are important because they directly affect what kinds of algorithms can be applied, how stable learning becomes, how editable the result is and how well geometric structure and topology are maintained. 
+SVG generation and vectorization models do not all manipulate 
+vector graphics the same way internally. The final output is 
+always an SVG file --- text-based, editable, conforming to the 
+same standard. What differs is the internal representation 
+used during learning or optimization, and this choice directly 
+affects which algorithms can be applied, how stable training 
+is, and what structural properties tend to emerge. The 
+following subsections introduce the four representation types 
+that appear across the models analyzed in this thesis.
 
 \subsection{Parametric Representation}
 
-The most direct way to represent a vector graphic is through explicit geometric parameters. As the obvious from the name, parametric representations describe vector graphics as collections of shapes, such as lines, curves and paths. Each of them is defined by continuous parameters. These parameters include coordinates, control points, stroke widths and colors. This representation closely matches how SVG itself is defined. An SVG file can be viewed as a list of shapes and paths, where each element is fully described by a set of numeric parameters. Complex graphics may appear by combining many primitives. Vector graphics are simply structured sets of parameters that can be modified independently.
-
-Parametric representations are highly interpretable and easy to edit manually. Each parameter controls a specific visual property, such as the curvature of a path or the position of a shape, which makes changes predictable. Because of this, parametric representations are commonly used in optimization-based approaches, where vector graphics are refined by directly adjusting geometric parameters to better match a target image or a textual description. At the same time, this representation can be challenging for learning-based models. The number of parameters can be different across graphics and small parameter changes can produce disproportionately large visual effects, making learning less stable. For complex images, explicit vector representations may overfit visual detail by introducing many fragmented paths, leading to cluttered structures that lack semantic coherence.
+SVG files are already parametric by nature: every element is 
+defined by a set of numeric values --- control point 
+coordinates, stroke widths, colors --- that can be read, 
+modified, and written as plain text~\cite{eisenbergSVGEssentialsProducing20}. 
+Parametric representations in generation models follow this 
+same structure directly. A graphic is treated as a collection 
+of primitives, each fully described by continuous parameters 
+that can be adjusted independently. In optimization-based 
+methods, generation works by initializing a set of shapes and 
+iteratively refining their parameters until the rendered 
+output matches a target~\cite{maLayerwiseImageVectorization2022}.
 
 \subsection{Sequential Representation}
 
-Another way to represent vector graphics is to view them as sequences of drawing commands. In this representation, a vector graphic is encoded as commands, such as moving a pen to a position, drawing a line, or creating a curve. This representation closely follows how paths are written in SVG, with commands and their arguments appearing in sequence. Sequential representations turn vector graphics into a format that looks alike a sentence. The order of commands defines drawing order and layering, while the commands themselves describe how the graphic is built step by step. This makes sequential representations well suited for models that operate on autoregressive or sequence-to-sequence models. But, it has also its own limitations. Long command sequences can be difficult to model and small errors early in the sequence may ruin the entire graphic. w
+A different way to think about vector graphics is as a 
+sequence of drawing instructions: move the pen here, draw a 
+line there, curve to this point. This mirrors how SVG path 
+data is actually written, but it also opens up a connection 
+to language modelling --- a vector graphic encoded as a 
+command sequence looks structurally similar to a 
+sentence~\cite{carlierDeepSVGHierarchicalGenerative2020}. 
+Command order determines both drawing sequence and layering, 
+and autoregressive models can generate graphics token by 
+token the same way they generate text. The trade-off is that 
+errors accumulate: a mistake early in a long sequence can 
+corrupt everything that follows.
 
-\subsection{Implicit Representation}
+\subsection{Implicit Neural Representation}
 
-Another approach is to represent vector graphics implicitly using neural networks. In this case, geometry is not stored explicitly as shapes, paths or command sequences. Instead, a neural network represents the graphic by its learned weights. The vector is defined implicitly as a function over continuous space, for example by mapping spatial coordinates to colors, layers or shape indicators. Implicit representations change the focus from explicit geometric primitives to continuous functional descriptions. They provide a fixed-size representation no matter of visual complexity and integrate well with gradient-based optimization. This makes them suitable for models that rely on iterative refinement or semantic supervision from pretrained networks. However, implicit representations are generally less interpretable than others. Because the weights of the neural network do not map onto specific shapes. Instead, they altogether define a continuous function that determines the properties of the graphic at each spatial location. For this reason, shapes emerge from evaluating this function over space rather than being stored explicitly as separate components. It is one of the main limitations oimplicit representations.
+Implicit representations take a fundamentally different 
+approach: there are no explicit shapes, no stored control 
+points, no command sequences. Instead, a neural network 
+defines the graphic entirely through its 
+weights~\cite{thamizharasanNIVeLNeuralImplicit2024}. Given a 
+spatial coordinate as input, the network outputs properties 
+at that location --- color, layer assignment, shape 
+membership. The geometry is never stored; it emerges from 
+evaluating this continuous function across space. Because 
+the entire representation is differentiable by construction, 
+implicit models integrate naturally with gradient-based 
+optimization and diffusion-based supervision.
 
+\subsection{Latent Representation}
 
-
-
+Latent representations are not vector representations in the 
+geometric sense. Rather than describing the structure of a 
+single graphic, a latent space compresses many graphics into 
+a shared numerical embedding learned during training. A VAE, 
+for example, encodes inputs into compact vectors and learns 
+to reconstruct them through a 
+decoder~\cite{kingmaAutoEncodingVariationalBayes2022}. The 
+actual geometry --- paths, control points, commands --- still 
+lives in one of the other representation types underneath. 
+This concept is included here because several models in 
+Chapter~\ref{ch:representation} use latent spaces as an 
+organizational layer on top of their base representation, 
+and that distinction matters when comparing how their 
+outputs are structured.
 
 \section{Differentiable Rendering}
 
-In order to understand many modern vectorization and text-to-SVG approaches, it is important to understand what DiffVG actually provides. DiffVG, introduced by Li et al.~\cite{liDifferentiableVectorGraphics2020a}, is described as ``a differentiable vector graphics rasterizer'' that can be embedded inside neural networks and trained end-to-end.
-
-At first glance, this definition may sound very technical, so it is useful to break it down into simpler terms.
-
-An \emph{operator} in this context simply means a function: something that takes an input and produces an output. In the case of DiffVG, the input is a set of vector graphic parameters (for example, Bézier control points, stroke widths, colors), and the output is a rasterized image in pixel space.
-
-The key word is \emph{differentiable}. If an operation is differentiable, it means we can compute gradients that describe how small changes in the input affect the output. In practical terms, this allows a system to understand how to adjust parameters step by step in order to reduce some error. Instead of randomly guessing better parameters, the system can follow gradient information to improve the result systematically.
-
-When the DiffVG paper states that the operator is designed to be ``embedded inside neural networks and trained end-to-end''~\cite{liDifferentiableVectorGraphics2020a}, it means that the rasterization process itself becomes part of the learning pipeline. Rather than treating rendering as a fixed, non-trainable black box, DiffVG allows gradients to flow through the rasterization stage. As a result, vector parameters can be optimized directly using standard gradient-based learning methods.
-
-To make this concrete in the context of SVG generation, consider the following example. A model predicts a set of vector shapes, such as paths defined by Bézier curves. These shapes are then rasterized into a pixel image. The pixel image is compared to a target image or evaluated using a pretrained model (for example, a diffusion or vision-language model). If the result does not match the target well, the system needs to adjust the vector parameters.
-
-Without a differentiable rasterizer, it would not be clear how to update the control points or shape parameters in a principled way. With DiffVG, gradients can be computed with respect to the vector parameters. The system can determine, for instance, which control point should move and in which direction to reduce the pixel-level error. This enables stable optimization of vector graphics directly in parameter space.
-
-Technically, DiffVG approximates the rasterization process in a way that makes it differentiable, including handling visibility and anti-aliasing effects~\cite{liDifferentiableVectorGraphics2020a}. The authors note that traditional rasterization is not differentiable due to discrete visibility changes and sampling operations. DiffVG addresses this by introducing a formulation that allows gradients to propagate through these operations, enabling gradient-based optimization of vector graphics.
-
-The introduction of DiffVG was a significant step for learning-based vector graphics methods. It provides the missing link between continuous vector parameters and pixel-based loss functions. Many subsequent works rely on this capability to optimize SVG primitives using supervision signals defined in raster space, such as reconstruction losses or semantic guidance from pretrained models.
-
-In summary, DiffVG can be understood as a bridge between vector space and pixel space. It allows vector graphics to be rendered into images in a way that supports gradient-based optimization. This makes it possible to refine shapes, control points, and other parameters automatically, rather than through manual adjustment or non-differentiable heuristics.
-
-
-\section{Latent Representations for Vector Graphics}
-
-In the previous section, we discussed representations where the vector graphic is described directly. In parametric representations, we store control points and shapes. In sequential representations, we store drawing commands. In implicit representations, we store neural functions that define geometry.
-
-Latent representations work differently. Instead of describing the graphic itself, the model compresses it into a compact numerical embedding. This embedding lives in what is called a latent space. The graphic is no longer represented as paths or commands inside the model, but as a vector of numbers that captures its overall structure.
-
-It is important to separate latent representations from direct vector representations. Parametric, sequential, and implicit representations define how a single SVG is structured. Latent representations define how many SVGs are organized and learned together inside a model. The final output is still an SVG file. The difference lies only in how the model internally handles the data.
-
-One of the earliest and most influential ways to learn such latent spaces is the Variational Autoencoder (VAE), introduced by Kingma and Welling~\cite{kingmaAutoEncodingVariationalBayes2014}. A VAE consists of two parts: an encoder and a decoder. The encoder compresses the input into a latent vector. The decoder reconstructs the data from that vector. During training, the model learns a smooth latent space where similar inputs are mapped to nearby points.
-
-In the context of vector graphics, DeepSVG~\cite{carlierDeepSVGHierarchicalGenerative2020} applies this idea to SVG command sequences. The model encodes SVG graphics into a latent vector and then decodes that vector back into drawing commands. Instead of predicting control points directly, generation happens by sampling a point in latent space and decoding it into an SVG.
-
-More recent approaches use latent spaces together with diffusion models. For example, SVGFusion~\cite{xingSVGFusionScalableTexttoSVG2025} first learns a continuous latent space for SVG graphics and then applies diffusion in that space to generate new samples. In this case, the diffusion process does not operate on pixels or raw control points, but on learned latent embeddings that represent structured vector content.
-
-There are also methods that learn latent representations at a smaller scale. For instance, neural path representations~\cite{zhangTexttoVectorGenerationNeural2024} encode individual vector paths into a latent space before assembling them into a complete graphic. This helps enforce geometric consistency while still allowing flexible composition.
-
-Latent representations offer clear advantages. They provide a fixed-size embedding, even if the SVG has many shapes. They often make learning more stable because the decoder implicitly learns structural patterns. They also allow interpolation: two vector graphics can be blended by interpolating between their latent vectors.
-
-However, this abstraction comes at a cost. A latent dimension does not correspond to a specific control point or shape. Editing becomes less direct compared to parametric representations. Changes in latent space may affect multiple elements at once.
-
-In summary, latent representations add a layer of abstraction on top of direct vector representations. They do not replace parametric or sequential structures, but instead provide a compact and learnable space in which vector graphics can be modeled, sampled, and interpolated. This idea becomes especially important in large-scale generative systems.
-
-\section{Reconstruction-Based Supervision}
-
-Although vector graphics are defined through geometric primitives such as paths and control points, supervision is typically defined in raster space. This may seem counterintuitive at first. If the goal is to generate or optimize SVGs, why compare pixels instead of directly comparing vector parameters?
-
-The reason is practical and fundamental: most visual data exists in raster form. Images collected from cameras, datasets, or the internet are stored as pixels. Even when working with vector graphics, the final visual result is always rendered to a raster image for display. As a result, measuring similarity in pixel space provides a natural and widely applicable supervision signal.
-
-Furthermore, pixel-based comparison allows the use of standard image-based loss functions developed in computer vision. When combined with differentiable rasterization~\cite{liDifferentiableVectorGraphics2020a}, gradients can flow from pixel-level losses back to vector parameters such as control points and stroke attributes. This creates a bridge between vector space and raster space, enabling gradient-based optimization.
-
-For this reason, reconstruction-based supervision is often the first and most direct training signal used in vectorization tasks. The model renders its current vector prediction into a raster image and compares it to a target image. The difference defines the loss.
-
-\subsection{Pixel-wise Losses (L1 and L2)}
-
-The simplest reconstruction losses operate directly on pixel values. The L2 loss (mean squared error) measures the squared difference between predicted and target pixels, while the L1 loss (mean absolute error) measures the absolute difference. These losses are widely used in regression and image reconstruction problems~\cite{goodfellow2016deep}.
-
-Pixel-wise losses are straightforward and computationally efficient. They encourage the rendered output to match the target image at the level of individual pixels. However, they treat each pixel independently and do not explicitly capture higher-level structures such as shapes or semantic regions.
-
-\subsection{Perceptual Losses}
-
-To better align optimization with human perception, perceptual losses were introduced. Instead of comparing raw pixel values, perceptual losses compare feature representations extracted from pretrained convolutional networks. A common formulation was proposed by Johnson et al.~\cite{johnson2016perceptual}, using intermediate feature maps from networks such as VGG~\cite{simonyan2015very}.
-
-The intuition is simple: deep neural networks trained for image recognition learn representations that capture edges, textures, and object-level structure. Comparing these features often produces visually more meaningful results than pixel-wise comparison alone. In vectorization settings, perceptual losses help preserve overall structure even when exact pixel alignment differs slightly.
-
-\subsection{IoU and Mask-Based Losses}
-
-In cases where shape accuracy is more important than exact color matching, overlap-based losses are used. Intersection over Union (IoU) measures the overlap between predicted and target regions and is widely used in segmentation benchmarks~\cite{everingham2010pascal}. 
-
-For vector graphics, especially those composed of distinct shapes or layers, mask-based supervision encourages correct topology and spatial consistency. Instead of focusing on pixel intensity differences, these losses evaluate whether predicted regions align properly with the target structure.
-
-
-Reconstruction-based supervision operates in raster space because that is where visual similarity is naturally measured. Even though the model manipulates vector parameters internally, comparison in pixel space allows access to powerful and well-established loss functions. 
-
-These losses provide stable and interpretable training signals when paired raster targets are available. However, they depend on having a reference image. In settings where only text descriptions are provided, or where no exact target image exists, alternative supervision strategies are required. This leads to the use of semantic guidance models, discussed in the next section.
-
-\section{Semantic Guidance Models}
-
-Reconstruction-based supervision relies on a target raster image. The model renders its current SVG prediction, compares it to the reference image, and minimizes the difference. However, many modern text-to-vector approaches do not have a paired ground-truth SVG or raster target. Instead, the only supervision available is a text prompt such as ``a red chair'' or ``minimalist cat icon.''
-
-In such cases, supervision must come from models that understand visual semantics rather than exact pixel similarity. Two important components in this context are CLIP and diffusion models.
-
-\subsection{CLIP as a Semantic Alignment Model}
-
-CLIP (Contrastive Language–Image Pretraining) was introduced by Radford et al.~\cite{radford2021learning}. It is trained on large-scale image–text pairs to learn a shared embedding space for images and text. In this space, semantically matching image–text pairs are placed close together, while mismatched pairs are far apart.
-
-This property makes CLIP useful for guiding generation. If a vector graphic is rendered into a raster image, that image can be passed through the CLIP image encoder. The text prompt is passed through the CLIP text encoder. The similarity between their embeddings can then be measured, typically using cosine similarity.
-
-If the rendered SVG does not match the text prompt semantically, the similarity score will be low. Since CLIP is differentiable, gradients can be computed with respect to the input image. When combined with a differentiable rasterizer such as DiffVG~\cite{liDifferentiableVectorGraphics2020a}, these gradients can be propagated back to the SVG parameters. In practice, this allows the system to adjust control points, colors, and shapes so that the rendered image becomes more aligned with the text description.
-
-In this setup, CLIP does not generate images. Instead, it acts as a semantic evaluator. It provides a direction for improvement based on learned image–text alignment.
-
-\subsection{Diffusion Models and Stable Diffusion}
-
-Diffusion models are generative models that learn to reverse a gradual noise corruption process. A clean image is progressively corrupted by adding noise, and the model is trained to denoise it step by step. After training, the model can generate new images by starting from random noise and iteratively denoising it~\cite{ho2020denoising}.
-
-Stable Diffusion~\cite{rombach2022high} is a latent diffusion model. Instead of operating directly in pixel space, it performs diffusion in a learned latent space produced by an autoencoder. This significantly reduces computational cost while preserving image quality.
-
-Unlike CLIP, diffusion models are full generative models. They capture complex image distributions and rich visual semantics. When conditioned on text, diffusion models learn to generate images consistent with the textual input.
-
-\subsection{Score Distillation Sampling (SDS)}
-
-The connection between diffusion models and vector graphics optimization is enabled by Score Distillation Sampling (SDS), introduced in the context of text-to-3D generation by DreamFusion~\cite{poole2022dreamfusion} and later adopted for vector graphics generation (e.g., VectorFusion~\cite{jainVectorFusionTexttoSVGAbstracting2022}).
-
-SDS uses a pretrained text-conditioned diffusion model as a source of semantic gradients. Instead of generating an image directly, the diffusion model evaluates how the rendered SVG image differs from what it considers plausible under the text condition. The model provides a gradient that encourages the image to move toward the learned data distribution.
-
-In practice, the current SVG is rendered to an image. Noise is added to this image according to the diffusion process. The pretrained diffusion model predicts the denoised version conditioned on the text prompt. The difference between the prediction and the noisy image defines a gradient. This gradient is then backpropagated through the rasterizer to update the SVG parameters.
-
-Unlike reconstruction losses, SDS does not require a ground-truth target image. The supervision comes entirely from the learned prior of the diffusion model. The diffusion model effectively acts as a powerful semantic and perceptual guide.
-
-\subsection{From Pixels to Semantics}
-
-Both CLIP and diffusion-based guidance operate in raster space, but they provide different types of signals. CLIP measures alignment between image and text embeddings. Diffusion models provide gradients based on the learned distribution of realistic images conditioned on text.
-
-In vector graphics generation, these models are not used to directly output SVG files. Instead, they guide the optimization of vector parameters through differentiable rendering. The rendered SVG becomes the interface between vector space and semantic models.
-
-In summary, semantic guidance models replace explicit target images with learned visual priors. They enable text-driven optimization of vector graphics by providing gradients that encourage semantic consistency, rather than exact pixel reconstruction.
-
-
-
-
-
-
-Methods that generate SVG(vector graphics) can be categorized into several research directions, each of them addressing the structural challenges of vector representations in different ways. 
-
-A first line of work focuses on sequence-generating approaches, where vector drawings are modelled as ordered sequences of commands or strokes. Inspired by language modelling, these methods learn to predict drawing operations step-by-step, typically using recurrent or transformer-based architectures. Early work which we mentioned before, SketchRNN [Ha and Eck 2017] demonstrated that neural networks can learn stroke dynamics and produce plausible vector-style sketches. Later models extend this idea to SVG command prediction, including DeepSVG [Carlier et al. 2020], Sketchformer [Ribeiro et al. 2020], and subsequent sequence-based vector generation works [Ganin et al. 2018; Lopes et al. 2019; Wang et al. 2023b; Wu et al. 2023]. However, when representing graphic as sequence, it can cause limitations, for example, long command chains make training difficult, keeping global visual coherence and structural correctness at the same time becomes challenging. At the same time, their dependence on vector datasets limited their generalization to more complex generations. Because there are not really datasets for complex images. We will talk about it later. Briefly, these approaches often struggle to scale to complex, layered SVG graphics. 
-
-An alternative research direction is the learning process happening into the image domain through differentiable rasterization. In this method, we optimize randomly or learned initialization of vector parameters so that the rendered image of initialized SVG matches a target raster image or sometimes a textual description. Differentiable rasterizers(DiffVG) plays a huge role in this process. Several methods introduce SVG generation as an optimization problem. Models, such as LIVE iteratively refines layered Bezier paths to approximate images or VectorFusion and SVGDreamer combine differentiable rasterization with diffusion-based supervision to enable text-to-vector generation. Those kind of approaches despite having strong visual similarity or generating complex images, may produce unstable geometry, messy paths which leads to difficulty on editability. We will detailly explain its integration to vector graphics generation in the background chapter. 
-
-Instead of explicitly predicting discrete primitives, some models shapes vector graphics as continuous neural fields or decomposable layered representations that behave similarly to vector graphics. By combining vector optimization with neural parameterization, frameworks such as NeuralSVG and NiVeL, model shapes of vector graphics through neural networks rather than directly optimizing primitive parameters. Such approaches produce vector representation by neural function, typically an MLP, which weights are optimized using image-space supervision. To explain simply, instead of updating Bezier control points, paths or shapes, optimization is happened in the neural parameter space. This can be classified as a hybrid approach that bridges vector optimization and neural representation learning. Difference between those approaches explained in that chapter.
-
-More recent works have begun to shift toward large language model (LLM) and multimodal large language model (MLLM) approaches. Since SVG is fundamentally a structured textual representation, language models appear to be a natural fit: methods such as StarVector~\cite{rodriguezStarVectorGeneratingScalable2025}, OmniSVG~\cite{yangOmniSVGUnifiedScalable2025}, LLM4SVG~\cite{xingEmpoweringLLMsUnderstand2025}, and InternSVG~\cite{wangInternSVGUnifiedSVG2025} formulate SVG generation as code synthesis, leveraging transformer architectures pretrained on large-scale text and multimodal data. These pipelines treat SVG as a multimodal sequence encoding both semantic and structural information, where models generate XML commands conditioned on textual or visual inputs. Compared to earlier sequence-based models, MLLM-based approaches demonstrate stronger multimodal alignment and broader task coverage, including understanding, generation, and editing.
-
-However, this paradigm introduces limitations that are directly relevant to the analytical focus of this thesis. The lengthy nature of SVG code makes it difficult for transformer models to maintain structural consistency over long sequences. More fundamentally, the generation process is distributed across large neural architectures rather than explicitly defined vector operations, which makes it substantially harder to analyze how geometric structure emerges from architectural decisions. For these reasons, LLM-based SVG generation is treated in this thesis as an emerging direction rather than a primary subject of analysis. The following chapters focus on optimization-based, neural, and hybrid approaches, where the relationship between representation choices and structural outcomes can be examined more directly.
+Before neural networks can optimize vector graphics using 
+image-based loss functions, there needs to be a way to connect 
+the two spaces. Vector parameters --- control points, stroke 
+widths, colors --- live in a continuous geometric space. Loss 
+functions operate on pixel values. These two spaces are not 
+naturally connected: traditional rasterization converts vector 
+geometry into pixels, but this process is not differentiable, 
+meaning gradients cannot flow back through it to update the 
+vector parameters.
+
+DiffVG, introduced by Li et al.~\cite{liDifferentiableVectorGraphics2020a}, 
+solves this by approximating rasterization in a way that 
+supports gradient computation. Given a set of vector 
+parameters as input, DiffVG renders a pixel image as output. 
+Because the rendering step is differentiable, a loss computed 
+on the output image --- whether a pixel reconstruction loss, 
+a perceptual loss, or a signal from a pretrained semantic 
+model --- can be backpropagated all the way through to the 
+vector parameters themselves. The system learns which control 
+point to move, and in which direction, to reduce the error. 
+Technically, DiffVG handles the discrete visibility changes 
+and anti-aliasing effects that make standard rasterization 
+non-differentiable~\cite{liDifferentiableVectorGraphics2020a}.
+
+Before DiffVG, optimizing vector graphics with gradient-based 
+methods was not straightforward. Its introduction made it 
+possible to apply the full range of image-based supervision 
+strategies --- reconstruction losses, CLIP guidance, diffusion 
+priors --- directly to vector parameters. Most of the 
+optimization-based models analyzed in this thesis rely on 
+this capability, which is why it is introduced here as a 
+foundational component rather than a model-specific detail.
+
+
+\section{Loss Functions and Semantic Guidance}
+
+Even when a model manipulates vector parameters internally, 
+comparing outputs in pixel space is more practical than 
+comparing vector structures directly. Most visual data exists 
+as raster images, and pixel-based comparison gives access to 
+well-established loss functions from computer vision. When 
+combined with differentiable rendering, gradients from these 
+losses flow back through the rasterizer to update vector 
+parameters. This section introduces the main supervision 
+signals used across the models analyzed in this thesis.
+
+\subsection{Reconstruction Losses}
+
+The simplest losses operate directly on pixel values. The L2 
+loss measures the mean squared difference between predicted 
+and target pixels, while the L1 loss measures the mean 
+absolute difference~\cite{goodfellow2016deep}. Both are 
+computationally efficient and provide stable gradients when 
+a reference image is available. Their limitation is that 
+they treat each pixel independently, without capturing 
+higher-level structure such as shape boundaries or object 
+regions.
+
+Perceptual losses address this by comparing feature 
+representations extracted from pretrained convolutional 
+networks rather than raw pixel values. The formulation 
+proposed by Johnson et al.~\cite{johnsonPerceptualLossesRealTime2016} 
+uses intermediate feature maps from VGG~\cite{simonyan2015very}, 
+which capture edges, textures, and object-level structure. 
+Comparing at the feature level produces supervision signals 
+that better reflect visual similarity as humans perceive it, 
+and helps preserve overall structure even when exact pixel 
+alignment differs slightly.
+
+For tasks where shape boundary accuracy matters more than 
+color fidelity, overlap-based losses are used. Intersection 
+over Union (IoU)~\cite{everingham2010pascal} measures the 
+overlap between predicted and target regions. In vector 
+graphics, mask-based supervision of this kind encourages 
+correct topology and spatial consistency across layers, 
+rather than minimizing pixel intensity differences.
+
+All three loss types depend on having a reference raster 
+image. In text-to-SVG settings, where no target image 
+exists, alternative guidance strategies are needed.
+
+\subsection{CLIP}
+
+CLIP (Contrastive Language--Image Pretraining), introduced 
+by Radford et al.~\cite{radfordLearningTransferableVisual2021}, 
+is trained on large-scale image--text pairs to learn a 
+shared embedding space where semantically matching pairs 
+are placed close together and mismatched pairs are pushed 
+apart. Given an image and a text prompt, CLIP measures 
+their similarity through separate image and text encoders, 
+typically using cosine similarity between the resulting 
+embeddings.
+
+In SVG generation pipelines, the rendered vector graphic 
+is passed through the CLIP image encoder while the text 
+prompt is encoded separately. If the rendered output does 
+not match the prompt semantically, the similarity score 
+will be low. Because CLIP is differentiable with respect 
+to its image input, and because images can be produced 
+from vector parameters via differentiable rendering, the 
+CLIP similarity score can serve as an optimization signal. 
+Gradients flow from the similarity score back through the 
+rasterizer to the SVG parameters, allowing the system to 
+adjust shapes and colors toward better semantic alignment. 
+CLIP does not generate images in this setup --- it acts as 
+a semantic evaluator that provides a direction for 
+improvement.
+
+\subsection{Diffusion Models}
+
+Diffusion models are generative models that learn to 
+reverse a gradual noise corruption process. During 
+training, clean images are progressively corrupted by 
+adding noise, and the model learns to denoise them step 
+by step. After training, new images can be generated by 
+starting from random noise and iteratively 
+denoising~\cite{ho2020denoising}. Stable 
+Diffusion~\cite{rombachHighResolutionImageSynthesis2021} extends this by 
+performing the diffusion process in a compressed latent 
+space rather than directly in pixel space, significantly 
+reducing computational cost while preserving image quality. 
+When conditioned on text, diffusion models learn to 
+generate images consistent with the textual description, 
+capturing complex visual distributions and rich semantic 
+structure.
+
+\subsection{Score Distillation Sampling and VSD}
+
+Score Distillation Sampling (SDS), introduced by 
+DreamFusion~\cite{pooleDreamFusionTextto3DUsing2022} for 
+text-to-3D generation and later adopted for vector 
+graphics by VectorFusion~\cite{jainVectorFusionTexttoSVGAbstracting2022}, 
+uses a pretrained text-conditioned diffusion model as an 
+optimization signal. The current SVG is rendered to an 
+image, noise is added according to the diffusion schedule, 
+and the diffusion model predicts the denoised version 
+conditioned on the text prompt. The difference between 
+the noisy image and the predicted denoising defines a 
+gradient, which is backpropagated through the rasterizer 
+to update the SVG parameters. No ground-truth image is 
+required --- the diffusion model's learned prior acts as 
+the teacher.
+
+A known limitation of SDS is oversaturation: because the 
+gradient update treats the rendered image as if it were 
+pure noise, results tend to be over-smoothed and lack 
+fine detail. Variational Score Distillation (VSD), 
+introduced in SVGDreamer~\cite{xingSVGDreamerTextGuided2024}, 
+addresses this by modeling the rendered output as a 
+particle in a distribution rather than treating it as 
+noise directly. This produces more stable gradients and 
+visually consistent results. Both SDS and VSD are used 
+across several models analyzed in 
+Chapter~\ref{ch:supervision}.
 
 
 

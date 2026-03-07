@@ -1,4 +1,4 @@
-\chapter{Vector Representation in SVG Generation}
+\chapter{Vector Representation in SVG Generation}\label{ch:representation}
 
 SVG generation models differ not only in their architectures and 
 training objectives but also in how they represent vector graphics 
@@ -36,6 +36,9 @@ across the selected models: parametric, sequential, implicit neural,
 and latent. For each family, the analysis describes how it works 
 technically, where it originates, and what structural tendencies it 
 introduces in SVG generation.
+
+
+
 \section{Parametric Representations}
 
 Parametric representations describe vector graphics as collections of 
@@ -162,7 +165,7 @@ denoised. Generation then occurs by decoding these embeddings into
 explicit vector primitives or command sequences.
 
 The foundational mechanism is the variational autoencoder 
-(VAE)~\cite{kingmaAutoEncodingVariationalBayes2014}, which trains an encoder to compress 
+(VAE)~\cite{kingmaAutoEncodingVariationalBayes2022}, which trains an encoder to compress 
 structured data into a continuous latent space and a decoder to 
 reconstruct it. DeepSVG~\cite{carlierDeepSVGHierarchicalGenerative2020} applies this to 
 SVG generation by encoding path command sequences into latent vectors 
