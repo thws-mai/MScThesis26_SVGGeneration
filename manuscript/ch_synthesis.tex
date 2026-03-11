@@ -37,8 +37,7 @@ structurally dense output --- visually accurate but fragmented.
 LIVE and VectorFusion both exhibit this behavior, where each 
 additional path reduces reconstruction loss without contributing 
 to semantic 
-structure~\cite{maLayerwiseImageVectorization2022, 
-jainVectorFusionTexttoSVGSymbol2023}.
+structure~\cite{maLayerwiseImageVectorization2022,jainVectorFusionTexttoSVGAbstracting2022}.
 
 Sequential representations model SVG as ordered command 
 sequences. This captures procedural drawing logic and produces 
@@ -52,8 +51,7 @@ complexity increases.
 Neural implicit representations shift structure into 
 representation space itself. NeuralSVG and NiVeL define shapes 
 through MLP weights rather than explicit path 
-coordinates~\cite{vinkerNeuralSVGInstancededbasedSVG2025, 
-thamizharasanNIVeLNeuralImplicit2024}. Because all geometry 
+coordinates~\cite{polaczekNeuralSVGImplicitRepresentation2025,thamizharasanNIVeLNeuralImplicit2024}. Because all geometry 
 passes through a shared neural function, the representation 
 constrains how primitives can be arranged. Layering emerges 
 architecturally rather than through optimization dynamics. This 
@@ -63,9 +61,8 @@ editable SVG primitives becomes less direct.
 
 Latent representations, used in SVGFusion and T2V-NPR, generate 
 through learned embeddings that encode dataset-level structural 
-patterns~\cite{xingSVGFusionScalableTexttoSVG2024, 
-zhangTexttoVectorGenerationNeural2024}. This allows the model to 
-inherit consistent path organization from training data, producing 
+patterns~\cite{xingSVGFusionScalableTexttoSVG2025, zhangTexttoVectorGenerationNeural2024}. 
+This allows the model to inherit consistent path organization from training data, producing 
 more coherent structure than unconstrained optimization. The 
 trade-off is reduced direct control over primitive composition --- 
 structure is mediated through the latent space rather than 
@@ -114,8 +111,7 @@ optimization increases primitive count to approximate
 high-frequency visual detail. VectorFusion and SVGDreamer 
 achieve strong visual results through this mechanism while 
 producing structurally dense 
-SVGs~\cite{jainVectorFusionTexttoSVGSymbol2023, 
-xingSVGDreamerTextGuided2024}.
+SVGs~\cite{jainVectorFusionTexttoSVGAbstracting2022, xingSVGDreamerTextGuided2024}.
 
 Methods that combine semantic guidance with constrained 
 representations --- NeuralSVG using SDS within a neural 
@@ -148,20 +144,19 @@ aligns with learned image priors. This refinement increases
 structural complexity in ways that undermine usability. LIVE, 
 following the optimization protocol also adopted by VectorFusion, 
 represents a single image using up to 160 paths distributed 
-across multiple layers~\cite{xingSVGDreamer2024}. At this scale, 
+across multiple layers~\cite{xingSVGDreamerTextGuided2024}. At this scale, 
 selecting or modifying a single visual component requires 
 identifying and adjusting dozens of overlapping primitives in 
 standard design tools. SVGDreamer++ explicitly acknowledges this 
 failure mode, noting that optimization-based approaches produce 
 outputs where objects are entangled across paths, making 
 component-level editing effectively 
-impossible~\cite{xingSVGDreamer2024}.
+impossible~\cite{xingSVGDreamerTextGuided2024}.
 
 This structural cost comes with a genuine visual benefit. 
 VectorFusion and SVGDreamer consistently produce the most 
 visually rich and semantically detailed outputs among the 
-analyzed methods~\cite{jainVectorFusionTexttoSVGSymbol2023, 
-xingSVGDreamerTextGuided2024}. The same mechanism that 
+analyzed methods~\cite{jainVectorFusionTexttoSVGAbstracting2022, xingSVGDreamerTextGuided2024}. The same mechanism that 
 fragments structure --- unconstrained primitive growth guided 
 by strong diffusion priors --- is precisely what enables 
 photorealistic rendering quality. The trade-off is genuine: 
@@ -173,7 +168,7 @@ Models that constrain representation tend to produce outputs
 that are easier to edit, even when visual abstraction is 
 introduced. NeuralSVG represents complex scenes using a small 
 fixed number of layers, improving usability despite reduced 
-photorealistic detail~\cite{vinkerNeuralSVGInstancededbasedSVG2025}. 
+photorealistic detail~\cite{polaczekNeuralSVGImplicitRepresentation2025}. 
 Dataset-trained models such as DeepSVG and DeepIcon inherit 
 structural simplicity from their training data, producing 
 directly editable outputs bounded by the style distribution 
