@@ -1,17 +1,187 @@
 \chapter{Conclusion}
+\label{ch:Conclusion}
 
-This thesis examined SVG generation and vectorization methods from the perspective of representation, supervision, and structural quality. While recent progress in generative modeling has significantly advanced raster image synthesis, vector graphics generation introduces additional challenges due to the structured nature of SVG. Unlike raster outputs, SVG graphics must preserve geometry, hierarchy, and editability, which makes evaluation and model design fundamentally different from conventional image generation tasks.
+This thesis examined how SVG generation methods construct 
+vector graphics and why their structural outcomes differ. 
+The analysis was organized around two dimensions (representation 
+and supervision) and applied across fourteen open-source 
+models spanning optimization-based, neural implicit, and 
+dataset-driven approaches. The following sections address 
+each research question in turn and summarize the 
+contributions of the work.
 
-Through a comparative analysis of representative models, this work showed that the internal representation used by a method strongly influences the structure of the resulting SVG. Parametric optimization approaches provide direct geometric control but often produce redundant paths when supervision operates primarily in raster space. Sequential and dataset-trained models can generate coherent structure within constrained domains, while implicit and layered neural representations introduce architectural constraints that encourage compact and interpretable decomposition. These observations indicate that structural quality is not solely an optimization outcome but emerges from representational design.
 
-The analysis further demonstrated that supervision signals shape geometric behavior in complementary ways. Pixel-based reconstruction encourages accurate boundary matching but may fragment structure, whereas semantic and diffusion-based supervision promote visual realism while increasing primitive complexity. Hybrid approaches that combine semantic guidance with constrained representations appear to balance these effects more effectively, suggesting that supervision design plays a central role in regulating structural outcomes.
+\section*{Answers to the Research Questions}
 
-A recurring insight across model families is the presence of a trade-off between visual realism and editability. Methods optimized for photorealistic appearance often introduce structural complexity that reduces usability, while approaches that enforce layered or constrained representations tend to produce outputs that are easier to modify. This trade-off highlights that SVG generation quality cannot be evaluated using visual metrics alone and must consider structural properties that affect downstream design workflows.
+\textbf{RQ1: What are the main properties and structures 
+that define an editable and high-quality SVG?}
 
-To address this gap, the thesis proposed a multi-dimensional perspective on SVG evaluation. Rather than relying on a single metric, SVG quality should be considered across semantic alignment, structural cleanliness, editability, geometric stability, and computational practicality. This perspective clarifies why methods with similar visual performance may differ substantially in usability and provides a consistent lens for comparing approaches across representation and supervision choices.
+An editable SVG requires a small number of semantically 
+meaningful paths, a clear layer structure where visual 
+components correspond to distinct groupings, and stable 
+geometry without redundant or overlapping primitives. 
+Visual quality and editability are separable properties: 
+a graphically rich output can simultaneously be difficult 
+to edit if its paths are fragmented or entangled. 
+Chapter~\ref{ch:Background} established these properties 
+as part of the foundational definition of SVG, and 
+Chapter~\ref{ch:synthesis} identified five conditions 
+under which current models satisfy them.
 
-Based on the synthesis of findings, several conditions were identified as recurring contributors to clean and editable SVG generation. These include constraints on primitive count, decomposition aligned with semantic structure, supervision applied within structured representation spaces, informed initialization strategies, and architectural priors that reflect design logic. Importantly, these conditions appear across different model categories, suggesting that editability emerges from coordinated design decisions rather than a single methodological paradigm.
+\textbf{RQ2: What open-source methods currently exist 
+for generating SVGs from different input modalities?}
 
-Overall, this thesis contributes an analytical understanding of how SVG generation methods construct vector graphics and why structural outcomes differ across approaches. By framing SVG generation as a structured design problem rather than purely an image synthesis task, the work highlights the importance of aligning representation, supervision, and evaluation with the properties that make vector graphics useful in practice.
+The review identified two broad methodological families. 
+Optimization-based methods (LIVE, SAMVG, Im2Vec, 
+VectorFusion, SVGDreamer, SVGDreamer++, NiVeL, and 
+NeuralSVG) operate by iteratively refining vector 
+parameters to match a target image or semantic 
+description. Dataset-driven methods (DeepSVG, DeepIcon, 
+LayerTracer, T2V-NPR, and SVGFusion) learn generation 
+from collections of existing SVGs. 
+Chapter~\ref{ch:Landscape} described their input 
+modalities, which span raster images, text prompts, 
+and unconditional generation from latent distributions. 
+Large language model approaches were reviewed but 
+excluded from the main analysis, as discussed in 
+Chapter~\ref{ch:Introduction}.
 
-Future research may explore evaluation protocols that explicitly measure editability and structural quality, develop hybrid architectures that combine fast generation with controllable refinement, and integrate designer-oriented priors into generative pipelines. Advancing SVG generation will likely depend not only on improving visual realism but on developing models that produce vector graphics that remain interpretable, efficient, and practically usable.
+\textbf{RQ3: What types of deep learning architectures 
+are used for SVG generation?}
+
+The analyzed models employ four distinct architecture 
+types: parametric optimization over Bézier primitives 
+using differentiable rasterization, transformer-based 
+hierarchical sequence models, MLP-parameterized neural 
+implicit representations, and latent diffusion 
+architectures with vector-specific decoders. 
+Chapter~\ref{ch:Landscape} introduced each type, and 
+Chapter~\ref{ch:representation} analyzed how 
+representational choices within each type determine 
+the structural properties of the output.
+
+\textbf{RQ4: What kinds of structure do these models 
+produce?}
+
+Structural outcomes vary substantially across the 
+analyzed models and correlate with representation 
+choice more than with visual quality. Parametric 
+optimization methods tend to produce high path counts 
+with fragmented geometry. Neural implicit and 
+dataset-driven methods produce more constrained outputs 
+with interpretable layer organization, at the cost of 
+reduced visual complexity. Chapter~\ref{ch:representation} 
+traced how representation shapes these structural outcomes,
+Chapter~\ref{ch:supervision} examined how supervision signals interact with them, 
+and Chapter~\ref{ch:synthesis} mapped the resulting trade-offs 
+across all fourteen models.
+\textbf{RQ5: How can the quality and editability of 
+generated SVG be evaluated?}
+
+Current evaluation practice relies primarily on metrics 
+adapted from raster image synthesis (FID, CLIP 
+similarity, LPIPS, and MSE) which measure visual 
+fidelity but not structural properties. 
+Chapter~\ref{ch:Evaluation} proposed a multi-dimensional 
+evaluation framework covering six dimensions: semantic 
+alignment, path economy, geometric quality, layer 
+organization, editability, and efficiency. The chapter 
+also identified SVGEditBench and SVGenius as emerging 
+benchmarks, while noting that both were designed for 
+language-model-based SVG generation and do not 
+directly apply to the optimization and dataset-trained 
+models analyzed here.
+
+\textbf{RQ6: What is the observed quality of SVG 
+outputs across different models?}
+
+No model in the analyzed set performs well across all 
+six evaluation dimensions simultaneously. Optimization-
+based models achieve the strongest visual fidelity but 
+produce the least editable outputs. Dataset-driven 
+models produce structurally cleaner SVGs within 
+constrained domains. LayerTracer and SVGFusion come 
+closest to balancing visual quality with structural 
+usability among the analyzed set. Chapter~\ref{ch:synthesis} 
+summarized these findings in a conditions table and 
+identified the specific architectural factors that 
+distinguish models on the editability-realism axis.
+
+
+\section*{Contributions}
+
+The primary contribution of this thesis is an 
+analytical framework for understanding SVG generation 
+in terms of representation, supervision, and their 
+structural consequences. This framework provides a 
+consistent basis for comparing methods that differ 
+substantially in architecture and training strategy, 
+and makes explicit a trade-off (between visual realism 
+and editability) that is present across the field but 
+rarely stated directly.
+
+A secondary contribution is a multi-dimensional 
+evaluation perspective that extends beyond pixel-level 
+metrics to structural and practical criteria. The 
+metrics coverage table in Chapter~\ref{ch:Evaluation} 
+documents what each model actually reports versus what 
+would be needed for a complete structural assessment, 
+and identifies the specific evaluation gaps that remain 
+open.
+
+The analysis also produced a set of conditions for 
+clean and editable SVG output (primitive count control, 
+semantically aligned decomposition, structured 
+supervision, informed initialization, and design-logic 
+priors) which represent a checklist for future model 
+design that does not currently exist in the literature.
+
+
+\section*{Limitations}
+
+The analysis is bounded by the set of publicly 
+available, open-source models with documented 
+implementations. Several models with reported strong 
+results, including VectorFusion and DeepIcon, did not 
+have accessible code at the time of writing, limiting 
+the depth of implementation-level analysis for those 
+methods. Quantitative comparison across models was not 
+feasible because reported metrics are heterogeneous: 
+different models evaluate on different datasets, use 
+different implementations of shared metrics, and report 
+results under different experimental conditions. The 
+evaluation framework proposed in 
+Chapter~\ref{ch:Evaluation} is conceptual rather than 
+empirically validated.
+
+
+\section*{Future Work}
+
+Three directions follow directly from the findings.
+
+Evaluation protocols that explicitly measure structural 
+quality remain the most immediate gap. A benchmark 
+combining path economy, layer coherence, and editability 
+scores alongside visual fidelity metrics would enable 
+direct comparison across optimization-based and 
+dataset-driven methods for the first time. This is 
+tractable to build using existing SVG tools.
+
+Hybrid architectures that combine fast feed-forward 
+generation with constrained vector refinement represent 
+the most promising near-term direction for closing the 
+realism-editability gap. The conditions identified in 
+Chapter~\ref{ch:synthesis} suggest that structural 
+constraints can be introduced at the representation 
+level without necessarily sacrificing visual quality, 
+but this has not been demonstrated in a single model.
+
+Supervision within structured representation spaces 
+(path-level latent constraints, layer consistency 
+objectives, construction sequence learning) appears to 
+regulate the fragmentation that characterizes purely 
+raster-space optimization. SVGDreamer's VPSD approach 
+and LayerTracer's construction-sequence supervision 
+both point in this direction from different starting 
+points. Converging these two approaches is a concrete 
+research question.
