@@ -27,6 +27,59 @@ predictor of structural quality across the analyzed models.
 Representation determines what kinds of structures are possible 
 before any optimization or training begins.
 
+
+Table~\ref{tab:representation_outcomes} maps each 
+model's representation and supervision choices to 
+the structural outcomes observed in its outputs. 
+The patterns this table makes visible are the 
+subject of the analysis that follows.
+
+\begin{table}[h!]
+\centering
+\caption{Representation type, supervision signal, 
+and observed structural outcomes across the fourteen 
+analyzed models.}
+\label{tab:representation_outcomes}
+\small
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\textbf{Representation} & \textbf{Supervision} & 
+\textbf{Models} & \textbf{Structural Outcome} \\
+\midrule
+Parametric    & Pixel recon.   & LIVE, SAMVG       
+              & High path count, accurate boundaries, 
+                fragmented structure \\
+Parametric    & Pixel recon.   & Im2Vec            
+              & Compact paths, limited topological 
+                complexity \\
+Parametric    & SDS            & VectorFusion      
+              & Semantically rich, dense primitives, 
+                low editability \\
+Parametric    & VPSD           & SVGDreamer, SVGDreamer++ 
+              & Improved diversity, object-aware 
+                decomposition, still dense \\
+Neural implicit & SDS          & NiVeL, NeuralSVG  
+              & Fixed layer count, constrained 
+                structure, moderate editability \\
+Sequential tokens & Reconstruction & DeepSVG, DeepIcon 
+              & Clean paths within training domain, 
+                poor generalization outside it \\
+Neural path latent & VSD       & T2V-NPR           
+              & Smooth geometry, stable paths, 
+                dataset-bounded style \\
+Continuous latent & Denoising  & SVGFusion         
+              & Logical construction order, coherent 
+                layers, fast inference \\
+Layered sequences & Denoising  & LayerTracer       
+              & Designer-aligned layers, explicit 
+                construction logic, strong editability \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+
+
+
 Parametric representations, used in optimization-based methods, 
 operate directly on Bézier control points, colors, and stroke 
 parameters. This gives clear geometric control and enables 

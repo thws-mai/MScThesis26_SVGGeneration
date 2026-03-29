@@ -1,165 +1,246 @@
 \chapter{Background}\label{ch:Background}
 
-The models analyzed in this thesis draw on a shared set of 
-technical foundations: the structure of SVG itself, the 
-representations used to manipulate it during learning, the 
-rendering bridge that connects vector parameters to pixel 
-space, and the supervision signals that drive optimization. 
-Understanding these components is what makes it possible to 
-compare models not just by their outputs, but by the 
-structural choices that produce them.
+Generating vector graphics computationally is harder than 
+it seems. Unlike raster images, which can be produced by 
+predicting pixel values, SVGs have to be 
+structurally correct and the resulting file needs 
+to be something a designer can actually open and work with. Otherwise,
+the output is not really something that can be used in practice.   
+Getting there requires understanding the building 
+blocks that most SVG generation models have in common, 
+despite the variety of approaches and architectures that exist. 
+This chapter covers those building blocks. It starts with 
+SVG itself: what is representation of format and why its 
+structural properties create constraints that raster generation does not have.
+After that, we will explain about  
+four internal representation types that used across the analyzed models, 
+followed by differentiable rendering, which is the technical bridge between SVG and raster image. 
+And final subchapter closes with the supervision signals, reconstruction losses, 
+CLIP, SDS, VSD that drive the generation process in different ways.
 
 
 \section{Vector Graphics Fundamentals}
 
 Scalable Vector Graphics (SVG) is an XML-based standard for 
 representing two-dimensional graphics as structured 
-text~\cite{eisenbergSVGEssentialsProducing20}. Unlike raster formats, an SVG 
-file is a readable document that describes how an image should 
+text~\cite{eisenbergSVGEssentialsProducing20}. Difference between raster formats and SVG 
+is that an SVG file is a readable document that describes how an image should 
 be drawn rather than storing pixel values. At its core, an SVG 
-file consists of instructions that define geometric primitives, 
+file consists of instructions or commands that define geometric primitives such as paths, shapes and curves, 
 styling, and hierarchical relationships between 
 elements~\cite{quintScalableVectorGraphics2003}.
 
 SVG supports a range of graphic elements, including basic shapes 
 such as lines, rectangles, and circles, as well as text and 
-raster image embeds. The most expressive element is the path, 
+raster image. The most flexible element is the path, 
 which allows complex shapes to be defined using sequences of 
 commands: moving a virtual pen, drawing straight lines, and 
 creating smooth curves~\cite{eisenbergSVGEssentialsProducing20}.
 
-SVG also supports grouping and layered organization of elements. 
-Multiple shapes can be combined into groups that behave as a 
+What makes SVG practically useful is editability, and that 
+editability comes from groups and layers. Multiple shapes can be combined into groups that behave as a 
 single unit for styling and editing~\cite{quintScalableVectorGraphics2003}. 
 Elements are rendered in a defined order, and later elements 
 appear on top of earlier ones, making layering an intrinsic 
-part of the representation. This hierarchical structure matters 
-for generation: models that produce only geometric approximations 
-without respecting layer organization generate outputs that are 
-visually plausible but difficult to edit.
+part of the representation. This hierarchical structure is what makes SVG files 
+editable in practice: a designer can select a group, 
+move a layer, or change one element without affecting 
+the rest.
+
+Figure~\ref{fig:svg_example} shows a minimal SVG file and 
+its rendered output. The file is plain text: each element 
+is a single readable line that defines geometry and color 
+directly. This is what makes SVG editable. a designer 
+can open the file, find the element they want, and change 
+a number.
+
+\begin{figure}[h]
+\centering
+\begin{minipage}{0.52\textwidth}
+\begin{lstlisting}[language=XML, basicstyle=\small\ttfamily]
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="200" height="200">
+  <!-- Face -->
+  <circle cx="100" cy="100" r="80"
+          fill="#FFD700"/>
+  <!-- Left eye -->
+  <circle cx="70" cy="80" r="10"
+          fill="#333"/>
+  <!-- Right eye -->
+  <circle cx="130" cy="80" r="10"
+          fill="#333"/>
+  <!-- Sad mouth -->
+  <path d="M 65 135 Q 100 110 135 135"
+        stroke="#333" stroke-width="5"
+        fill="none"/>
+</svg>
+\end{lstlisting}
+\end{minipage}
+\hfill
+\begin{minipage}{0.40\textwidth}
+\centering
+\includegraphics[width=\textwidth]{simpleSVG.png}
+\end{minipage}
+\caption{A minimal SVG file (left) and its rendered output 
+(right). Each element is one readable line: the face, 
+eyes, and mouth are independent objects defined by plain 
+text parameters. Any of them can be selected and changed 
+without touching the rest.}
+\label{fig:svg_example}
+\end{figure}
 
 \subsection{Paths and Bézier Curves}
 
 Most SVG graphics are built using paths. A path is a sequence 
-of commands --- \emph{move to}, \emph{line to}, \emph{curve to} 
---- that define its shape~\cite{eisenbergSVGEssentialsProducing20}. Curved 
-segments use Bézier curves, which are smooth curves controlled 
+of commands, \emph{move to}, \emph{line to}, \emph{curve to},  that define its shape~\cite{eisenbergSVGEssentialsProducing20}. 
+Curved segments use Bézier curves, which are controlled 
 by a set of control points that influence curvature without 
 lying directly on the curve.
 
-SVG supports both quadratic Bézier curves, which use a single 
-control point, and cubic Bézier curves, which use two and offer 
-greater flexibility for complex shapes~\cite{eisenbergSVGEssentialsProducing20}. 
-From the perspective of SVG generation, these control points 
-are the core geometric parameters that most models either 
-predict directly or optimize iteratively.
+Curved segments in paths use B\'{e}zier curves. A B\'{e}zier 
+curve is not defined by the points it passes through but by 
+control points that pull the curve toward them from the 
+outside. Moving a control point reshapes the curve smoothly 
+without breaking it.
+
+As shown in Figure~\ref{fig:bezier}, SVG supports two types. 
+Quadratic B\'{e}zier curves use a single control point and 
+are simpler but less flexible. Cubic B\'{e}zier curves use 
+two control points and can represent almost any smooth 
+shape~\cite{eisenbergSVGEssentialsProducing20}. Most 
+generation models in this thesis work with cubic curves 
+because they are expressive enough to approximate complex 
+geometry. The control point coordinates are the core 
+parameters that models either predict directly or adjust 
+during optimization.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{Bezier_grad123.png}
+\caption{B\'{e}zier curves of grade 1, 2, and 3 (red) with 
+their control polygons (gray). From left to right, an 
+additional control point (blue) is added at each grade. 
+The curve changes direction and curvature as control points 
+are inserted or moved. Image: Wikimedia 
+Commons~\cite{wikiBezier}.}
+\label{fig:bezier}
+\end{figure}
+
+
 
 \subsection{Coordinate Systems and Transformations}
 
-SVG graphics are drawn within a coordinate system defined by a 
-viewport, with the origin at the top-left corner, the x-axis 
-pointing right, and the y-axis pointing 
-downward~\cite{quintScalableVectorGraphics2003}. Transformations --- 
-translation, scaling, rotation, skewing --- can be applied to 
-individual shapes or to groups, allowing collections of paths 
-to be moved or resized while preserving their internal 
-structure. Nested groups define local coordinate frames, which 
-is particularly relevant for layered compositions where 
-subgroups must maintain their relative geometry independently.
+SVG uses a simple coordinate system. The top-left corner of 
+the canvas is the origin, x increases to the right, and y 
+increases downward~\cite{quintScalableVectorGraphics2003}. 
+Every element is positioned within this grid using numeric 
+coordinates — the same numbers you see in the SVG file.
 
-\subsection{Scope of SVG in This Thesis}
-
-SVG includes additional features such as clipping, masking, 
-and filter effects. These primarily affect rendering appearance 
-rather than geometric structure, and are not considered further 
-here. This thesis treats SVG as a structured representation of 
-geometric primitives, paths, and hierarchical relationships. 
-Understanding these components is what allows the generation 
-models analyzed in Chapters~\ref{ch:Landscape} 
-through~\ref{ch:synthesis} to be compared on structural 
-grounds --- not just by their visual output.
+What makes this system powerful for design is transformations. 
+Any shape or group can be moved, scaled, rotated, or skewed 
+by applying a transform attribute. When a transformation is 
+applied to a group, every element inside moves together. 
+Groups can be nested inside other groups, each with their 
+own local coordinate frame. A logo might have a top-level 
+group for the whole graphic, sub-groups for each component, 
+and individual paths inside those. Moving the top-level group 
+moves everything. Moving a sub-group moves only that part. 
+This nested structure is what allows complex SVG files to 
+remain organized and editable even as they grow in size.
 
 
 
 \section{Vector Representations}
 
 SVG generation and vectorization models do not all manipulate 
-vector graphics the same way internally. The final output is 
-always an SVG file --- text-based, editable, conforming to the 
-same standard. What differs is the internal representation 
-used during learning or optimization, and this choice directly 
+vector graphics the same way internally in generation processes. Obviously, the final output is 
+always a text-based file or SVG itself as image. What differs is the internal representation 
+used during learning or optimization. This choice directly 
 affects which algorithms can be applied, how stable training 
-is, and what structural properties tend to emerge. The 
-following subsections introduce the four representation types 
+is, what structural properties tend to emerge and quality of final output. 
+The following sections introduce the four representation types 
 that appear across the models analyzed in this thesis.
 
 \subsection{Parametric Representation}
 
-SVG files are already parametric by nature: every element is 
-defined by a set of numeric values --- control point 
-coordinates, stroke widths, colors --- that can be read, 
-modified, and written as plain text~\cite{eisenbergSVGEssentialsProducing20}. 
-Parametric representations in generation models follow this 
-same structure directly. A graphic is treated as a collection 
-of primitives, each fully described by continuous parameters 
-that can be adjusted independently. In optimization-based 
-methods, generation works by initializing a set of shapes and 
-iteratively refining their parameters until the rendered 
-output matches a target~\cite{maLayerwiseImageVectorization2022}.
+Parametric representation is natural for SVG because  
+SVG is already parametric. Every element in the file is 
+defined by control point coordinates, stroke 
+widths and colors which are readable and editable as plain 
+text~\cite{eisenbergSVGEssentialsProducing20}. The introduction 
+of differentiable rasterization by Li et 
+al.~\cite{liDifferentiableVectorGraphics2020a} made it practically possible 
+to optimize these parameters directly using image-based loss 
+functions: a graphic is initialized as a collection of 
+primitives, and their parameters are iteratively refined until 
+the rendered output matches a target. Before DiffVG, this kind 
+of gradient-based update of vector primitives was not 
+straightforward.
 
 \subsection{Sequential Representation}
 
-A different way to think about vector graphics is as a 
-sequence of drawing instructions: move the pen here, draw a 
-line there, curve to this point. This mirrors how SVG path 
-data is actually written, but it also opens up a connection 
-to language modelling --- a vector graphic encoded as a 
-command sequence looks structurally similar to a 
-sentence~\cite{carlierDeepSVGHierarchicalGenerative2020}. 
-Command order determines both drawing sequence and layering, 
-and autoregressive models can generate graphics token by 
-token the same way they generate text. The trade-off is that 
-errors accumulate: a mistake early in a long sequence can 
-corrupt everything that follows.
+The idea of treating vector graphics as ordered sequences of 
+drawing commands goes back to Ha and 
+Eck~\cite{haNeuralRepresentationSketch2017}, who showed that 
+recurrent networks could learn to generate stroke-based 
+drawings by modelling them as sequences of pen movements. 
+Vector graphics encoded this way look like a script: move the pen here,
+draw a line there, curve to this point. These representations share the same basic 
+structure as a sentence, which opened the door to applying 
+language modelling techniques directly. The downside of that approach 
+is that whenever errors accumulate, a mistake early in a long sequence can 
+break everything that follows.
 
 \subsection{Implicit Neural Representation}
 
-Implicit representations take a fundamentally different 
-approach: there are no explicit shapes, no stored control 
-points, no command sequences. Instead, a neural network 
-defines the graphic entirely through its 
-weights~\cite{thamizharasanNIVeLNeuralImplicit2024}. Given a 
-spatial coordinate as input, the network outputs properties 
-at that location --- color, layer assignment, shape 
-membership. The geometry is never stored; it emerges from 
-evaluating this continuous function across space. Because 
-the entire representation is differentiable by construction, 
-implicit models integrate naturally with gradient-based 
-optimization and diffusion-based supervision.
+The use of neural networks to define geometry implicitly 
+through learned weights was established in 
+3D scene representation by Mildenhall et 
+al.~\cite{mildenhallNeRFRepresentingScenes2020}. In NeRF,
+the network acts like a function: based on given location,
+it tells you what occupies that 
+space. Nothing is stored explicitly, the geometry 
+only appears when you query the network.
+Thamizharasan et 
+al.~\cite{thamizharasanNIVeLNeuralImplicit2024} adapted this 
+idea to vector graphics by replacing explicit path coordinates 
+with neural implicit layers that define shape boundaries 
+indirectly. The network learns to represent the geometry as a continuous 
+function and the resulting shapes emerge from the learned implicit representation 
+instead of being directly parameterized. This allows for more flexible and 
+compact representations, but also makes it harder to control specific 
+geometric features directly, because they are not explicitly defined as 
+parameters.   
+
 
 \subsection{Latent Representation}
 
-Latent representations are not vector representations in the 
-geometric sense. Rather than describing the structure of a 
-single graphic, a latent space compresses many graphics into 
-a shared numerical embedding learned during training. A VAE, 
-for example, encodes inputs into compact vectors and learns 
-to reconstruct them through a 
-decoder~\cite{kingmaAutoEncodingVariationalBayes2022}. The 
-actual geometry --- paths, control points, commands --- still 
-lives in one of the other representation types underneath. 
-This concept is included here because several models in 
-Chapter~\ref{ch:representation} use latent spaces as an 
-organizational layer on top of their base representation, 
-and that distinction matters when comparing how their 
-outputs are structured.
+Latent representation works differently from the three above, 
+it is not a vector representation in the geometric sense.
+There are no control points, no path commands, no shape boundaries 
+stored anywhere. Latent space is compressing many graphics
+into a shared numerical embedding learned during training. 
+Kingma and Welling~\cite{kingmaAutoEncodingVariationalBayes2022} 
+formalized this idea through the Variational Autoencoder: 
+an encoder compresses an input into a short vector, and a 
+decoder reconstructs the original from it.
+
+For SVG generation, the actual geometry is always produced 
+by the decoder, which translates a latent vector back into 
+one of the other representation types: parametric paths or sequential commands.
+The latent space sits on top as an organizational layer. It is included 
+here because several models use it this way and confusing 
+it with a geometric representation leads to misunderstanding 
+how those models actually construct their outputs.
+
+
 
 \section{Differentiable Rendering}
 
 Before neural networks can optimize vector graphics using 
 image-based loss functions, there needs to be a way to connect 
-the two spaces. Vector parameters --- control points, stroke 
-widths, colors --- live in a continuous geometric space. Loss 
+the two spaces. Vector parameters (control points, stroke widths, colors) live
+in a continuous geometric space. Loss 
 functions operate on pixel values. These two spaces are not 
 naturally connected: traditional rasterization converts vector 
 geometry into pixels, but this process is not differentiable, 
@@ -170,10 +251,10 @@ DiffVG, introduced by Li et al.~\cite{liDifferentiableVectorGraphics2020a},
 solves this by approximating rasterization in a way that 
 supports gradient computation. Given a set of vector 
 parameters as input, DiffVG renders a pixel image as output. 
-Because the rendering step is differentiable, a loss computed 
-on the output image --- whether a pixel reconstruction loss, 
-a perceptual loss, or a signal from a pretrained semantic 
-model --- can be backpropagated all the way through to the 
+Because the rendering step is differentiablea loss computed 
+on the output image (whether a pixel reconstruction loss,
+a perceptual loss, or a signal from a pretrained semantic model) 
+can be backpropagated all the way through to the 
 vector parameters themselves. The system learns which control 
 point to move, and in which direction, to reduce the error. 
 Technically, DiffVG handles the discrete visibility changes 
@@ -183,12 +264,45 @@ non-differentiable~\cite{liDifferentiableVectorGraphics2020a}.
 Before DiffVG, optimizing vector graphics with gradient-based 
 methods was not straightforward. Its introduction made it 
 possible to apply the full range of image-based supervision 
-strategies --- reconstruction losses, CLIP guidance, diffusion 
-priors --- directly to vector parameters. Most of the 
-optimization-based models analyzed in this thesis rely on 
-this capability, which is why it is introduced here as a 
-foundational component rather than a model-specific detail.
+strategies, reconstruction losses, CLIP guidance, diffusion 
+priors directly to vector parameters.
 
+
+
+The core idea is shown in Figure~\ref{fig:diffvg_pipeline}. 
+Normally, converting vector shapes to pixels is a one-way 
+street: you can go from shapes to pixels, but not back. 
+DiffVG makes the middle step reversible. Once gradients 
+can flow back through the rasterizer, any image-based loss 
+function becomes usable for optimizing vector parameters 
+directly.
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[
+  box/.style={rectangle, draw, rounded corners,
+              minimum width=2cm, minimum height=0.8cm,
+              text centered, font=\small, fill=gray!10},
+  arrow/.style={->, thick}
+]
+\node[box] (params) at (0,0)   {SVG Params};
+\node[box] (diffvg) at (3,0)   {DiffVG};
+\node[box] (image)  at (6,0)   {Pixel Image};
+\node[box] (loss)   at (9,0)   {Loss};
+
+\draw[arrow] (params) -- (diffvg);
+\draw[arrow] (diffvg) -- (image);
+\draw[arrow] (image)  -- (loss);
+\draw[arrow] (loss) to[bend right=40] 
+    node[below, font=\scriptsize] {gradients flow back} (params);
+\end{tikzpicture}
+\caption{The differentiable rendering pipeline. DiffVG 
+converts vector parameters into a pixel image. A loss 
+compares this image to a target. Gradients then flow 
+back through DiffVG to update the vector parameters 
+directly~\cite{liDifferentiableVectorGraphics2020a}.}
+\label{fig:diffvg_pipeline}
+\end{figure}
 
 \section{Loss Functions and Semantic Guidance}
 
@@ -199,8 +313,8 @@ as raster images, and pixel-based comparison gives access to
 well-established loss functions from computer vision. When 
 combined with differentiable rendering, gradients from these 
 losses flow back through the rasterizer to update vector 
-parameters. This section introduces the main supervision 
-signals used across the models analyzed in this thesis.
+parameters. Which loss you use matters a lot, it shapes 
+what the model focuses on during training.
 
 \subsection{Reconstruction Losses}
 
@@ -209,10 +323,9 @@ loss measures the mean squared difference between predicted
 and target pixels, while the L1 loss measures the mean 
 absolute difference~\cite{goodfellow2016deep}. Both are 
 computationally efficient and provide stable gradients when 
-a reference image is available. Their limitation is that 
-they treat each pixel independently, without capturing 
-higher-level structure such as shape boundaries or object 
-regions.
+a reference image is available. The problem is that they treat 
+every pixel the same. A pixel at a shape boundary matters more
+than one in a flat colored region, but L1 and L2 do not know that.
 
 Perceptual losses address this by comparing feature 
 representations extracted from pretrained convolutional 
@@ -241,7 +354,7 @@ exists, alternative guidance strategies are needed.
 
 CLIP (Contrastive Language--Image Pretraining), introduced 
 by Radford et al.~\cite{radfordLearningTransferableVisual2021}, 
-is trained on large-scale image--text pairs to learn a 
+is trained on large-scale image-text pairs to learn a 
 shared embedding space where semantically matching pairs 
 are placed close together and mismatched pairs are pushed 
 apart. Given an image and a text prompt, CLIP measures 
@@ -260,7 +373,7 @@ CLIP similarity score can serve as an optimization signal.
 Gradients flow from the similarity score back through the 
 rasterizer to the SVG parameters, allowing the system to 
 adjust shapes and colors toward better semantic alignment. 
-CLIP does not generate images in this setup --- it acts as 
+CLIP does not generate images in this setup, it acts as 
 a semantic evaluator that provides a direction for 
 improvement.
 
@@ -296,7 +409,7 @@ conditioned on the text prompt. The difference between
 the noisy image and the predicted denoising defines a 
 gradient, which is backpropagated through the rasterizer 
 to update the SVG parameters. No ground-truth image is 
-required --- the diffusion model's learned prior acts as 
+required, the diffusion model's learned prior acts as 
 the teacher.
 
 A known limitation of SDS is oversaturation: because the 

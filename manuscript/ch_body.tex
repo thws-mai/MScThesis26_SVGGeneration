@@ -186,6 +186,47 @@ independent paths, both models tend toward more globally
 coherent outputs --- though at the cost of increased
 inference time.
 
+Table~\ref{tab:arch_optbased} summarizes the 
+architectural components of the optimization-based 
+methods. For all models in this group, the 
+``Trainables'' column refers to per-instance 
+parameters optimized at inference time rather than 
+learned model weights. None of these methods require 
+a training dataset; supervision is provided either 
+by the input image directly or by a frozen pretrained 
+model.
+
+\begin{table}[h!]
+\centering
+\caption{Architectural overview of optimization-based 
+SVG generation methods. Trainables refer to 
+per-instance parameters optimized at inference time.}
+\label{tab:arch_optbased}
+\small
+\begin{tabularx}{\textwidth}{l l l l l}
+\toprule
+\textbf{Model} & \textbf{Trainables} & \textbf{Init.} 
+& \textbf{Supervision} & \textbf{Representation} \\
+\midrule
+LIVE         & SVG parameters      & Raster-driven    
+             & Pixel recon.        & Parametric       \\
+SAMVG        & None                & Mask-based       
+             & None                & Parametric       \\
+Im2Vec       & Encoder + RNN       & Image encoding   
+             & Pixel recon.        & Parametric paths \\
+VectorFusion & SVG parameters      & Random/Trace     
+             & SDS                 & Parametric       \\
+SVGDreamer   & SVG param. + LoRA   & Random paths     
+             & VPSD                & Parametric       \\
+SVGDreamer++ & SVG param. + LoRA   & Random + HIVE    
+             & VPSD + HIVE         & Structured param.\\
+NeuralSVG    & MLP weights + LoRA  & Saliency-based   
+             & SDS                 & Neural implicit  \\
+NiVeL        & MLP weights         & Random weights   
+             & SDS                 & Neural implicit  \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 \section{Dataset-Driven Methods}
 \label{sec:datasetdriven}
@@ -259,6 +300,43 @@ SVGFusion uses a diffusion process over a learned vector
 distribution to sample new SVGs directly. The outputs
 reflect the statistical structure of the training corpus
 rather than the convergence of any optimization loop.
+
+
+Table~\ref{tab:arch_dataset} summarizes the 
+architectural components of the dataset-driven 
+methods. Unlike the optimization-based group, these 
+models learn generation from collections of existing 
+SVGs during a training phase. At inference, 
+generation occurs through a single forward pass 
+rather than iterative refinement.
+
+\begin{table}[h!]
+\centering
+\caption{Architectural overview of dataset-driven 
+SVG generation methods. Training data refers to 
+the dataset used for offline model training.}
+\label{tab:arch_dataset}
+\small
+\begin{tabularx}{\textwidth}{l l l l l}
+\toprule
+\textbf{Model} & \textbf{Trainables} & \textbf{Data} 
+& \textbf{Supervision} & \textbf{Representation} \\
+\midrule
+DeepSVG      & VAE + Transformer   & SVGIcons8        
+             & Recon. + KL         & Sequential tokens \\
+DeepIcon     & Transformer         & SVGIcons8        
+             & Reconstruction      & Sequential tokens \\
+SVGFusion    & VP-VAE + VS-DiT     & SVGX             
+             & Recon. + Denoising  & Continuous latent \\
+T2V-NPR      & NPR-VAE + LoRA      & FIGR-8           
+             & VSD                 & Neural path repr. \\
+LayerTracer  & DiT + LoRA          & LayerSVG         
+             & Denoising           & Layered sequences \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+
 
 Table~\ref{tab:model_overview} summarizes the fourteen models 
 analyzed in this thesis. The \textit{Inference} column 
