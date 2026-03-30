@@ -257,9 +257,10 @@ a perceptual loss, or a signal from a pretrained semantic model)
 can be backpropagated all the way through to the 
 vector parameters themselves. The system learns which control 
 point to move, and in which direction, to reduce the error. 
-Technically, DiffVG handles the discrete visibility changes 
-and anti-aliasing effects that make standard rasterization 
-non-differentiable~\cite{liDifferentiableVectorGraphics2020a}.
+The tricky part is handling edges and anti-aliasing — places 
+where a tiny shift in a path boundary causes a sudden pixel 
+change. DiffVG approximates these discontinuities in a way 
+that still produces usable gradients~\cite{liDifferentiableVectorGraphics2020a}.
 
 Before DiffVG, optimizing vector graphics with gradient-based 
 methods was not straightforward. Its introduction made it 

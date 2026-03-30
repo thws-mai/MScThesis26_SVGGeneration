@@ -7,8 +7,8 @@ adjust geometric parameters until a rendered image matches a
 prompt or a reference. Others learn from datasets and generate
 SVGs through a trained decoder. A smaller group avoids explicit
 geometric primitives entirely and uses neural functions to
-define shapes indirectly. These differences are not just
-technical details --- they reflect fundamentally different
+define shapes indirectly. These differences are not just technical details. 
+They reflect fundamentally different
 assumptions about what a good SVG output should look like,
 and they lead to very different trade-offs between visual
 quality, structural organization, and editability.
@@ -21,8 +21,8 @@ more recently, large language model approaches to SVG
 synthesis. That wider context is sketched briefly below to
 clarify where the selected models sit and why they were
 chosen. The organizing principle is simple: these fourteen
-models together cover the full range of design decisions ---
-in representation and supervision --- that shape how SVG
+models together cover the full range of design decisions
+in representation and supervision, that shape how SVG
 structure emerges from a generation pipeline. A summary of
 all fourteen models is provided in
 Table~\ref{tab:model_overview}.
@@ -69,18 +69,17 @@ OmniSVG~\cite{yangOmniSVGUnifiedScalable2025},
 LLM4SVG~\cite{xingEmpoweringLLMsUnderstand2025}, and
 InternSVG~\cite{wangInternSVGUnifiedSVG2025} treat SVG as
 structured code and generate it through transformer
-architectures pretrained on large-scale text and image
-corpora. Visual alignment improves substantially compared to
-earlier sequence models, but structural consistency across
-long XML sequences remains a fundamental challenge. More
-practically, these models depend on large proprietary
-architectures, making independent reproduction and industrial
-deployment difficult. For this reason --- and because the
-relationship between architectural decisions and structural
-outputs is difficult to trace through billions of parameters
---- LLM-based generation is not included in the main analysis.
-A more detailed justification is provided in the appendix.
-
+architectures pretrained on collection of large-scale texts and images. In one sense, SVG is a natural fit for language
+models: the file format is sequential XML commands, not
+unlike a programming language. Visual alignment improves
+substantially compared to earlier sequence models, and
+these approaches handle a wide range of generation and
+editing tasks. However, they are not included in the main
+analysis here. The core question of this thesis is how
+specific architectural decisions impacts the structure
+of the output and that relationship is difficult to
+trace through billions of parameters. A more detailed
+justification is provided in the appendix.
 
 \section{Optimization-Based Methods}
 \label{sec:optimization}
@@ -103,7 +102,8 @@ a rendered image to propagate gradients back to Bézier
 control points, stroke widths, and colors. The optimization
 loop is the same across all methods in this family: initialize
 primitives, render, compute loss, update parameters. What
-changes is the loss and the representation.
+changes is the loss and the representation. Table~\ref{tab:arch_optbased} summarizes how each 
+model in this group implements those differently.
 
 \subsection*{Reconstruction-Supervised}
 
@@ -118,7 +118,7 @@ same core loop but uses the Segment Anything
 Model~\cite{kirillovSegmentAnything2023} to initialize
 primitives at semantically meaningful regions rather than
 random positions. The core difference between their outputs
-is almost entirely a function of initialization --- which
+is almost entirely a function of initialization, which
 suggests that how optimization begins matters as much as how
 it proceeds.
 
@@ -147,25 +147,33 @@ distribution. No paired SVG training data is needed.
 VectorFusion~\cite{jainVectorFusionTexttoSVGAbstracting2022}
 was among the first to apply this to SVG, using a latent
 diffusion model~\cite{rombachHighResolutionImageSynthesis2021}
-as the supervision backbone. SVGDreamer~\cite{xingSVGDreamerTextGuided2024}
+as the supervision backbone, as shown in
+Figure~\ref{fig:sds_loop}. SVGDreamer~\cite{xingSVGDreamerTextGuided2024}
 builds on this by replacing standard SDS with Vectorized
 Particle-based Score Distillation (VPSD), which treats the
 rendered output as a particle in a learned distribution
-rather than a noisy sample --- producing more stable
-gradients and reducing oversaturation. It also introduces
-explicit control over primitive count and type, organized
+rather than a noisy sample, producing more stable
+gradients and reducing oversaturation, as illustrated in Figure~\ref{fig:svgdreamer_vpsd}.
+It also introduces explicit control over primitive count and type, organized
 into semantic layers. SVGDreamer++~\cite{xingSVGDreamerAdvancingEditability2025}
 extends this with hierarchical refinement mechanisms that
 adapt vector organization during generation.
 
-% Figure: SVGDreamer VPSD pipeline
-% Source: Xing et al. 2024
-% \begin{figure}[h]
-%   \centering
-%   \includegraphics[width=0.85\textwidth]{figures/svgdreamer_vpsd.png}
-%   \caption{VPSD optimization loop in SVGDreamer~\cite{xingSVGDreamerTextGuided2024}.}
-%   \label{fig:svgdreamer_vpsd}
-% \end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{SDS.png}
+\caption{SDS optimization loop in VectorFusion~\cite{jainVectorFusionTexttoSVGAbstracting2022}.}
+\label{fig:sds_loop}
+\end{figure}
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{VPSD!.png}
+\caption{VPSD optimization loop in SVGDreamer~\cite{xingSVGDreamerTextGuided2024}.}
+\label{fig:svgdreamer_vpsd}
+\end{figure}
 
 \subsection*{Neural Implicit Representation}
 
@@ -183,7 +191,7 @@ representation, where each semantic region is a separately
 optimized neural component. Because geometry is produced
 through a shared function rather than a collection of
 independent paths, both models tend toward more globally
-coherent outputs --- though at the cost of increased
+coherent outputs, though at the cost of increased
 inference time.
 
 Table~\ref{tab:arch_optbased} summarizes the 
@@ -228,6 +236,7 @@ NiVeL        & MLP weights         & Random weights
 \end{tabularx}
 \end{table}
 
+
 \section{Dataset-Driven Methods}
 \label{sec:datasetdriven}
 
@@ -245,7 +254,7 @@ DeepSVG~\cite{carlierDeepSVGHierarchicalGenerative2020}
 is the foundational model in this family. It learns a
 hierarchical latent space over SVG path commands using
 a transformer-based encoder-decoder trained on the
-SVG-Icons dataset~\cite{carlierDeepSVGHierarchicalGenerative2020}.
+SVG-Icons dataset.
 The latent space separates path-level and command-level
 representations, allowing the model to capture both coarse
 shape organization and fine geometric detail. At inference,
@@ -280,8 +289,8 @@ paths through a latent path space rather than explicit
 Bézier coordinates. It uses diffusion-based semantic
 supervision during training, but at inference it operates
 as a forward generative model. Its placement here reflects
-the fact that its structural behavior --- consistent paths,
-stable geometry, dataset-bounded style --- is closer to
+the fact that its structural behavior, consistent paths,
+stable geometry, dataset-bounded style is closer to
 the learned models in this section than to the per-instance
 optimization methods above.
 
@@ -299,16 +308,10 @@ gradients to guide per-instance optimization in pixel space,
 SVGFusion uses a diffusion process over a learned vector
 distribution to sample new SVGs directly. The outputs
 reflect the statistical structure of the training corpus
-rather than the convergence of any optimization loop.
-
-
+rather than the convergence of any optimization loop. 
 Table~\ref{tab:arch_dataset} summarizes the 
 architectural components of the dataset-driven 
-methods. Unlike the optimization-based group, these 
-models learn generation from collections of existing 
-SVGs during a training phase. At inference, 
-generation occurs through a single forward pass 
-rather than iterative refinement.
+methods.
 
 \begin{table}[h!]
 \centering
@@ -335,6 +338,12 @@ LayerTracer  & DiT + LoRA          & LayerSVG
 \bottomrule
 \end{tabularx}
 \end{table}
+
+Unlike the optimization-based group, every model here has a 
+named training corpus. The representation column also shifts 
+away from parametric paths toward sequential tokens, latent 
+spaces, and layered sequences, reflecting a fundamentally 
+different approach to how SVG structure is encoded.
 
 
 
@@ -385,6 +394,15 @@ LayerTracer  & Text-to-SVG        & Hybrid         & Text/Img & Layers/Paths & S
 \end{tabularx}
 \end{table}
 
+The split between Iterative Opt. and Forward Dec. in the 
+Inference column maps cleanly onto the two families: every 
+optimization-based model refines at inference time, while 
+every dataset-driven model generates through a single 
+forward pass. LayerTracer is the only exception, labeled 
+Hybrid because it combines a trained diffusion model with 
+a per-instance vectorization step.
+
+
 The fourteen models described in this chapter will be
 examined through two analytical lenses in the chapters
 that follow. The first is representation: how each model
@@ -393,7 +411,7 @@ makes possible or forecloses in terms of structural
 organization and editability. The second is supervision:
 what signal drives the generation process, and how that
 signal shapes the geometry that emerges. These two
-dimensions do not operate independently --- a model's
+dimensions do not operate independently, since a model's
 representation constrains what supervision signals are
 meaningful, and the choice of supervision often determines
 which representations are practical. Understanding how
