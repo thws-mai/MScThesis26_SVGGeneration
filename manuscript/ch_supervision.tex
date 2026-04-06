@@ -33,9 +33,9 @@ significant consequences for speed, structure, reproducibility, and
 practical usability, and is examined in detail in Section~\ref{sec:dataset_vs_instance}.
 
 The following sections examine the main supervision families used 
-across the selected models, focusing on how different guidance 
-strategies influence structure, editability, visual quality, and 
-practical usability.
+across the selected models. 
+Table~\ref{tab:supervision_overview} provides a complete overview 
+of which signal each model uses and when it is applied.
 
 
 \section{Reconstruction-Based Supervision}
@@ -43,25 +43,25 @@ practical usability.
 Reconstruction-based supervision guides generation by comparing a 
 rendered SVG output with a target raster image. The objective is to 
 minimize the difference between prediction and reference using loss 
-functions defined in image or feature space. Common choices include 
-pixel-wise L1 or L2 losses and perceptual losses computed from 
-pretrained convolutional networks~\cite{johnsonPerceptualLossesRealTime2016}. 
-This paradigm is particularly common in dataset-trained models and 
-image-to-SVG approaches.
+functions defined in image or feature space. Using the reconstruction losses described in 
+Section~\ref{sec:recon_losses}, these models minimize the 
+difference between rendered output and target image through DiffVG~\cite{liDifferentiableVectorGraphics2020a}.
 
 One advantage of reconstruction-based supervision is stability. 
 Because the target is known, gradients provide direct information 
-about how geometry should change. Training behavior is predictable, 
-and when datasets contain clean SVG examples, models can learn 
-typical path counts, grouping patterns, and structural conventions. 
-The dataset itself acts as the primary supervision signal: models 
-such as DeepSVG~\cite{carlierDeepSVGHierarchicalGenerative2020}, 
-DeepIcon~\cite{bingDeepIconHierarchicalNetwork2024}, and Im2Vec~\cite{reddyIm2VecSynthesizingVector2021} are trained to 
-reconstruct vector graphics from data, and the reconstruction 
-objective is what drives learning. As discussed in 
-Chapter~\ref{ch:Landscape}, these models do not apply supervision 
-at inference time, once trained, generation occurs through a 
-forward pass.
+about how geometry should change. When datasets contain clean SVG 
+examples, models can absorb typical path counts, grouping patterns, 
+and structural conventions from the data itself. But that structural 
+quality comes from the dataset, not from the loss. The loss only 
+measures visual similarity. A model trained on messy, redundant SVGs 
+would learn to reproduce that mess just as faithfully. DeepSVG, DeepIcon, and Im2Vec are all trained this 
+way~\cite{carlierDeepSVGHierarchicalGenerative2020, 
+bingDeepIconHierarchicalNetwork2024, 
+reddyIm2VecSynthesizingVector2021}, each using a different 
+combination of reconstruction losses 
+(Table~\ref{tab:supervision_overview}), and once trained, 
+generation occurs through a forward pass without further 
+optimization (Chapter~\ref{ch:Landscape}).
 
 However, reconstruction-based supervision has limits. Output quality 
 depends heavily on dataset distribution: models trained on simplified 
@@ -73,6 +73,9 @@ achieve low reconstruction error while producing redundant paths or
 weak hierarchy, particularly when pixel-level matching dominates the 
 objective. Without explicit structural constraints, reconstruction 
 supervision does not guarantee editability or geometric clarity.
+Reconstruction supervision also requires a reference image, which 
+means it cannot support text-to-SVG generation on its own. When no 
+target image exists, alternative guidance strategies are needed.
 
 
 \section{Semantic Guidance with Vision–Language Models}
@@ -118,23 +121,26 @@ distributions and provide gradients that encourage rendered SVGs
 to move toward visually plausible solutions conditioned on a 
 text prompt.
 
-The most common implementation is Score Distillation Sampling (SDS), 
-introduced by DreamFusion~\cite{pooleDreamFusionTextto3DUsing2022}. 
-SDS removes the need for ground-truth images by treating a frozen 
-diffusion model as the optimization signal --- it evaluates the 
-rendered SVG and provides gradients that push vector parameters 
-toward outputs the diffusion model considers plausible for the 
-given prompt. Variational Score Distillation (VSD), used in 
-SVGDreamer~\cite{xingSVGDreamerTextGuided2024}, refines this 
-further by reducing the oversaturation artifacts that plain SDS 
-tends to produce.
+The most common implementation is Score Distillation Sampling 
+(SDS), described in Section~\ref{sec:sds_vsd}. SDS treats a 
+frozen diffusion model as the optimization signal, providing 
+gradients that push vector parameters toward outputs the model 
+considers plausible for a given prompt. Variational Score 
+Distillation (VSD), used in 
+SVGDreamer~\cite{xingSVGDreamerTextGuided2024}, reduces the 
+oversaturation artifacts that plain SDS tends to produce.
+
 
 Several models in this thesis use diffusion-based supervision 
-as their primary guidance signal, including VectorFusion, 
-SVGDreamer~\cite{xingSVGDreamerTextGuided2024}, SVGDreamer++~\cite{xingSVGDreamerAdvancingEditability2025}, 
-NeuralSVG~\cite{polaczekNeuralSVGImplicitRepresentation2025}, NIVeL~\cite{thamizharasanNIVeLNeuralImplicit2024}, 
-and T2V-NPR~\cite{zhangTexttoVectorGenerationNeural2024}.
-
+as their primary guidance signal, though each relies on a 
+different distillation variant 
+(Table~\ref{tab:supervision_overview}): VectorFusion and NiVeL 
+use standard 
+SDS~\cite{thamizharasanNIVeLNeuralImplicit2024}, NeuralSVG 
+adds a fine-tuned LoRA 
+adapter~\cite{polaczekNeuralSVGImplicitRepresentation2025}, 
+and SVGDreamer replaces SDS with 
+VPSD~\cite{xingSVGDreamerTextGuided2024}.
 The main advantage is expressive power. Because diffusion models 
 encode rich visual knowledge, they can guide generation toward 
 complex compositions and stylistic diversity that reconstruction 
@@ -145,7 +151,9 @@ constraints, optimization tends to increase primitive count to
 satisfy visual objectives, which directly affects editability. 
 Inference cost is also substantially higher than for forward-decoding 
 approaches, since each generation requires repeated rendering and 
-evaluation cycles.
+evaluation cycles. Figure~\ref{fig:supervision_comparison} shows how these three 
+variants produce visibly different outputs from the same prompt, 
+despite all relying on diffusion-based supervision.
 
 Despite these trade-offs, diffusion-based supervision has become 
 the dominant strategy for open-ended SVG generation because it 
@@ -155,6 +163,28 @@ representation innovations or structural priors to mitigate
 geometric instability, which is why supervision cannot be 
 analyzed independently from the other design choices examined 
 in this thesis.
+
+\begin{figure}[ht]
+    \centering
+    \begin{tabular}{ccc}
+    \textbf{VectorFusion} & \textbf{SVGDreamer} & \textbf{NeuralSVG} \\
+    \small{SDS} & \small{VPSD} & 
+    \small{SDS + LoRA} \\[4pt]
+    \includegraphics[width=0.3\textwidth]{vectorfusion_img.png} &
+    \includegraphics[width=0.3\textwidth]{svgdreamer256_img.png} &
+    \includegraphics[width=0.3\textwidth]{neuralsvg16_img.png} \\
+    \end{tabular}
+    \caption{Three diffusion-based supervision variants generating 
+    from the same prompt. VectorFusion (SDS, 64 shapes) produces 
+    over-smoothed geometry. SVGDreamer (VPSD, 256 shapes) improves 
+    diversity but uses four times as many primitives. NeuralSVG 
+    (SDS with LoRA, 16 shapes) achieves comparable visual quality 
+    with the fewest shapes. Images reproduced 
+    from~\cite{xingSVGFusionScalableTexttoSVG2025, 
+    polaczekNeuralSVGImplicitRepresentation2025}.}
+    \label{fig:supervision_comparison}
+\end{figure}
+
 
 
 \section{Dataset Supervision vs.\ Per-Instance Supervision}
@@ -174,16 +204,29 @@ generation requires no further optimization. LayerTracer~\cite{songLayerTracerCo
 a specific variant of this approach: it is trained on a 
 synthetically generated serpentine dataset, where vector 
 graphics are constructed in a deliberate layer order that 
-mimics human drawing behavior~\cite{songLayerTracerCognitiveAlignedLayered2025}. 
+mimics human drawing behavior. 
 The dataset structure itself encodes the supervision prior, 
 teaching the model to generate layered, sequential outputs 
 that reflect design conventions rather than arbitrary path 
 orderings.
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.85\textwidth]{latertracer trng.png}
+    \caption{Step-by-step construction sequence from the Serpentine 
+    dataset used to train 
+    LayerTracer~\cite{songLayerTracerCognitiveAlignedLayered2025}. 
+    Each stage adds a new layer, mimicking how a designer would 
+    build the graphic incrementally. The dataset structure itself 
+    encodes the supervision prior.}
+    \label{fig:serpentine}
+\end{figure}
+
+
 Per-instance supervision works differently. Models such as 
 LIVE~\cite{maLayerwiseImageVectorization2022}, 
 SAMVG~\cite{zhuSAMVGMultistageImage2023}, VectorFusion~\cite{jainVectorFusionTexttoSVGAbstracting2022}, 
-SVGDreamer~\cite{liSVGDreamerTexttoSVG2023}, NeuralSVG~\cite{liNeuralSVGTexttoSVG2023}, NIVeL~\cite{zhaoNIVeLTexttoVector2023}, and T2V-NPR~\cite{liT2V-NPRTexttoVector2023} apply supervision 
+SVGDreamer~\cite{xingSVGDreamerTextGuided2024}, NeuralSVG~\cite{polaczekNeuralSVGImplicitRepresentation2025}, NIVeL~\cite{thamizharasanNIVeLNeuralImplicit2024}, and T2V-NPR~\cite{zhangTexttoVectorGenerationNeural2024} apply supervision 
 directly during generation. No reusable generation model is 
 trained; instead, vector parameters are optimized from scratch 
 for each input using reconstruction losses, semantic alignment, 
@@ -211,101 +254,101 @@ Hybrid approaches mitigate some of these trade-offs but
 increase overall system complexity.
 
 
-\section{Structural Priors and Initialization as Supervision}
 
-Beyond explicit loss functions, many SVG generation methods 
-rely on structural priors and initialization strategies that 
-act as additional forms of supervision. These mechanisms are 
-not always described as supervision, but they strongly 
-influence how structure emerges in the resulting SVG.
+\begin{table}[ht]
+\centering
+\caption{Supervision signals used by each of the fourteen models 
+analyzed in this thesis.}
+\label{tab:supervision_overview}
+\begin{tabular}{l l l}
+\hline
+\textbf{Model} & \textbf{Supervision Signal} & \textbf{Applied} \\
+\hline
+LIVE & L1 + perceptual (VGG) + Xing loss & Inference \\
+SAMVG & L1 + IoU + SAM segmentation init & Inference \\
+Im2Vec & L2 via differentiable rendering & Training \\
+VectorFusion & SDS from Stable Diffusion & Inference \\
+SVGDreamer & VPSD from Stable Diffusion & Inference \\
+SVGDreamer++ & VPSD + HIVE masks + reward model & Inference \\
+NeuralSVG & SDS + fine-tuned LoRA adapter & Inference \\
+NiVeL & SDS from Stable Diffusion & Inference \\
+DeepSVG & Cross-entropy + L1 + KL divergence & Training \\
+DeepIcon & Cross-entropy + CLIP embedding & Training \\
+SVGFusion & KL + latent-space denoising (VS-DiT) & Training \\
+T2V-NPR & VSD + neural path VAE & Both \\
+LayerTracer & Denoising + serpentine construction data & Training \\
+\hline
+\end{tabular}
+\end{table}
 
-Initialization determines the starting point of optimization. 
-Random initialization provides flexibility but often leads to 
-unstable optimization and fragmented paths. Structured 
-initialization introduces prior knowledge about object 
-boundaries and layout, reducing the need for excessive 
-refinement. SAMVG~\cite{zhuSAMVGMultistageImage2023} illustrates this by using segmentation 
-outputs to define an initial set of semantically meaningful 
-regions before vector optimization begins. LIVE~\cite{maLayerwiseImageVectorization2022} and 
-SVGDreamer++~\cite{liSVGDreamerTexttoSVG2023} use layered initialization strategies that 
-progressively refine structure across stages. In these cases, 
-the initialization itself constrains geometry before any 
-loss is applied.
 
-Structural priors can also come from learned representations. 
-SVGFusion~\cite{xingSVGFusionScalableTexttoSVG2025} and 
-T2V-NPR~\cite{liT2V-NPRTexttoVector2023} both use latent starting points shaped 
-by prior training, so optimization begins from a representation 
-that already encodes typical path structures rather than from 
-scratch. This often improves convergence speed and reduces 
-structural noise compared to random initialization.
+\section{Initialization and Structural Priors}
 
-The interaction with diffusion supervision is particularly 
-important here. Because diffusion gradients operate in pixel 
-space and do not enforce hierarchy, initialization plays a 
-critical role in determining whether structure remains 
-interpretable. When meaningful priors are absent, 
-diffusion-driven optimization tends to increase primitive 
-count to match visual detail. When structured initialization 
-is present, the same supervision signal can produce more 
-coherent geometry with fewer paths. This is one reason why 
-models with similar supervision strategies can produce very 
-different structural outcomes depending on how generation 
-is initialized.
+Not everything that shapes a generated SVG comes from a loss 
+function. Where optimization starts matters at least as much as 
+what it optimizes for, and in some cases the initialization 
+itself acts as the dominant supervision signal.
 
-From a broader perspective, treating initialization and 
-structural constraints as forms of supervision helps explain 
-observations that loss functions alone cannot account for. 
-Methods that incorporate segmentation, layering, or learned 
-latent starting points often generate more interpretable SVG 
-outputs despite relying on similar perceptual objectives as 
-less structured alternatives.
+SAMVG~\cite{zhuSAMVGMultistageImage2023} is the clearest example. 
+It uses the Segment Anything Model to define semantically 
+meaningful regions before any vector optimization begins. The 
+loss function is still pixel reconstruction, same as LIVE. But 
+SAMVG's outputs have cleaner boundaries and less path 
+fragmentation, because the starting point already encodes where 
+objects are. The supervision signal did not change. The 
+initialization did, and that made the structural difference, 
+though not without cost: SAMVG's outputs are structurally 
+cleaner but visually less faithful to the target 
+(Figure~\ref{fig:init_comparison}). Even the choice of initialization 
+has an impact on the realism-editability trade-off .
 
+\begin{figure}[ht]
+    \centering
+    \begin{tabular}{cc}
+    \textbf{LIVE} & \textbf{SAMVG} \\
+    \textbf{Random init} & \textbf{SAM segmentation init} \\[4pt]
+    \includegraphics[width=0.4\textwidth]{live_img.png} &
+    \includegraphics[width=0.4\textwidth]{sam_img.png} \\
+    \end{tabular}
+    \caption{Both models use pixel reconstruction loss via 
+    differentiable rasterization. LIVE initializes randomly and 
+    produces a visually closer match to the target through dense 
+    overlapping paths, but the resulting file is fragmented and 
+    difficult to edit. SAMVG initializes from segmentation masks 
+    and produces cleaner object boundaries with fewer paths, at 
+    the cost of reduced visual 
+    fidelity~\cite{zhuSAMVGMultistageImage2023}.}
+    \label{fig:init_comparison}
+\end{figure}
+
+The same logic applies to models that begin from learned 
+representations. SVGFusion and T2V-NPR both start optimization 
+from latent embeddings shaped by prior training, so the 
+optimizer never begins from random noise. LayerTracer goes 
+further: its training data was designed to encode construction 
+order (Figure~\ref{fig:serpentine}), which means the model 
+learns to produce layered outputs without any explicit 
+structural loss. The dataset itself is the structural prior.
+
+This matters because it explains something that supervision 
+type alone cannot: why models using the same diffusion-based 
+loss can produce very different structural outcomes. When 
+meaningful priors are absent, diffusion optimization tends to 
+pile on more primitives. When structured initialization is 
+present, the same loss produces cleaner geometry with fewer 
+paths. The choice of supervision tells you what the model 
+optimizes for. The choice of initialization tells you where 
+it starts, and that starting point often determines whether 
+the result is editable or not.
 
 \section{Summary}
 
-This chapter analyzed supervision as a key dimension shaping 
-SVG generation methods. While representation determines how 
-vector graphics are encoded, supervision determines how these 
-representations evolve toward desired outputs.
-
-Reconstruction-based supervision provides explicit targets and 
-stable optimization, but its quality depends on dataset 
-distribution and it does not guarantee structural correctness. 
-Semantic guidance enables generation without paired data, but 
-its indirect nature can lead to unstable geometry. 
-Diffusion-based supervision provides strong perceptual priors 
-that improve visual expressiveness significantly, at the cost 
-of increased computational load and structural complexity.
-
-The distinction between dataset supervision and per-instance 
-supervision clarifies how methods allocate computational effort. 
-Dataset-trained models use the training data itself as the 
-supervision signal and favor efficiency and consistency. 
-Per-instance optimization offers flexibility and expressive 
-power at the cost of runtime and reproducibility. Hybrid 
-approaches such as SVGFusion~\cite{xingSVGFusionScalableTexttoSVG2025} 
-and T2V-NPR~\cite{liT2V-NPRTexttoVector2023} combine both, 
-reflecting an ongoing attempt to balance speed with 
-adaptability. LayerTracer~\cite{maLayerwiseImageVectorization2022} 
-represents a particularly direct example of how dataset design can encode structural priors: 
-its serpentine training data teaches the model to produce 
-layered outputs without requiring any explicit structural 
-loss.
-
-Structural priors and initialization strategies extend the 
-definition of supervision beyond explicit loss functions. 
-They shape the space in which optimization occurs and 
-strongly influence geometry quality, often more than the 
-choice of loss function itself.
-
-Across all supervision strategies, a recurring pattern 
-emerges: supervision tends to prioritize visual objectives, 
-while structural properties emerge indirectly. This explains 
-why models with strong perceptual guidance can produce 
-visually convincing SVGs that are difficult to edit. When 
-analyzed together with representation, supervision provides 
-a framework for understanding why different model 
-architectures produce distinct structural outcomes. The next 
-chapter examines how these properties can be measured and 
-compared through evaluation.
+Supervision determines what aspects of the output a model 
+prioritizes during generation. Reconstruction losses provide 
+stability but do not guarantee structural correctness. Diffusion 
+priors enable open-ended generation but tend to increase primitive 
+count. Across all strategies, the recurring pattern is that 
+supervision prioritizes visual objectives while structural 
+properties emerge indirectly, which is why the evaluation 
+practices examined in the next chapter matter as much as the 
+generation methods themselves.

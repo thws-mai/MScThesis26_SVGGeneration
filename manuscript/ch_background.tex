@@ -20,14 +20,15 @@ CLIP, SDS, VSD that drive the generation process in different ways.
 
 
 \section{Vector Graphics Fundamentals}
+\label{sec:vector_fundamentals}
 
 Scalable Vector Graphics (SVG) is an XML-based standard for 
 representing two-dimensional graphics as structured 
 text~\cite{eisenbergSVGEssentialsProducing20}. Difference between raster formats and SVG 
 is that an SVG file is a readable document that describes how an image should 
-be drawn rather than storing pixel values. At its core, an SVG 
-file consists of instructions or commands that define geometric primitives such as paths, shapes and curves, 
-styling, and hierarchical relationships between 
+be drawn rather than storing pixel values. At its core, an SVG file consists of instructions or commands that 
+define geometric primitives such as circles, rectangles, lines, and 
+paths, along with styling and hierarchical relationships between 
 elements~\cite{quintScalableVectorGraphics2003}.
 
 SVG supports a range of graphic elements, including basic shapes 
@@ -162,6 +163,7 @@ The following sections introduce the four representation types
 that appear across the models analyzed in this thesis.
 
 \subsection{Parametric Representation}
+\label{sec:parametric_repr}
 
 Parametric representation is natural for SVG because  
 SVG is already parametric. Every element in the file is 
@@ -178,6 +180,7 @@ of gradient-based update of vector primitives was not
 straightforward.
 
 \subsection{Sequential Representation}
+\label{sec:sequential_repr}
 
 The idea of treating vector graphics as ordered sequences of 
 drawing commands goes back to Ha and 
@@ -192,6 +195,7 @@ is that whenever errors accumulate, a mistake early in a long sequence can
 break everything that follows.
 
 \subsection{Implicit Neural Representation}
+\label{sec:implicit_repr}
 
 The use of neural networks to define geometry implicitly 
 through learned weights was established in 
@@ -214,6 +218,7 @@ parameters.
 
 
 \subsection{Latent Representation}
+\label{sec:latent_repr}
 
 Latent representation works differently from the three above, 
 it is not a vector representation in the geometric sense.
@@ -236,6 +241,7 @@ how those models actually construct their outputs.
 
 
 \section{Differentiable Rendering}
+\label{sec:diffvg}
 
 Before neural networks can optimize vector graphics using 
 image-based loss functions, there needs to be a way to connect 
@@ -307,6 +313,7 @@ directly~\cite{liDifferentiableVectorGraphics2020a}.}
 
 \section{Loss Functions and Semantic Guidance}
 
+
 Even when a model manipulates vector parameters internally, 
 comparing outputs in pixel space is more practical than 
 comparing vector structures directly. Most visual data exists 
@@ -318,6 +325,7 @@ parameters. Which loss you use matters a lot, it shapes
 what the model focuses on during training.
 
 \subsection{Reconstruction Losses}
+\label{sec:recon_losses}
 
 The simplest losses operate directly on pixel values. The L2 
 loss measures the mean squared difference between predicted 
@@ -397,7 +405,7 @@ capturing complex visual distributions and rich semantic
 structure.
 
 \subsection{Score Distillation Sampling and VSD}
-
+\label{sec:sds_vsd}
 Score Distillation Sampling (SDS), introduced by 
 DreamFusion~\cite{pooleDreamFusionTextto3DUsing2022} for 
 text-to-3D generation and later adopted for vector 

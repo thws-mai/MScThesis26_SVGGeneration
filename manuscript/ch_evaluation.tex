@@ -1,24 +1,23 @@
-\chapter{Evaluation of SVG Generation Methods}
+\chapter{Evaluation of SVG Generation}
 \label{ch:Evaluation}
 
 Evaluating SVG generation is harder than evaluating raster 
-image generation. A raster image is just pixels --- if it 
-looks right, it is right. An SVG is a structured artifact 
+image generation. A raster image is just pixels, only matter is how it looks.
+An SVG is a structured artifact 
 that has to look right, be geometrically stable, and remain 
 editable. These three requirements do not always point in 
 the same direction, and the metrics most commonly used in 
-the literature only measure the first one.
-
+the literature only measure the first one. 
 This chapter examines how the fourteen models analyzed in 
 this thesis are actually evaluated, where those practices 
 fall short, and what a more complete framework would need 
 to include. The argument is not that FID and CLIP score 
-are useless --- they capture real properties --- but that 
+are useless, but that 
 relying on them alone systematically misses what makes a 
 vector graphic useful in practice.
 
 
-\section{Evaluation of Generated SVGs}
+\section{Evaluation Metrics in Current Practice}
 \label{sec:current_eval}
 
 The majority of SVG generation papers evaluate their outputs 
@@ -30,9 +29,9 @@ perceptual similarity measures such as
 LPIPS~\cite{zhangUnreasonableEffectivenessDeep2018}, 
 pixel-level reconstruction metrics such as MSE, and human 
 preference studies. All of these share one property: they 
-operate on rasterized outputs. The SVG file itself --- its 
-path structure, layer organization, and geometric properties 
---- is invisible to every one of them.
+operate on rasterized outputs. The SVG file itself, its 
+path structure, layer organization, and geometric properties, 
+is invisible to every one of them.
 
 FID measures the statistical distance between 
 distributions of generated and reference images in a feature 
@@ -50,16 +49,14 @@ papers in the SVG literature report FID on sets of a few
 hundred rendered outputs, which produces estimates that are 
 difficult to compare across papers.
 
-CLIP score measures semantic alignment between 
-a rendered image and a text 
-prompt~\cite{radfordLearningTransferableVisual2021}. It is 
-particularly useful for text-to-SVG tasks where the goal is 
-conceptual correctness rather than pixel-accurate 
-reconstruction. CLIP captures high-level semantic 
-relationships effectively, but like FID it operates entirely 
-in image space. A model can achieve strong CLIP scores while 
-producing structurally fragmented, geometrically unstable, 
-or completely uneditable SVG output.
+CLIP score measures semantic alignment between a rendered 
+image and a text 
+prompt~\cite{radfordLearningTransferableVisual2021}, as 
+described in Section~\ref{sec:clip}. It is useful for 
+text-to-SVG tasks where the goal is conceptual correctness, 
+but like FID it operates entirely in image space. A model 
+can achieve strong CLIP scores while producing structurally 
+fragmented or completely uneditable SVG output.
 
 LPIPS is a perceptual similarity metric that 
 computes feature-based distances using a pretrained 
@@ -73,8 +70,8 @@ an evaluation metric in several vectorization papers. The
 limitation is the same: it measures rendered appearance, 
 not vector structure.
 
-MSE is the most basic pixel-level metric --- 
-mean squared error between rendered output and reference 
+Mean squared error (MSE) is the most basic pixel-level metric 
+between rendered output and reference 
 image. It is fast to compute and easy to interpret, but 
 sensitive to minor geometric misalignments and color 
 averaging. LIVE explicitly avoids MSE as a training loss 
@@ -111,7 +108,7 @@ models. \checkmark\,= reported, \text{--} = not reported.}
 \toprule
 \textbf{Model} & \textbf{FID} & \textbf{CLIP} & 
 \textbf{LPIPS} & \textbf{MSE} & \textbf{User} & 
-\textbf{Smooth} \\
+\textbf{Chamfer} \\
 \midrule
 LIVE         & --         & --         & --         
              & \checkmark & \checkmark & --         \\
@@ -132,11 +129,11 @@ NeuralSVG    & --         & \checkmark & --
 DeepSVG      & --         & --         & --         
              & \checkmark & \checkmark & --         \\
 DeepIcon     & --         & --         & --         
-             & --         & --         & --         \\
+             & --         & --         & \checkmark \\
 SVGFusion    & \checkmark & \checkmark & --         
              & --         & \checkmark & --         \\
 T2V-NPR      & \checkmark & \checkmark & --         
-             & --         & \checkmark & \checkmark \\
+             & --         & \checkmark & --         \\
 LayerTracer  & \checkmark & \checkmark & --         
              & \checkmark & --         & --         \\
 \bottomrule
@@ -147,15 +144,16 @@ Three observations follow from this table. First, no model
 reports layer quality as a quantitative metric, despite 
 LayerTracer, NeuralSVG, and T2V-NPR all explicitly claiming 
 layered outputs as a contribution. Second, T2V-NPR is the 
-only model that evaluates geometric smoothness --- and it 
+only model that evaluates geometric smoothness and it 
 does so precisely because smoothness is central to its 
 architectural claim, not because it is a standard metric 
-in the field. Third, DeepIcon reports no metrics at all in 
-the sources reviewed --- its evaluation is entirely 
-qualitative. This pattern suggests that models tend to 
-report metrics that favor their specific contributions 
-while structural properties remain systematically 
-unmeasured.
+in the field. Third, DeepIcon is the only model that reports contour-based 
+metrics (IoU and Chamfer 
+Distance)~\cite{bingDeepIconHierarchicalNetwork2024}, which 
+measure shape overlap rather than pixel similarity. No other 
+model uses these. This pattern suggests that models tend to 
+report metrics that favor their specific contributions while 
+structural properties remain systematically unmeasured. 
 
 Emerging benchmarks have begun to recognize this gap. 
 SVGEditBench~\cite{nishinaSVGEditBenchBenchmarkDataset2024} 
@@ -192,11 +190,10 @@ would represent with one or two shapes. LIVE and
 VectorFusion both exhibit this 
 behavior~\cite{maLayerwiseImageVectorization2022, 
 jainVectorFusionTexttoSVGAbstracting2022}. The SVG renders 
-correctly but is structurally opaque. No metric in 
-Table~\ref{tab:metrics_used} detects this --- a model 
-with 300 fragmented paths and a model with 12 clean 
-shapes can produce identical FID scores if they render 
-similarly.
+correctly but is structurally opaque. No metric in Table~\ref{tab:metrics_used} would detect 
+the difference: a model with 300 fragmented paths and a 
+model with 12 clean shapes can produce identical FID 
+scores if they render similarly.
 
 \paragraph{Geometric quality.} Curved paths in 
 optimization outputs are sometimes jagged, 
@@ -222,27 +219,37 @@ measure this. Editability is occasionally demonstrated
 by showing that a generated element can be recolored 
 or moved, but this is not systematically evaluated 
 across models and no paper defines criteria for what 
-counts as editable.
+counts as editable. Commercial tools such as SVGMaker.io already produce SVGs 
+with named layers and individually selectable shapes 
+(Figure~\ref{fig:svgmaker_editability}), but how they 
+achieve this is not publicly known. The gap between what 
+industry tools deliver and what research models are 
+evaluated on is part of the problem: editability is a 
+practical requirement that the field has not yet learned 
+to measure.
 
-% Figure: SVGMaker.io screenshot
-% Insert March 12
-% \begin{figure}[h]
-%   \centering
-%   \includegraphics[width=0.85\textwidth]{figures/svgmaker_example.png}
-%   \caption{A designer-ready SVG in SVGMaker.io. Individual 
-%   shapes are selectable, organized into named layers, and 
-%   independently editable --- properties that none of the 
-%   metrics in Table~\ref{tab:metrics_used} measure.}
-%   \label{fig:svgmaker_editability}
-% \end{figure}
-
-
+\begin{figure}[ht]
+    \centering
+    \begin{tabular}{cc}
+    \includegraphics[width=0.4\textwidth]{2.png} &
+    \includegraphics[width=0.4\textwidth]{3.png} \\
+    \small{(a) Assembled} & \small{(b) Shapes separated} \\
+    \end{tabular}
+    \caption{A human-designed SVG icon from SVGRepo, opened 
+    and decomposed in Inkscape. The graphic consists of 8 
+    B\'{e}zier paths, each representing a distinct visual 
+    component: pole, flag body, skull, eyes, and nose. 
+    Every shape can be independently selected, moved, 
+    recolored, or deleted. This structural clarity is what 
+    current evaluation metrics do not capture.}
+    \label{fig:svgmaker_editability}
+\end{figure}
 
 \section{Efficiency and Reproducibility}
 \label{sec:efficiency}
 
 Inference speed and reproducibility are not peripheral 
-concerns for SVG generation --- they directly determine 
+concerns for SVG generation, they directly determine 
 whether a method can be used in practice. 
 Table~\ref{tab:reproducibility} summarizes code 
 availability, hardware requirements, and inference time 
@@ -263,7 +270,7 @@ By contrast, LayerTracer generates a layered SVG in 27
 to 34 seconds~\cite{songLayerTracerCognitiveAlignedLayered2025}, 
 and SVGFusion in 24 to 36 
 seconds~\cite{xingSVGFusionScalableTexttoSVG2025}. The 
-difference is not marginal --- it is two to three orders 
+difference is not marginal, it is two to three orders 
 of magnitude. This gap follows directly from architecture: 
 optimization-based methods refine parameters iteratively 
 at inference time, while dataset-trained models generate 
@@ -291,21 +298,6 @@ entirely on self-reported numbers, which may reflect
 favorable experimental conditions rather than typical 
 performance.
 
-Taken together, efficiency and reproducibility reveal 
-a tension that runs through the entire field. The methods 
-with the strongest structural control --- optimization-based 
-approaches --- are the slowest and most hardware-intensive. 
-The fastest methods --- dataset-trained forward decoders 
---- are often the least reproducible. No current model 
-in the analyzed set is simultaneously fast, reproducible, 
-and structurally strong.
-
-Table~\ref{tab:reproducibility} summarizes hardware 
-requirements, code availability, and inference time 
-across the fourteen models. The pattern divides cleanly 
-along family lines: optimization-based methods are slow 
-and generally reproducible, while several dataset-trained 
-models are fast but lack public implementations entirely.
 
 \begin{table}[h!]
 \centering
@@ -341,6 +333,18 @@ LayerTracer  & Public   & A100 (80GB)     & 27--34 s        \\
 \end{tabularx}
 \end{table}
 
+The pattern in Table~\ref{tab:reproducibility} divides 
+cleanly along family lines: optimization-based methods 
+are slow and generally reproducible, while several 
+dataset-trained models are fast but lack public 
+implementations entirely. Taken together, efficiency and 
+reproducibility reveal a tension that runs through the 
+entire field. The optimization-based methods with the 
+strongest structural control are the slowest and most 
+hardware-intensive. The dataset-trained forward decoders 
+are the fastest but often the least reproducible. No 
+current model in the analyzed set is simultaneously fast, 
+reproducible, and structurally strong.
 
 
 \section{Toward a Multi-Dimensional Evaluation Framework}
@@ -368,8 +372,8 @@ is path count relative to visually distinct regions.
 NeuralSVG produces semantically accurate results with 
 substantially fewer shapes than VectorFusion or 
 SVGDreamer for equivalent 
-prompts~\cite{polaczekNeuralSVGImplicitRepresentation2025} 
---- a structural difference invisible to FID. Path 
+prompts~\cite{polaczekNeuralSVGImplicitRepresentation2025}. 
+This structural difference is invisible to FID. Path 
 count is directly computable from the SVG file without 
 rasterization.
 
@@ -391,12 +395,12 @@ the ratio of semantically grouped elements to total
 path count. LayerTracer and NeuralSVG make the 
 strongest architectural claims in this dimension, 
 but neither reports a quantitative layer quality 
-score~\cite{lsongLayerTracerCognitiveAlignedLayered2025, polaczekNeuralSVGImplicitRepresentation2025}. Developing 
-a standardized layer metric remains an open problem.
+score~\cite{songLayerTracerCognitiveAlignedLayered2025, polaczekNeuralSVGImplicitRepresentation2025}. 
+Developing a standardized layer metric remains an open problem.
 
 \paragraph{Editability.} Can a designer modify the 
 output using standard tools? This requires human 
-evaluation --- importing the SVG into Illustrator 
+evaluation, importing the SVG into Illustrator 
 or Figma and assessing whether elements can be 
 selected, recolored, and repositioned independently. 
 Figure~\ref{fig:svgmaker_editability} shows what 
@@ -415,8 +419,7 @@ speed and infrastructure cost are primary constraints.
 Table~\ref{tab:framework} applies these six dimensions 
 to all fourteen models based on their architectural 
 properties. Most ratings reflect design characteristics 
-rather than measured outcomes --- a direct consequence 
-of the evaluation gap this chapter identifies. The 
+rather than measured outcomes. The 
 pattern that emerges is consistent: no single model 
 scores well across all six dimensions simultaneously. 
 Optimization-based methods tend to score well on 
@@ -425,10 +428,10 @@ on path economy, geometric quality, and efficiency.
 Dataset-trained methods score better on efficiency 
 and path economy but vary widely on semantic alignment 
 and editability depending on training data scope. 
-Neural implicit methods occupy a middle ground --- 
+Neural implicit methods occupy a middle ground which is 
 strong on geometry and layers, but slow.
 
-This is not a ranking of models --- it is a map of 
+This is not a ranking of models, it is a map of 
 the trade-offs that current architectures navigate. 
 The absence of a model that scores well on all six 
 dimensions is itself a finding: it reflects that 

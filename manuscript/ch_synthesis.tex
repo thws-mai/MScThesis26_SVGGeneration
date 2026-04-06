@@ -34,6 +34,7 @@ the structural outcomes observed in its outputs.
 The patterns this table makes visible are the 
 subject of the analysis that follows.
 
+
 \begin{table}[h!]
 \centering
 \caption{Representation type, supervision signal, 
@@ -215,7 +216,11 @@ by strong diffusion priors --- is precisely what enables
 photorealistic rendering quality. The trade-off is genuine: 
 neither side is simply better. The appropriate choice depends 
 on whether the intended use prioritizes visual output quality 
-or downstream editability.
+or downstream editability. The multi-dimensional framework in 
+Table~\ref{tab:framework} makes this trade-off 
+quantifiable: models that score highest on semantic 
+alignment (VectorFusion, SVGDreamer) consistently 
+score lowest on path economy and editability.
 
 Models that constrain representation tend to produce outputs 
 that are easier to edit, even when visual abstraction is 
