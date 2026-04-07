@@ -2,7 +2,7 @@
 \label{ch:Evaluation}
 
 Evaluating SVG generation is harder than evaluating raster 
-image generation. A raster image is just pixels, only matter is how it looks.
+image generation. A raster image is just pixels, the only thing that matters is how it looks.
 An SVG is a structured artifact 
 that has to look right, be geometrically stable, and remain 
 editable. These three requirements do not always point in 
@@ -221,7 +221,7 @@ or moved, but this is not systematically evaluated
 across models and no paper defines criteria for what 
 counts as editable. Commercial tools such as SVGMaker.io already produce SVGs 
 with named layers and individually selectable shapes 
-(Figure~\ref{fig:svgmaker_editability}), but how they 
+(Figure~\ref{fig:editability_gap}), but how they 
 achieve this is not publicly known. The gap between what 
 industry tools deliver and what research models are 
 evaluated on is part of the problem: editability is a 
@@ -242,7 +242,7 @@ to measure.
     Every shape can be independently selected, moved, 
     recolored, or deleted. This structural clarity is what 
     current evaluation metrics do not capture.}
-    \label{fig:svgmaker_editability}
+    \label{fig:editability_gap}
 \end{figure}
 
 \section{Efficiency and Reproducibility}

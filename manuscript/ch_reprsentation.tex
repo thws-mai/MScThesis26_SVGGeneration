@@ -13,80 +13,54 @@ structural properties the resulting graphics have.
 In the context of this thesis, representation refers to the 
 intermediate form in which a model encodes vector geometry, not 
 the final output file but the internal structure through which 
-shapes are created, manipulated, and decoded. As introduced in 
-Chapter~\ref{ch:Background}, a vector graphic can be represented 
-in several fundamentally different ways: as a collection of 
-explicit geometric primitives with directly optimizable parameters, 
-as an ordered sequence of drawing commands, as the weights of a 
-neural network that maps indices or coordinates to shape properties, 
-or as a compact latent embedding from which structured output is 
-decoded. Each of these formulations encodes the same underlying 
+shapes are created, manipulated, and decoded. The four 
+representation types introduced in 
+Chapter~\ref{ch:Background} each encode the same underlying 
 geometry differently, and this difference shapes how the model 
-learns, how gradients propagate, and what the generated SVG looks 
-like structurally.
+learns, how gradients propagate, and what the generated SVG 
+looks like structurally.
 
-This chapter examines four primary representation families 
-identified across the selected models: parametric, sequential, 
-implicit neural, and latent. For each family, the analysis 
-describes how it works technically, which models use it, and what 
-structural tendencies it introduces. 
-Figure~\ref{fig:representation_outputs} shows qualitative outputs 
-from representative models across the four families, illustrating 
-how these representational choices translate into visible structural 
-differences.
+The chapter works through four representation families 
+(parametric, sequential, implicit neural, and latent) as 
+they appear across the selected models, then examines what 
+each one does to the structure and editability of the output. 
+Figure~\ref{fig:representation_outputs} gives an immediate 
+sense of the differences: four models, four representations, 
+the same subject.
 
 
 \section{Parametric Representations}
 
-Parametric representations describe vector graphics as collections 
-of explicit geometric primitives, specifically paths defined by 
-B\'{e}zier control points, stroke attributes, and fill colors. 
-These parameters can be optimized directly using gradient-based 
-methods. The representation closely matches the SVG format itself 
-(Section~\ref{sec:vector_fundamentals}), which is why it feels 
-like the most natural starting point for SVG generation.
-
-Once DiffVG made rasterization 
+Parametric representations are the closest to how SVG already 
+works. Every path is stored as B\'{e}zier control points, stroke 
+attributes, and fill colors, exactly the parameters that appear 
+in the file itself 
+(Section~\ref{sec:vector_fundamentals}). Once DiffVG made 
+rasterization 
 differentiable~\cite{liDifferentiableVectorGraphics2020a} 
-(Section~\ref{sec:diffvg}), it became possible to optimize these 
-parameters directly against image-based or semantic objectives. 
-LIVE, SAMVG, VectorFusion, and SVGDreamer are all built on this 
+(Section~\ref{sec:diffvg}), these parameters became directly 
+optimizable against image-based or semantic objectives. LIVE, 
+SAMVG, VectorFusion, and SVGDreamer are all built on this 
 foundation~\cite{maLayerwiseImageVectorization2022, 
 zhuSAMVGMultistageImage2023, 
 jainVectorFusionTexttoSVGAbstracting2022, 
 xingSVGDreamerTextGuided2024}.
 
-In practice, these models initialize a fixed set of vector 
-primitives and iteratively refine their parameters so that the 
-rendered image aligns with a target signal. At each step, the 
-model holds a list of paths, each described by a handful of 
-numbers. It renders them, computes the loss, and nudges those 
-numbers slightly. That is the entire loop. The initialization 
-strategy varies: LIVE uses a layer-by-layer approach that 
-progressively adds paths, while SVGDreamer's SIVE module uses 
-diffusion model attention maps to determine where primitives 
-should be placed before optimization 
-begins~\cite{xingSVGDreamerTextGuided2024}. Despite these 
-differences, all of these methods share the same underlying 
-commitment: shapes are stored as explicit geometric parameters 
-that are modified directly during optimization.
-
-The predictable failure mode is that complexity is handled by 
-adding more paths. When a model needs to capture fine visual 
-detail, it introduces overlapping or redundant primitives rather 
-than increasing the expressiveness of individual ones. LIVE uses 
-160 paths across five layers to represent a single 
-image~\cite{maLayerwiseImageVectorization2022}. At this scale, 
-the output is theoretically editable since each path is a 
-geometric object, but in practice the number and entanglement of 
-paths makes meaningful manual editing very difficult. 
-SVGDreamer++ explicitly identifies path entanglement as a failure 
-mode of optimization-based parametric 
-methods~\cite{xingSVGDreamerAdvancingEditability2025}. Open a 
-LIVE output in Illustrator and you will see what this means: the 
-image looks fine, but trying to select a single object means 
-clicking through dozens of overlapping fragments.
-
+In theory, this should make parametric outputs the most editable 
+of any representation, since every shape is an explicit geometric 
+object a designer can select. In practice, that breaks down at 
+scale. LIVE uses 160 paths across five layers to represent a 
+single image~\cite{maLayerwiseImageVectorization2022}. Open 
+that output in Illustrator and the problem is immediate: the 
+image looks fine, but selecting a single object means clicking 
+through dozens of overlapping fragments that do not correspond 
+to any recognizable component. The underlying issue is that 
+when optimization needs to capture fine visual detail, it adds 
+more paths rather than making existing ones more expressive. 
+SVGDreamer++ identifies this path 
+entanglement explicitly as a failure mode of optimization-based 
+parametric 
+methods~\cite{xingSVGDreamerAdvancingEditability2025}.
 
 \section{Sequential Representations}
 
@@ -97,12 +71,11 @@ are small enough to read by hand. The reason is that sequential
 representations treat vector graphics as ordered sequences of 
 drawing commands, mirroring the actual structure of SVG path data.
 
-The idea of modeling vector graphics this way goes back to 
-SketchRNN~\cite{haNeuralRepresentationSketch2017}, which showed 
-that recurrent networks could learn stroke dynamics from data. 
-DeepSVG extended this to structured SVG icons using a hierarchical 
-VAE with a transformer 
-decoder~\cite{carlierDeepSVGHierarchicalGenerative2020}. 
+The sequential formulation traces back to SketchRNN 
+(Section~\ref{sec:sequential_repr}), and DeepSVG extended 
+it to structured SVG icons using a hierarchical VAE with a 
+transformer 
+decoder~\cite{carlierDeepSVGHierarchicalGenerative2020}.
 DeepIcon~\cite{bingDeepIconHierarchicalNetwork2024} follows the 
 same sequential formulation for icon generation. Rather than 
 storing shapes as independent geometric objects, these models 
@@ -134,12 +107,7 @@ colors~\cite{polaczekNeuralSVGImplicitRepresentation2025}. The
 network weights are the representation, not the shapes themselves. 
 This is a fundamentally different approach from storing control 
 points or commands explicitly: the geometry only exists when you 
-query the network for it.
-
-The idea builds on the same principle as 
-NeRF~\cite{mildenhallNeRFRepresentingScenes2020}, where a neural 
-network defines geometry implicitly through learned weights rather 
-than through stored coordinates. NeuralSVG maintains stable shape 
+query the network for it. The model maintains stable shape 
 correspondence during training, meaning each index always maps to 
 the same visual region, which prevents the network from producing 
 inconsistent outputs across iterations. NiVeL follows a related 
@@ -159,15 +127,13 @@ whether the final SVG supports practical editing.
 
 \section{Latent Representations}
 
-There are no control points, no path commands, no shape boundaries 
-stored in a latent vector. What the latent space does is compress 
-many graphics into a shared numerical embedding learned during 
-training, and generation occurs by decoding these embeddings into 
-one of the other representation types (parametric paths or 
-sequential commands) underneath. This distinction was introduced in 
-Section~\ref{sec:latent_repr}: a latent space is not a geometric 
-representation but an organizational layer that sits on top of one. 
-Several models use latent spaces this way.
+As established in Section~\ref{sec:latent_repr}, a latent space 
+is not a geometric representation but an organizational layer 
+that sits on top of one. The actual geometry is always produced 
+by a decoder that translates latent vectors back into parametric 
+paths or sequential commands. What the latent space contributes 
+is compression: many graphics mapped into a shared numerical 
+embedding learned during training.
 
 DeepSVG applies this by encoding path command sequences into latent 
 vectors and training a transformer decoder to reconstruct 
@@ -189,48 +155,47 @@ one specific shape requires navigating latent space rather than
 clicking a path, which is not how designers work.
 
 
-\section{Hybrid Representations}
+\section{Representation Boundaries in Practice}
 \label{sec:hybrid}
 
-In practice, many models combine elements from more than one 
-representation family, because no single representation fully 
-addresses the competing requirements of structural correctness, 
-editability, scalability, and visual realism.
+The four families described above are useful for analysis, but 
+most models do not stay cleanly inside one. VectorFusion and 
+SVGDreamer optimize parametric primitives directly while using 
+a latent diffusion model as the semantic prior. The parametric 
+layer provides geometric interpretability (every path is a 
+readable object), while the latent model provides the semantic 
+coherence that pure geometric optimization cannot achieve on 
+its own. Without the diffusion prior, optimization would 
+match pixels but not meaning. SVGFusion takes a similar 
+combined approach, encoding path-level structure into latent 
+embeddings before applying diffusion, which allows it to 
+generate SVGs that reflect dataset-level structural patterns 
+rather than converging from random initialization.
 
-VectorFusion and SVGDreamer use parametric primitives as the 
-direct optimization target while relying on a latent diffusion 
-model as the semantic prior. The parametric layer provides 
-geometric interpretability, while the latent model provides 
-semantic coherence that pure geometric optimization cannot achieve 
-alone. SVGFusion takes a similar combined approach, encoding 
-path-level structure into latent embeddings before applying 
-diffusion.
+NeuralSVG's core representation is implicit (an MLP mapping 
+shape indices to geometry), but it borrows an ordered 
+assignment mechanism from 
+DeepSVG~\cite{polaczekNeuralSVGImplicitRepresentation2025} 
+that imposes explicit hierarchy on what would otherwise be a 
+purely neural representation. The result is that each shape 
+index consistently maps to the same visual region across 
+iterations, which stabilizes training and produces 
+outputs where individual shapes can be identified and 
+separated. LayerTracer crosses a different boundary: its 
+training data is sequential (step-by-step construction 
+sequences from the Serpentine 
+dataset~\cite{songLayerTracerCognitiveAlignedLayered2025}), 
+but the output is a layered parametric SVG where each layer 
+corresponds to a meaningful visual component. Because the 
+model learns from how designers actually build graphics, it 
+absorbs layer separation and construction order as structural 
+conventions rather than discovering them through optimization.
 
-LayerTracer~\cite{songLayerTracerCognitiveAlignedLayered2025} 
-represents a different kind of hybrid. The model is trained on 
-the Serpentine dataset, which contains step-by-step human SVG 
-construction sequences, meaning the training data encodes a 
-sequential procedural representation. The output the model learns 
-to produce, however, is a layered parametric SVG where each layer 
-corresponds to a meaningful visual component. Editability becomes 
-a learned property rather than an emergent one, because the model 
-was trained on how humans draw, it produces outputs structured 
-the way a human designer would structure them, with clean layer 
-separation and manageable path counts.
-
-NeuralSVG also combines ideas across families. Its core 
-representation is implicit, with an MLP mapping shape indices to 
-geometric parameters, but it incorporates an ordered assignment 
-mechanism originally introduced in DeepSVG to ensure shape 
-indices correspond consistently to visual regions across 
-training~\cite{polaczekNeuralSVGImplicitRepresentation2025}. 
-This ordered structure imposes explicit hierarchy on what is 
-otherwise a purely neural representation.
-
-These hybrid strategies show that representation design in SVG 
-generation is less about choosing one family and more about 
-deciding which trade-offs to accept.
-
+These combinations exist because no single representation 
+handles visual realism, structural clarity, and editability 
+at the same time. Each combination trades something for 
+something else, and those trade-offs become visible in the 
+structural analysis of Chapter~\ref{ch:synthesis}.
 
 \begin{figure}[ht]
     \centering
@@ -271,8 +236,8 @@ paths~\cite{xingSVGDreamerTextGuided2024}. The result is visually
 rich but structurally opaque, because most of those paths overlap 
 and do not correspond to any recognizable component. NeuralSVG 
 renders its rocket with exactly 16 shapes, each mapped through an 
-MLP~\cite{polaczekNeuralSVGImplicitRepresentation2025}, a roughly 
-30x reduction in element count for the same subject. And SVGFusion 
+MLP~\cite{polaczekNeuralSVGImplicitRepresentation2025}. That is 
+a roughly 30x reduction in element count for the same subject. And SVGFusion 
 sits in between, producing roughly 10 to 20 structured shapes 
 including not just B\'{e}zier paths but also basic SVG elements 
 like circles and 
@@ -328,10 +293,8 @@ actually shows up in the output.
 
 \section{Summary}
 
-These observations provide the foundation for the next analytical 
-dimension of the thesis. While representation defines how vector 
-graphics are encoded, supervision determines how models learn to 
-shape that representation. The following chapter examines 
-supervision signals and guidance strategies, analyzing how they 
-interact with representation choices to influence the quality, 
-structure, and behavior of generated SVG graphics.
+
+Representation defines what kinds of structures a model can 
+produce, but not which ones it will produce. That depends on 
+supervision: what signal drives generation and where it pushes 
+the geometry. The next chapter examines those signals.

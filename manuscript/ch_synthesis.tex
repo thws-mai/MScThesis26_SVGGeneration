@@ -87,7 +87,7 @@ parameters. This gives clear geometric control and enables
 gradient-based updates. However, when supervision operates 
 primarily in raster space, parametric methods tend to increase 
 primitive count to minimize visual error. The result is 
-structurally dense output --- visually accurate but fragmented. 
+structurally dense output, which is visually accurate but fragmented. 
 LIVE and VectorFusion both exhibit this behavior, where each 
 additional path reduces reconstruction loss without contributing 
 to semantic 
@@ -109,8 +109,8 @@ coordinates~\cite{polaczekNeuralSVGImplicitRepresentation2025,thamizharasanNIVeL
 passes through a shared neural function, the representation 
 constrains how primitives can be arranged. Layering emerges 
 architecturally rather than through optimization dynamics. This 
-acts as a structural regularizer --- fewer primitives, clearer 
-decomposition --- but the mapping between neural parameters and 
+acts as a structural regularizer, leads to fewer primitives, clearer 
+decomposition, but the mapping between neural parameters and 
 editable SVG primitives becomes less direct.
 
 Latent representations, used in SVGFusion and T2V-NPR, generate 
@@ -118,7 +118,7 @@ through learned embeddings that encode dataset-level structural
 patterns~\cite{xingSVGFusionScalableTexttoSVG2025, zhangTexttoVectorGenerationNeural2024}. 
 This allows the model to inherit consistent path organization from training data, producing 
 more coherent structure than unconstrained optimization. The 
-trade-off is reduced direct control over primitive composition --- 
+trade-off is reduced direct control over primitive composition, as  
 structure is mediated through the latent space rather than 
 directly accessible.
 
@@ -135,7 +135,7 @@ representational property, not only an optimization outcome.
 Where representation defines what structures are possible, 
 supervision determines which of those structures are 
 encouraged. The choice of supervision signal shapes geometric 
-behavior directly --- influencing primitive count, curve 
+behavior directly, influencing primitive count, curve 
 stability, and layer organization.
 
 Reconstruction supervision, used in dataset-trained methods, 
@@ -168,9 +168,9 @@ producing structurally dense
 SVGs~\cite{jainVectorFusionTexttoSVGAbstracting2022, xingSVGDreamerTextGuided2024}.
 
 Methods that combine semantic guidance with constrained 
-representations --- NeuralSVG using SDS within a neural 
+representations: NeuralSVG using SDS within a neural 
 implicit space, T2V-NPR using VSD within a learned latent 
-path space --- exhibit more stable geometry because supervision 
+path space and exhibit more stable geometry because supervision 
 acts within a restricted domain. Rather than freely increasing 
 primitives, optimization is bounded by the representation, 
 which reduces fragmentation and improves structural coherence.
@@ -189,7 +189,7 @@ structural quality.
 
 The most consistent pattern across the fourteen models is the 
 tension between visual realism and editability. This tension 
-is not theoretical --- it is observable in specific models and 
+is not theoretical, it is observable in specific models and 
 has direct practical consequences.
 
 Methods driven by diffusion-based supervision achieve visually 
@@ -198,21 +198,21 @@ aligns with learned image priors. This refinement increases
 structural complexity in ways that undermine usability. LIVE, 
 following the optimization protocol also adopted by VectorFusion, 
 represents a single image using up to 160 paths distributed 
-across multiple layers~\cite{xingSVGDreamerTextGuided2024}. At this scale, 
+across multiple layers~\cite{maLayerwiseImageVectorization2022}. At this scale, 
 selecting or modifying a single visual component requires 
 identifying and adjusting dozens of overlapping primitives in 
 standard design tools. SVGDreamer++ explicitly acknowledges this 
 failure mode, noting that optimization-based approaches produce 
 outputs where objects are entangled across paths, making 
 component-level editing effectively 
-impossible~\cite{xingSVGDreamerTextGuided2024}.
+impossible~\cite{xingSVGDreamerAdvancingEditability2025}.
 
 This structural cost comes with a genuine visual benefit. 
 VectorFusion and SVGDreamer consistently produce the most 
 visually rich and semantically detailed outputs among the 
-analyzed methods~\cite{jainVectorFusionTexttoSVGAbstracting2022, xingSVGDreamerTextGuided2024}. The same mechanism that 
-fragments structure --- unconstrained primitive growth guided 
-by strong diffusion priors --- is precisely what enables 
+analyzed methods~\cite{jainVectorFusionTexttoSVGAbstracting2022, xingSVGDreamerTextGuided2024}.
+The unconstrained primitive growth guided by strong diffusion priors that 
+fragments structures is precisely what enables 
 photorealistic rendering quality. The trade-off is genuine: 
 neither side is simply better. The appropriate choice depends 
 on whether the intended use prioritizes visual output quality 
@@ -237,7 +237,7 @@ Rather than constraining an optimization process, it is trained
 directly on layered construction sequences that reflect how 
 designers build SVG graphics step by 
 step~\cite{songLayerTracerCognitiveAlignedLayered2025}. 
-Editability is not an emergent property but a learned one --- 
+Editability is not an emergent property but a learned one, 
 the model produces layered outputs because it was explicitly 
 supervised to construct graphics that way. This makes 
 LayerTracer structurally closer to designer workflows than 
@@ -264,7 +264,7 @@ structural regularization, primitive counts increase and
 editability degrades. When representation enforces decomposition 
 or limits complexity, editability improves but visual detail 
 is reduced. Hybrid approaches that integrate structural priors 
-with semantic guidance --- as in NeuralSVG and T2V-NPR --- 
+with semantic guidance, as in NeuralSVG and T2V-NPR, 
 suggest that both objectives can be partially reconciled, though 
 no current model satisfies both simultaneously at the level 
 required for professional design workflows.
@@ -280,8 +280,8 @@ together determine whether a generated SVG is structurally
 usable.
 
 \textbf{Primitive count control.} Methods that limit path 
-count --- either through explicit budgets, latent space 
-constraints, or neural parameterization --- produce outputs 
+count, either through explicit budgets, latent space 
+constraints, or neural parameterization, produce outputs 
 with less redundancy. Unconstrained primitive growth, common 
 in pixel-supervised optimization, is the primary source of 
 structural fragmentation.
@@ -303,15 +303,14 @@ when the optimization domain is constrained.
 
 \textbf{Informed initialization.} Random initialization 
 with unconstrained optimization leads to unstable structure. 
-Semantically meaningful starting points --- from segmentation 
-masks, attention maps, or learned latent embeddings --- 
+Semantically meaningful starting points
 reduce the need for excessive primitive refinement and 
 improve structural coherence from the outset.
 
 \textbf{Design-aware architectural priors.} Models that 
 incorporate layering, sequential construction, or scene 
 composition logic produce outputs that more closely reflect 
-designer intent. LayerTracer is the clearest example --- 
+designer intent. LayerTracer is the clearest example where 
 editability is architectural rather than incidental.
 
 \begin{table}[h!]
@@ -360,8 +359,8 @@ and supervision. The analysis consistently shows that supervision
 operating within constrained representations produces better 
 structural outcomes than supervision operating in raster space. 
 Future models that explicitly co-design representation 
-constraints and supervision signals --- rather than treating 
-them as independent architectural decisions --- are likely to 
+constraints and supervision signals, rather than treating 
+them as independent architectural decisions, are likely to 
 make more progress on the realism--editability trade-off than 
 approaches that improve either dimension alone.
 

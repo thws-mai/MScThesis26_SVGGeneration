@@ -27,22 +27,19 @@ structure emerges from a generation pipeline. A summary of
 all fourteen models is provided in
 Table~\ref{tab:model_overview}.
 
-Research in SVG generation spans several directions, each
-addressing the problem from a different starting point.
-An early line of work treats vector drawings as ordered
-sequences of commands or strokes. Inspired by language
-modelling, methods like
-SketchRNN~\cite{haNeuralRepresentationSketch2017} showed that neural
-networks can learn stroke dynamics from data. Later work
-extended this to full SVG command prediction, including
-Sketchformer~\cite{ribeiroSketchformerTransformerbasedRepresentation2020}
-and related sequence
-models~\cite{ganinSynthesizingProgramsImages2018,
-lopesLearnedRepresentationScalable2019b}. These approaches
-established that SVG structure could be learned statistically,
-but long command chains make training difficult and
-generalization to complex scenes remains limited by the
-scarcity of large-scale SVG datasets.
+An early line of work treats vector drawings as ordered 
+sequences of commands or strokes. Starting from 
+SketchRNN (Section~\ref{sec:sequential_repr}), later 
+methods extended this to full SVG command prediction, 
+including 
+Sketchformer~\cite{ribeiroSketchformerTransformerbasedRepresentation2020} 
+and related sequence 
+models~\cite{ganinSynthesizingProgramsImages2018, 
+lopesLearnedRepresentationScalable2019b}. These approaches 
+established that SVG structure could be learned 
+statistically, but long command chains make training 
+difficult and generalization to complex scenes remains 
+limited by the scarcity of large-scale SVG datasets.h
 
 A second direction introduced differentiable rasterization as
 a bridge between vector parameters and image-space supervision.
@@ -69,14 +66,15 @@ OmniSVG~\cite{yangOmniSVGUnifiedScalable2025},
 LLM4SVG~\cite{xingEmpoweringLLMsUnderstand2025}, and
 InternSVG~\cite{wangInternSVGUnifiedSVG2025} treat SVG as
 structured code and generate it through transformer
-architectures pretrained on collection of large-scale texts and images. In one sense, SVG is a natural fit for language
+architectures pretrained on collection of large-scale texts and images. 
+In one sense, SVG is a natural fit for language
 models: the file format is sequential XML commands, not
 unlike a programming language. Visual alignment improves
 substantially compared to earlier sequence models, and
 these approaches handle a wide range of generation and
 editing tasks. However, they are not included in the main
 analysis here. The core question of this thesis is how
-specific architectural decisions impacts the structure
+specific architectural decisions impact the structure
 of the output and that relationship is difficult to
 trace through billions of parameters. A more detailed
 justification is provided in the appendix.
@@ -97,12 +95,10 @@ The enabling technology across all of them is differentiable
 rasterization. DiffVG~\cite{liDifferentiableVectorGraphics2020a}
 connects vector parameter space to pixel space by making the
 rasterization step differentiable, as described in
-Chapter~\ref{ch:Background}. This allows any loss defined on
-a rendered image to propagate gradients back to Bézier
-control points, stroke widths, and colors. The optimization
-loop is the same across all methods in this family: initialize
-primitives, render, compute loss, update parameters. What
-changes is the loss and the representation. Table~\ref{tab:arch_optbased} summarizes how each 
+Chapter~\ref{ch:Background}.The optimization loop across all methods 
+follows the same render-compare-update cycle, 
+but differs in what loss drives it and how geometry is represented.
+Table~\ref{tab:arch_optbased} summarizes how each 
 model in this group implements those differently.
 
 \subsection*{Reconstruction-Supervised}
@@ -140,21 +136,16 @@ a target image. Score Distillation Sampling
 (SDS)~\cite{pooleDreamFusionTextto3DUsing2022}, described
 in Chapter~\ref{ch:Background}, allows gradients derived
 from a text-conditioned diffusion model to update vector
-parameters directly. The SVG is rendered, evaluated against
-a text prompt, and updated to move toward the learned
-distribution. No paired SVG training data is needed.
-
-VectorFusion~\cite{jainVectorFusionTexttoSVGAbstracting2022}
+parameters directly. VectorFusion~\cite{jainVectorFusionTexttoSVGAbstracting2022}
 was among the first to apply this to SVG, using a latent
 diffusion model~\cite{rombachHighResolutionImageSynthesis2021}
 as the supervision backbone, as shown in
 Figure~\ref{fig:sds_loop}. SVGDreamer~\cite{xingSVGDreamerTextGuided2024}
 builds on this by replacing standard SDS with Vectorized
-Particle-based Score Distillation (VPSD), which treats the
-rendered output as a particle in a learned distribution
-rather than a noisy sample, producing more stable
-gradients and reducing oversaturation, as illustrated in Figure~\ref{fig:svgdreamer_vpsd}.
-It also introduces explicit control over primitive count and type, organized
+Particle-based Score Distillation 
+(VPSD, Section~\ref{sec:sds_vsd}), as illustrated in 
+Figure~\ref{fig:svgdreamer_vpsd}. It also introduces 
+explicit control over primitive count and type, organized
 into semantic layers. SVGDreamer++~\cite{xingSVGDreamerAdvancingEditability2025}
 extends this with hierarchical refinement mechanisms that
 adapt vector organization during generation.
@@ -403,17 +394,11 @@ Hybrid because it combines a trained diffusion model with
 a per-instance vectorization step.
 
 
-The fourteen models described in this chapter will be
-examined through two analytical lenses in the chapters
-that follow. The first is representation: how each model
-encodes vector geometry internally, and what that encoding
-makes possible or forecloses in terms of structural
-organization and editability. The second is supervision:
-what signal drives the generation process, and how that
-signal shapes the geometry that emerges. These two
-dimensions do not operate independently, since a model's
-representation constrains what supervision signals are
-meaningful, and the choice of supervision often determines
-which representations are practical. Understanding how
-they interact is the analytical task of the remainder of
-this thesis.
+The fourteen models described here differ in representation 
+and supervision, and those two dimensions do not operate 
+independently. A model's representation constrains what 
+supervision signals are meaningful, and the choice of 
+supervision often determines which representations are 
+practical. The next two chapters trace these interactions: 
+first through representation (Chapter~\ref{ch:representation}), 
+then through supervision (Chapter~\ref{ch:supervision}).

@@ -10,14 +10,15 @@ Getting there requires understanding the building
 blocks that most SVG generation models have in common, 
 despite the variety of approaches and architectures that exist. 
 This chapter covers those building blocks. It starts with 
-SVG itself: what is representation of format and why its 
-structural properties create constraints that raster generation does not have.
-After that, we will explain about  
-four internal representation types that used across the analyzed models, 
-followed by differentiable rendering, which is the technical bridge between SVG and raster image. 
-And final subchapter closes with the supervision signals, reconstruction losses, 
-CLIP, SDS, VSD that drive the generation process in different ways.
-
+SVG itself: what the format represents, how it is structured, 
+and why those structural properties create constraints that 
+raster generation does not have. From there it introduces 
+four internal representation types used across the analyzed 
+models, then differentiable rendering, which is the technical 
+bridge that connects vector parameters to pixel-space losses. 
+The chapter closes with the supervision signals (reconstruction 
+losses, CLIP, SDS, VSD) that drive the generation process in 
+different ways.
 
 \section{Vector Graphics Fundamentals}
 \label{sec:vector_fundamentals}
@@ -93,16 +94,13 @@ without touching the rest.}
 \subsection{Paths and Bézier Curves}
 
 Most SVG graphics are built using paths. A path is a sequence 
-of commands, \emph{move to}, \emph{line to}, \emph{curve to},  that define its shape~\cite{eisenbergSVGEssentialsProducing20}. 
-Curved segments use Bézier curves, which are controlled 
-by a set of control points that influence curvature without 
-lying directly on the curve.
-
-Curved segments in paths use B\'{e}zier curves. A B\'{e}zier 
-curve is not defined by the points it passes through but by 
-control points that pull the curve toward them from the 
-outside. Moving a control point reshapes the curve smoothly 
-without breaking it.
+of commands (\emph{move to}, \emph{line to}, \emph{curve to}) 
+that define its 
+shape~\cite{eisenbergSVGEssentialsProducing20}. Curved segments 
+use B\'{e}zier curves, which are not defined by the points they 
+pass through but by control points that pull the curve toward 
+them from the outside. Moving a control point reshapes the curve 
+smoothly without breaking it.
 
 As shown in Figure~\ref{fig:bezier}, SVG supports two types. 
 Quadratic B\'{e}zier curves use a single control point and 
@@ -135,7 +133,7 @@ SVG uses a simple coordinate system. The top-left corner of
 the canvas is the origin, x increases to the right, and y 
 increases downward~\cite{quintScalableVectorGraphics2003}. 
 Every element is positioned within this grid using numeric 
-coordinates — the same numbers you see in the SVG file.
+coordinates, the same numbers you see in the SVG file.
 
 What makes this system powerful for design is transformations. 
 Any shape or group can be moved, scaled, rotated, or skewed 
@@ -257,7 +255,7 @@ DiffVG, introduced by Li et al.~\cite{liDifferentiableVectorGraphics2020a},
 solves this by approximating rasterization in a way that 
 supports gradient computation. Given a set of vector 
 parameters as input, DiffVG renders a pixel image as output. 
-Because the rendering step is differentiablea loss computed 
+Because the rendering step is differentiable, loss computed 
 on the output image (whether a pixel reconstruction loss,
 a perceptual loss, or a signal from a pretrained semantic model) 
 can be backpropagated all the way through to the 
@@ -379,12 +377,12 @@ will be low. Because CLIP is differentiable with respect
 to its image input, and because images can be produced 
 from vector parameters via differentiable rendering, the 
 CLIP similarity score can serve as an optimization signal. 
-Gradients flow from the similarity score back through the 
-rasterizer to the SVG parameters, allowing the system to 
-adjust shapes and colors toward better semantic alignment. 
 CLIP does not generate images in this setup, it acts as 
 a semantic evaluator that provides a direction for 
-improvement.
+improvement. In several of the models analyzed in 
+Chapter~\ref{ch:supervision}, CLIP-based guidance serves 
+as an early-stage alignment signal before stronger 
+supervision (typically from a diffusion model) takes over.
 
 \subsection{Diffusion Models}
 
@@ -429,9 +427,12 @@ introduced in SVGDreamer~\cite{xingSVGDreamerTextGuided2024},
 addresses this by modeling the rendered output as a 
 particle in a distribution rather than treating it as 
 noise directly. This produces more stable gradients and 
-visually consistent results. Both SDS and VSD are used 
-across several models analyzed in 
-Chapter~\ref{ch:supervision}.
+visually consistent results. Both SDS and VSD are used across several models analyzed 
+in Chapter~\ref{ch:supervision}. The complete optimization 
+loops for SDS and VSD are shown in 
+Figures~\ref{fig:sds_loop} and~\ref{fig:svgdreamer_vpsd}, 
+where the role of the diffusion model as a supervision 
+signal becomes concrete.
 
 
 

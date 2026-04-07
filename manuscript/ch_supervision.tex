@@ -25,12 +25,14 @@ whereas the same losses applied to implicit neural representations may
 reshape continuous fields. This interaction highlights that supervision 
 and representation need to be analyzed together.
 
-A further distinction concerns when supervision is applied. Some models 
-learn reusable generation behavior from datasets at training time. 
-Others apply supervision directly during inference, refining a vector 
-representation for each individual input. This difference has 
-significant consequences for speed, structure, reproducibility, and 
-practical usability, and is examined in detail in Section~\ref{sec:dataset_vs_instance}.
+A further distinction concerns when supervision is applied. Some 
+models learn reusable generation behavior from datasets at training 
+time. Others apply supervision directly during inference, refining 
+a vector representation for each individual input. Whether 
+supervision happens once (during training) or every time (during 
+generation) shapes both the speed of inference and the structural 
+consistency of the output, as Section~\ref{sec:dataset_vs_instance} 
+examines.
 
 The following sections examine the main supervision families used 
 across the selected models. 
@@ -40,12 +42,11 @@ of which signal each model uses and when it is applied.
 
 \section{Reconstruction-Based Supervision}
 
-Reconstruction-based supervision guides generation by comparing a 
-rendered SVG output with a target raster image. The objective is to 
-minimize the difference between prediction and reference using loss 
-functions defined in image or feature space. Using the reconstruction losses described in 
-Section~\ref{sec:recon_losses}, these models minimize the 
-difference between rendered output and target image through DiffVG~\cite{liDifferentiableVectorGraphics2020a}.
+Reconstruction-based supervision is the most direct application 
+of the losses described in 
+Section~\ref{sec:recon_losses}: render the SVG through 
+DiffVG~\cite{liDifferentiableVectorGraphics2020a}, compare 
+the result to a target image, update the parameters.
 
 One advantage of reconstruction-based supervision is stability. 
 Because the target is known, gradients provide direct information 
@@ -86,20 +87,13 @@ description of the desired graphic. Semantic guidance addresses this
 by using pretrained vision–language models as evaluators that provide 
 feedback about whether the rendered SVG aligns with a prompt.
 
-As described in Chapter~\ref{ch:Background}, CLIP embeds images and 
-text into a shared representation space~\cite{radfordLearningTransferableVisual2021}. 
-In SVG generation pipelines, the rendered vector graphic is passed 
-through the image encoder and compared against the encoded text 
-prompt. Because gradients can propagate back through the 
-differentiable rasterizer, vector parameters can be adjusted to 
-improve semantic alignment. This enables open-ended generation 
-without requiring paired SVG datasets.
+CLIP-based guidance (Chapter~\ref{ch:Background}) enables 
+open-ended generation without paired SVG datasets by scoring 
+how well the rendered output matches a text prompt. 
+This flexibility comes at a cost: the signal measures alignment 
+in embedding space rather than geometric correctness.
 
-Semantic guidance offers flexibility across diverse prompts and 
-captures high-level visual semantics that are difficult to encode 
-through handcrafted losses. At the same time, it remains indirect: 
-the signal measures alignment in embedding space rather than 
-geometric correctness. Optimization may therefore introduce 
+Optimization may therefore introduce 
 additional primitives or unstable geometry to satisfy semantic 
 objectives, without any guarantee of clean structure or editability.
 
@@ -122,14 +116,11 @@ to move toward visually plausible solutions conditioned on a
 text prompt.
 
 The most common implementation is Score Distillation Sampling 
-(SDS), described in Section~\ref{sec:sds_vsd}. SDS treats a 
-frozen diffusion model as the optimization signal, providing 
-gradients that push vector parameters toward outputs the model 
-considers plausible for a given prompt. Variational Score 
-Distillation (VSD), used in 
-SVGDreamer~\cite{xingSVGDreamerTextGuided2024}, reduces the 
-oversaturation artifacts that plain SDS tends to produce.
-
+(SDS), with Variational Score Distillation (VSD) introduced by 
+SVGDreamer~\cite{xingSVGDreamerTextGuided2024} to reduce the 
+oversaturation that plain SDS tends to produce. Both are 
+described in Section~\ref{sec:sds_vsd}; what matters here is 
+how each variant shapes the geometry that comes out.
 
 Several models in this thesis use diffusion-based supervision 
 as their primary guidance signal, though each relies on a 
@@ -283,7 +274,7 @@ LayerTracer & Denoising + serpentine construction data & Training \\
 
 
 \section{Initialization and Structural Priors}
-
+\label{sec:init_priors}
 Not everything that shapes a generated SVG comes from a loss 
 function. Where optimization starts matters at least as much as 
 what it optimizes for, and in some cases the initialization 
@@ -341,14 +332,12 @@ optimizes for. The choice of initialization tells you where
 it starts, and that starting point often determines whether 
 the result is editable or not.
 
+
 \section{Summary}
 
-Supervision determines what aspects of the output a model 
-prioritizes during generation. Reconstruction losses provide 
-stability but do not guarantee structural correctness. Diffusion 
-priors enable open-ended generation but tend to increase primitive 
-count. Across all strategies, the recurring pattern is that 
-supervision prioritizes visual objectives while structural 
-properties emerge indirectly, which is why the evaluation 
-practices examined in the next chapter matter as much as the 
-generation methods themselves.
+The recurring pattern across all supervision strategies is 
+the same: the signal prioritizes visual objectives while 
+structural properties emerge indirectly, if they emerge at 
+all. Initialization can partly compensate (Section~\ref{sec:init_priors}), 
+but no supervision signal in the current landscape directly 
+rewards editability.
