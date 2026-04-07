@@ -221,12 +221,12 @@ observed across current methods.
 
 \section{Thesis Structure}
 
-The background chapter introduces the foundational 
-concepts required to understand vector graphics 
-generation: SVG structure, representation types, 
-differentiable rendering, and the supervision 
+Chapter~\ref{ch:SLR} describes the systematic literature 
+review that guided model selection. The background~\ref{ch:Background} chapter 
+introduces the foundational concepts required to understand 
+vector graphics generation: SVG structure, representation 
+types, differentiable rendering, and the supervision 
 strategies used in learning-based methods.
-
 Building on this, Chapter~\ref{ch:Landscape} surveys 
 existing SVG generation approaches and categorizes 
 them by architectural family and input modality. 
@@ -235,7 +235,6 @@ analyze how representation and supervision choices
 shape vector structure, tracing the relationship 
 between internal design decisions and observable 
 output properties.
-
 Chapter~\ref{ch:Evaluation} introduces a 
 multi-dimensional evaluation framework for SVG 
 generation that extends beyond visual similarity to 
@@ -244,7 +243,6 @@ perspectives are then applied in
 Chapter~\ref{ch:synthesis}, where strengths, 
 limitations, and trade-offs across the analyzed 
 models are examined comparatively.
-
 The thesis concludes by mapping findings to the 
 research questions, summarizing contributions, and 
 identifying directions for future work.
@@ -253,129 +251,3 @@ identifying directions for future work.
 
 
 
-
-
-
-% In recent years or even months, image generative models is changing the stones of visual design/art creation. Diffusion models, large-scale multimodal systems such as CLIP and transformer-based architectures have demonstrated high-level synthesis from text is a practical reality now. Specifically, raster image generations is in non-stop progress. We can see the example such as Stable Diff. DALL-E3, Midjourney, FLUX and etc. Those are image generation models which lead the field currently. Most of the generated raster images are not separatable from the original or human-made designs right now. But it does not start like that, over the time they were trying to minimize the error and they achieved it and it will be better. However, this progress has not reflected on domain of vector graphics. We can not say it is completely loss case, there are many websites/tools, e.g. Figma, Adobe Illustrator, SVGMaker.io, Kittle and etc. and also many generation models, which is built by using different approaches such as, optimization-based, neural feed-forward and transformer-based methods.
-
-% Why vector graphics are very important? We will explain detailly about vector graphics and SVG in the background chapter, but shortly saying, all the websites, apps, software, games and so on. most of them are relying on vector graphics in terms of design. Because rather than raster images which rely on pixels to create one image, vector graphics rely on mathematical foundations to generate image, that's making it easy to scale it or edit it by dragging somewhere or transform or changing the shape. Because of mathematical foundations, you can change the number to change view of shape or size without losing any resolution or quality. In pixel case, while each images has certain number of pixels, when its scaled either it needs to predict more pixels btw current ones or when you scaled downwards it will be discarded, so leading to loss of detail. For both cases, visual information is lost. So for that kind of reason, we mostly rely on vector graphics in terms of design of everything on the web?! According to recent W3Techs data from January, SVG has become a web staple, with 65.3% of all websites now relying on it for their graphics. SVG is 2D vector graphics. I think, we can say that SVG is structured representation of geometric primitives, their hierarchy and styling. Its capability on editability, modular structure makes SVG indispensable in web design, interface development, branding, data visualization, and iconography. But from aspect of generative modelling, those structure properties bring challenges with themselves. 
-
-% Unlike raster images, which can be represented as dense numerical grids, SVGs encode shapes, paths, layers and topology explicitly. Therefore, generation of SVG requires structural correctness. It may be hard to edit or reuse if there is output that contains, broken grouping or redundant paths. This structural dimension differentiates SVG generation from conventional image synthesis.
-
-% Long before AI, there was only algorithm-based vectorization tools, such as Adobe Illustrator, CorelDraw, Portrace, Inkspace and etc., to convert raster/pixel-based images into vector format, mainly SVG. How they are doing that? There were main techniques for it, such as edge detection, counter tracing and polygon approximation. Instead of explaining how they work one-by-one,I want to gather under them all one name, tracing. How it works? For example, you have a pixel-based image of a blue whale, and you want it in vector format. Those tools usually detect connected regions in the image (often after converting to a bitmap), extract their boundaries and then approximate those boundaries with polygons or Bézier curves, rather than just detecting edges and drawing lines on them. Or one famous way is converting images to bitmap and then detect the connected regions and their contours, which makes it easier. Those detection and approximation lines or figures are called tracing which is kind of following the contours of detected regions.
-
-% In this thesis, we will focus on SVG generation and vectorization models within domain of AI, Machine Learning and ANN. First known model which is generating vector-style drawings is SketchRNN by Google in 2017. Basically, model learns to produce vector drawings as sequences of pen strokes. However, those kind of methods represent drawings as temporal stroke sequences rather than structured vector graphics elements. They do not generate structed SVG representations, which is the primary focus of this research. 
-
-% Methods that generate SVG(vector graphics) can be categorized into several research directions, each of them addressing the structural challenges of vector representations in different ways. 
-
-% A first line of work focuses on sequence-generating approaches, where vector drawings are modelled as ordered sequences of commands or strokes. Inspired by language modelling, these methods learn to predict drawing operations step-by-step, typically using recurrent or transformer-based architectures. Early work which we mentioned before, SketchRNN [Ha and Eck 2017] demonstrated that neural networks can learn stroke dynamics and produce plausible vector-style sketches. Later models extend this idea to SVG command prediction, including DeepSVG [Carlier et al. 2020], Sketchformer [Ribeiro et al. 2020], and subsequent sequence-based vector generation works [Ganin et al. 2018; Lopes et al. 2019; Wang et al. 2023b; Wu et al. 2023]. However, when representing graphic as sequence, it can cause limitations, for example, long command chains make training difficult, keeping global visual coherence and structural correctness at the same time becomes challenging. At the same time, their dependence on vector datasets limited their generalization to more complex generations. Because there are not really datasets for complex images. We will talk about it later. Briefly, these approaches often struggle to scale to complex, layered SVG graphics. 
-
-% An alternative research direction is the learning process happening into the image domain through differentiable rasterization. In this method, we optimize randomly or learned initialization of vector parameters so that the rendered image of initialized SVG matches a target raster image or sometimes a textual description. Differentiable rasterizers(DiffVG) plays a huge role in this process. Several methods introduce SVG generation as an optimization problem. Models, such as LIVE iteratively refines layered Bezier paths to approximate images or VectorFusion and SVGDreamer combine differentiable rasterization with diffusion-based supervision to enable text-to-vector generation. Those kind of approaches despite having strong visual similarity or generating complex images, may produce unstable geometry, messy paths which leads to difficulty on editability. We will detailly explain its integration to vector graphics generation in the background chapter. 
-
-% Instead of explicitly predicting discrete primitives, some models shapes vector graphics as continuous neural fields or decomposable layered representations that behave similarly to vector graphics. By combining vector optimization with neural parameterization, frameworks such as NeuralSVG and NiVeL, model shapes of vector graphics through neural networks rather than directly optimizing primitive parameters. Such approaches produce vector representation by neural function, typically an MLP, which weights are optimized using image-space supervision. To explain simply, instead of updating Bezier control points, paths or shapes, optimization is happened in the neural parameter space. This can be classified as a hybrid approach that bridges vector optimization and neural representation learning. Difference between those approaches explained in that chapter.
-
-% More recent works has begun to shift toward large language model(LLM) and multimodal large language model (MLLM) approaches. As mentioned before, SVG is fundamentally a structured textual representation, so theoretically that suppose to be perfect match for language models. These methods formulate SVG generation as code synthesis, leveraging transformer architectures pretrained on large-scale text and multimodal data. The works such as Starvector, OmniSVG, LLM4SVG, LLM4SVG and InternSVG adopt MLLM designs that integrate visual encoders, based on Vision Transformers or CLIP-style approaches. Building on this idea, Language model-based pipelines work on SVG as a multimodal sequence that encodes both semantic and structural information. In this paradigm, SVGs are treated similarly to natural language, where models generate XML commands while conditioning on textual or visual inputs. Compared to earlier sequence-based models, these models focus on multimodal alignment and ability to handle multiple task, such as understanding, generation and editing. Despite their high-level results, length nature of SVG code makes it difficult for transformer models to maintain structural consistency over long sequences. In addition, these models are also less interpretable, in terms of generation process, which is distributed across large neural architectures rather than explicitly defined vector operations. For this reason, in this thesis, we did not focus on language-based model SVG generation. Instead, we focus on approaches where architectures provide clearer insight into how vector graphics are constructed and optimized. 
-
-
-
-% \section{Motivation}
-
-% Scalable Vector Graphics (SVG) play an essential role in modern digital design due to their scalability, compactness, and support for semantic editing. Unlike raster images, SVGs describe visual content through structured, text-based geometry using paths, shapes, and hierarchical groupings, allowing for precise control, reusability, and easy modification.
-
-% In recent years, machine learning and deep learning models have been applied to the generation of SVGs from various input modalities, such as text prompts, raster images, and sketches. Open-source research has produced a variety of approaches, including sequence models, transformer-based architectures, and differentiable optimization methods, each proposing different strategies for representing and producing vector graphics.
-
-% Given this diversity, it becomes relevant to study how these open-source models differ in their architectures, internal representations, and the structure of the SVGs they generate. Understanding these aspects can provide a clearer picture of how SVGs are represented and produced computationally, and what factors may influence the quality and editability of the resulting graphics.
-
-
-% \section{Problem Statement}
-% While multiple open-source models exist for SVG generation, they employ heterogeneous approaches in terms of architecture, data representation, and output structure. Some models treat SVGs as sequences of drawing commands, others as hierarchical objects, and still others as continuous geometric parameters optimized through differentiable rendering.
-
-% This diversity makes it challenging to compare how different approaches handle SVG generation and how these choices influence the final output. Furthermore, the evaluation of SVG quality often depends on various factors, such as path simplicity, structural organization, and editability, which are not always measured in the same way.
-
-% Therefore, the problem addressed in this research is to systematically describe, compare, and analyze open-source SVG generation methods, focusing on their architectures, internal representations, and output characteristics, in order to understand how these design choices relate to the quality and structure of the generated SVGs.
-
-
-
-
-    
-% The main goal of this thesis is to understand how SVGs are generated, what makes them editable, and how their quality is currently measured.
-% To achieve this, the thesis aims to:
-
-% \begin{enumerate}
-%     \item Explain the key properties and structure of Scalable Vector Graphics (SVGs) — including their layers, primitives, and editability.
-    
-%     \item Review how current models (Text-to-SVG and Raster-to-SVG) generate SVGs and how they represent vector structure.
-    
-%     \item Analyze existing benchmarks and evaluation metrics to understand what they measure and where they fall short.
-    
-%     \item Identify open challenges and suggest directions for more consistent and structure-aware evaluation methods.
-% \end{enumerate}
-
-
-
-
-
-    % \begin{itemize}
-    % \item What kind of methods exist to generate SVGs?(e.g. from text and raster images)
-    % \item What kind of deep learning and ML methods do they use? (neural network, diffusion models, only open-source models)
-    % \item What types of output representations do these models produce?
-    % \item How to evaluate quality of output SVGs? (example: reading existing surveys and benchmarks of SVG generators)
-    % \item What is the quality of output SVGs?(e.g. editability, number of nodes/paths, number of shapes, etc.)
-    % \item  What are properties of SVGs? 
-    % \item  What should be the main properties? 
-    % \item How models generate SVGs? 
-    % \item  Which steps models took while producing SVG?
-    % \item Tentative How do current SVG generation models represent and encode these structural properties?
-    % \item How do existing benchmarks and metrics evaluate SVG generation, and what are their current limitations?
-    % \item What is still missing for a unified and fair evaluation of structural and visual quality in SVG generation?
-    % \item What kind of output models produce as result? Answer: SVG, text
-    %   \end{itemize}
-
-
-
-
-% % Magda Gregorova, 2025-01-10
-
-% \chapter{Introduction}\label{ch:Intro}
-% This \LaTeX\ template provides a basic structure plus some tips about writing your master's thesis manuscript. 
-% You shall not to keep the structure as is here, you shall change it as appropriate for your thesis.
-% You can even change the \LaTeX\ formatting and the whole thesis style if you wish.
-% The title-page shall, nevertheless, contain the information as provided in this template.
-% In particular, you shall decide:
-% \begin{itemize}[noitemsep, nosep]
-% \item on the structure of the thesis, the chapters and their content
-% \item inclusion of list of figures, list of tables, index, etc.
-% \item reasonable math notation and stick to it throughout the thesis
-% \end{itemize}
-
-% \section{Organization of template}\label{sec:Intro_orga}
-% This template make great use of the \verb|\input| commands to input files containing parts of the text.
-% This is generally recommended for longer texts as it helps you to organize your work better and allows for easier re-usability, e.g. of the preamble.
-% You can also easily change the order of the chapters or comment out complete chapters if not relevant.
-% Nevertheless, you do not have to stick to this practice if you do not find it convenient for your work.
-
-% Though the template provides some examples for standard formatting and for including classical elements into your text, such as figures or tables, it expects sufficient knowledge of \LaTeX\ from your side.
-% There is plenty of material about \TeX\ and \LaTeX\ available on line.
-% A classical book is for example \cite{oetikerNotShortIntroduction2023}.
-% There are many more things you can do to make your text look professionally and spending some time on polishing it so is strongly recommended.
-% An example of advanced tool you may want to explore on your own is the \href{https://ctan.org/pkg/pgf?lang=en}{PGF/TikZ} package for creating graphics.
-
-% For longer and more complicated documents it is recommended to install LaTex locally on your computer and use some of the dedicated LaTex editors such as Texstudio or standard code editors and their extensions such as VS Code and Latex Workshop. 
-% In-browser editing via tools such as Overleaf is discouraged as it does not provide sufficient flexibility for organizing your manuscript files.
-% Moreover, the free version does not have any versioning capability which is critical for keeping in control of your writing.
-% Remember to back-up and version your writing for example through GitHub or the faculty Bitbucket to be sure not to accidentally lose your work.
-
-% \section{Writing thesis}\label{sec:Intro_writing}
-% When writing the thesis manuscript keep in mind that it is the most important part of your master thesis work.
-% It is ``the'' document that will be read and evaluated and will remain even after you have left the school.
-% It shall explain well what, why and how have you done.
-
-% Follow the basic principles of good writing. 
-% Always keep the reader in the center of your attention and make sure that your text is well structured, easy to follow and possible to comprehend even for someone who has not been involved in developing the thesis.
-% Focus on the main points and do not get distracted by minor technical details.
-% If some detail might be useful or interesting, you can include them into the the appendix.
-
-% Remember that in scientific texts all claims have to be supported by evidence.
-% Such evidence can come from some previous work you cite, such as a text book, e.g. \cite{bishopPatternRecognitionMachine2006},
-% or it shall be directly provided by you, e.g. by results of experiments, mathematical proofs, etc.
-% There are many more good practices for writing which I am not going to explain here.

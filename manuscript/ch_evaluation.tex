@@ -36,23 +36,21 @@ is invisible to every one of them.
 FID measures the statistical distance between 
 distributions of generated and reference images in a feature 
 space derived from a pretrained Inception 
-network~\cite{szegedy2016rethinking}. Lower scores indicate 
-closer distributional similarity. In SVG generation, outputs 
+network~\cite{szegedy2016rethinking}. In SVG generation, outputs 
 are rasterized before computing FID, which means the metric 
 captures rendered appearance only. FID also has documented 
 technical sensitivities: it is unstable at sample sizes below 
 10,000~\cite{heuselGANsTrainedTwo2017}, and scores shift 
 significantly depending on the reference distribution. When 
 models are evaluated against datasets that overlap with their 
-training data, scores appear artificially favorable. Several 
-papers in the SVG literature report FID on sets of a few 
-hundred rendered outputs, which produces estimates that are 
-difficult to compare across papers.
+training data, scores appear artificially favorable. Several papers 
+in the SVG generation still compute it on substantially 
+smaller test sets, which makes cross-paper comparison unreliable.
 
 CLIP score measures semantic alignment between a rendered 
 image and a text 
 prompt~\cite{radfordLearningTransferableVisual2021}, as 
-described in Section~\ref{sec:clip}. It is useful for 
+described in Section~\ref{ch:Background}. It is useful for 
 text-to-SVG tasks where the goal is conceptual correctness, 
 but like FID it operates entirely in image space. A model 
 can achieve strong CLIP scores while producing structurally 
@@ -70,15 +68,11 @@ an evaluation metric in several vectorization papers. The
 limitation is the same: it measures rendered appearance, 
 not vector structure.
 
-Mean squared error (MSE) is the most basic pixel-level metric 
-between rendered output and reference 
-image. It is fast to compute and easy to interpret, but 
-sensitive to minor geometric misalignments and color 
-averaging. LIVE explicitly avoids MSE as a training loss 
-because it leads to blurry, color-averaged 
-outputs~\cite{maLayerwiseImageVectorization2022}, yet 
-several papers still report it as an evaluation metric for 
-comparability.
+Mean squared error (MSE) measures pixel-level difference between
+rendered output and reference image. LIVE explicitly avoids it as 
+a training loss because it produces blurry, color-averaged 
+outputs~\cite{maLayerwiseImageVectorization2022}, yet several
+papers still report it for comparability.
 
 Human evaluation remains the most practically 
 meaningful signal, but also the hardest to standardize. 
@@ -190,10 +184,15 @@ would represent with one or two shapes. LIVE and
 VectorFusion both exhibit this 
 behavior~\cite{maLayerwiseImageVectorization2022, 
 jainVectorFusionTexttoSVGAbstracting2022}. The SVG renders 
-correctly but is structurally opaque. No metric in Table~\ref{tab:metrics_used} would detect 
-the difference: a model with 300 fragmented paths and a 
-model with 12 clean shapes can produce identical FID 
-scores if they render similarly.
+correctly but is structurally opaque. No metric in 
+Table~\ref{tab:metrics_used} would detect the difference. 
+NeuralSVG achieves a CLIP text-image similarity of 26.94 
+using 16 shapes, while VectorFusion reaches 26.33 with 64 
+shapes and SVGDreamer 26.58 with 
+256~\cite{polaczekNeuralSVGImplicitRepresentation2025}. 
+A 16x difference in path count produces near-identical 
+scores on the metric most commonly used to evaluate 
+these models.
 
 \paragraph{Geometric quality.} Curved paths in 
 optimization outputs are sometimes jagged, 
@@ -219,14 +218,16 @@ measure this. Editability is occasionally demonstrated
 by showing that a generated element can be recolored 
 or moved, but this is not systematically evaluated 
 across models and no paper defines criteria for what 
-counts as editable. Commercial tools such as SVGMaker.io already produce SVGs 
-with named layers and individually selectable shapes 
-(Figure~\ref{fig:editability_gap}), but how they 
-achieve this is not publicly known. The gap between what 
-industry tools deliver and what research models are 
-evaluated on is part of the problem: editability is a 
-practical requirement that the field has not yet learned 
-to measure.
+counts as editable. 
+Human-designed SVGs already exhibit the structural clarity 
+that generated outputs lack. 
+Figure~\ref{fig:editability_gap} shows a typical example: 
+an icon from SVGRepo opened in Inkscape, where every 
+shape can be independently selected and modified. The gap 
+between what manual design delivers and what generation 
+models are evaluated on is part of the problem: editability 
+is a practical requirement that the field has not yet 
+learned to measure.
 
 \begin{figure}[ht]
     \centering
@@ -296,7 +297,10 @@ inconsistencies described in Section~\ref{sec:current_eval}:
 when models cannot be run, cross-model comparisons rely 
 entirely on self-reported numbers, which may reflect 
 favorable experimental conditions rather than typical 
-performance.
+performance. That five of the fourteen models report no inference 
+time at all (Table~\ref{tab:reproducibility}). But it is itself 
+a data point, it suggests that computational cost is not 
+treated as a first-class evaluation criterion.
 
 
 \begin{table}[h!]
@@ -403,7 +407,7 @@ output using standard tools? This requires human
 evaluation, importing the SVG into Illustrator 
 or Figma and assessing whether elements can be 
 selected, recolored, and repositioned independently. 
-Figure~\ref{fig:svgmaker_editability} shows what 
+Figure~\ref{fig:editability_gap} shows what 
 target editability looks like in practice. Based on 
 their architectural design, SVGFusion, LayerTracer, 
 and NeuralSVG are the strongest candidates in the 
@@ -429,24 +433,31 @@ Dataset-trained methods score better on efficiency
 and path economy but vary widely on semantic alignment 
 and editability depending on training data scope. 
 Neural implicit methods occupy a middle ground which is 
-strong on geometry and layers, but slow.
+strong on geometry and layers, but slow. SVGFusion scores 
+well across most dimensions based on its 
+architectural design and reported metrics, but its ratings 
+cannot be independently verified because no public 
+implementation is available 
+(Table~\ref{tab:reproducibility}).
 
-This is not a ranking of models, it is a map of 
-the trade-offs that current architectures navigate. 
-The absence of a model that scores well on all six 
-dimensions is itself a finding: it reflects that 
+The table maps trade-offs rather than ranking models. 
+The absence of a model shows a finding which reflects that 
 the field has optimized for what is easy to measure 
 rather than what is useful in practice. Closing that 
 gap is the practical motivation behind the analysis 
 in this thesis.
 
+
 \begin{table}[h!]
 \centering
 \caption{Proposed multi-dimensional evaluation 
-framework applied to the fourteen models. Ratings 
-reflect architectural design properties: 
-\textbf{+} = strong, \textbf{\textasciitilde} = partial, 
-\textbf{-} = weak. * = empirically tested in paper.}
+framework applied to the fourteen models. 
+\textbf{+} = good, \textbf{\textasciitilde} = partial, 
+\textbf{-} = bad. Ratings marked * reflect metrics 
+reported in the original paper. All other ratings are 
+the author's assessment based on the observations from papers and
+the architectural analysis in Chapters~\ref{ch:representation} 
+and~\ref{ch:supervision}.}
 \label{tab:framework}
 \small
 \begin{tabularx}{\textwidth}{l c c c c c c}
@@ -454,27 +465,27 @@ reflect architectural design properties:
 \textbf{Model} & \textbf{Semantic} & \textbf{Path} & 
 \textbf{Geom.} & \textbf{Layers} & \textbf{Edit.} & 
 \textbf{Effic.} \\
- & \textbf{Align.} & \textbf{Economy} & 
+ & \textbf{Align.} & \textbf{Density} & 
 \textbf{Quality} & & & \\
 \midrule
 \multicolumn{7}{l}{\textit{Optimization-Based}} \\
 \midrule
-LIVE         & \textasciitilde & \textasciitilde & \textasciitilde* & + & \textasciitilde & - \\
-SAMVG        & \textasciitilde & +               & \textasciitilde  & + & +               & \textasciitilde \\
-VectorFusion & +               & -               & -                & - & -               & - \\
-SVGDreamer   & +               & \textasciitilde & \textasciitilde  & + & \textasciitilde & - \\
-SVGDreamer++ & +               & \textasciitilde & \textasciitilde  & + & \textasciitilde & - \\
-NiVeL        & +               & +               & +                & + & \textasciitilde & - \\
-NeuralSVG    & +               & +*              & +                & + & +               & - \\
+LIVE         & -*              & -*              & \textasciitilde* & +*& -               & \textasciitilde \\
+SAMVG        & -*              & \textasciitilde & \textasciitilde  & +*& \textasciitilde & \textasciitilde\\
+VectorFusion & +*              & -               & -                & - & -               & \textasciitilde \\
+SVGDreamer   & +*              & \textasciitilde*& \textasciitilde  & +*& \textasciitilde & \textasciitilde \\
+SVGDreamer++ & +*              & \textasciitilde & +                & +*& \textasciitilde & \textasciitilde \\
+NiVeL        & +               & +               & +                & + & \textasciitilde & \textasciitilde \\
+NeuralSVG    & +*              & +*              & +                & + & +               & \textasciitilde \\
 Im2Vec       & \textasciitilde & \textasciitilde & \textasciitilde  & - & \textasciitilde & + \\
 \midrule
 \multicolumn{7}{l}{\textit{Dataset-Driven}} \\
 \midrule
 DeepSVG      & \textasciitilde & \textasciitilde & \textasciitilde  & - & \textasciitilde & + \\
-DeepIcon     & \textasciitilde & +               & +                & + & +               & + \\
-SVGFusion    & +               & +               & +                & + & +               & + \\
-T2V-NPR      & +               & +*              & +*               & + & +               & - \\
-LayerTracer  & +               & +*              & \textasciitilde  & +               & + & + \\
+DeepIcon     & \textasciitilde & +               & +*               & - & \textasciitilde & + \\
+SVGFusion    & +*              & +               & +                & + & +               & + \\
+T2V-NPR      & +*              & +*              & +*               & + & \textasciitilde & - \\
+LayerTracer  & +*              & +*              & +*               & + & +*              & + \\
 \bottomrule
 \end{tabularx}
 \end{table}

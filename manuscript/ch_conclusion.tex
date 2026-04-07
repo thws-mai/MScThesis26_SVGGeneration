@@ -50,16 +50,12 @@ Chapter~\ref{ch:Introduction}.
 are used for SVG generation?}
 
 The analyzed models employ four distinct architecture 
-types: parametric optimization over Bézier primitives 
-using differentiable rasterization, transformer-based 
-hierarchical sequence models, MLP-parameterized neural 
-implicit representations, and latent diffusion 
-architectures with vector-specific decoders. 
-Chapter~\ref{ch:Landscape} introduced each type, and 
-Chapter~\ref{ch:representation} analyzed how 
-representational choices within each type determine 
-the structural properties of the output.
-
+types, described in Chapter~\ref{ch:Landscape} and 
+analyzed in Chapter~\ref{ch:representation}. The 
+structural properties of each type's output differ 
+more than their visual quality, which is the 
+observation that motivated the representation-focused 
+analysis of this thesis.
 \textbf{RQ4: What kinds of structure do these models 
 produce?}
 
@@ -100,12 +96,11 @@ six evaluation dimensions simultaneously. Optimization-
 based models achieve the strongest visual fidelity but 
 produce the least editable outputs. Dataset-driven 
 models produce structurally cleaner SVGs within 
-constrained domains. LayerTracer and SVGFusion come 
-closest to balancing visual quality with structural 
-usability among the analyzed set. Chapter~\ref{ch:synthesis} 
-summarized these findings in a conditions table and 
-identified the specific architectural factors that 
-distinguish models on the editability-realism axis.
+constrained domains. LayerTracer comes closest to balancing visual quality 
+with structural usability among the analyzed set, with 
+SVGFusion showing strong architectural potential that 
+remains unverifiable due to the absence of a public 
+implementation (Chapter~\ref{ch:Evaluation}).
 
 
 \section*{Contributions}
@@ -185,3 +180,35 @@ and LayerTracer's construction-sequence supervision
 both point in this direction from different starting 
 points. Converging these two approaches is a concrete 
 research question.
+
+
+
+
+\section*{Personal Takeaways}
+
+Working on this thesis changed how I think about 
+evaluation in machine learning. Before starting, I 
+assumed that standard metrics like FID would be 
+sufficient to compare SVG generation models. The 
+discovery that structurally different outputs can 
+score identically on raster-based metrics was the 
+turning point that shaped the analytical framework 
+of the thesis.
+
+The most challenging part was maintaining analytical 
+consistency across fourteen models with different 
+architectures, training strategies, and evaluation 
+practices. Building the comparison tables required 
+reading each paper multiple times and cross-checking 
+claims against reported numbers, which taught me 
+that published results are not always directly 
+comparable even when they use the same metric names.
+
+If I were to start this thesis again, I would begin 
+by defining the evaluation framework 
+(Chapter~\ref{ch:Evaluation}) before analyzing 
+individual models, rather than developing it 
+alongside the analysis. Having the six dimensions 
+clear from the start would have made the 
+model-by-model analysis more systematic from the 
+beginning.
