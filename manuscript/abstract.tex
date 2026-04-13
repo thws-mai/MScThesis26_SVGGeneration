@@ -2,13 +2,23 @@
 % abstract
 
 \section*{Abstract (en)}
-A single paragraph summarizing the most important points of your thesis.
-This can be more than one paragraph but should not be too long.
-You usually write this as the very last thing of your thesis.
-
+Current generative models can produce visually high-quality raster images from input text or image, but the field falls short in vector graphics format due to its complex nature. An SVG file is a structured document with paths, layers, and hierarchy, that means its purpose is not just to represent something semantically, it should be structurally clean and neat. Those requirements create far more problems to overcome to build a model for generating SVG. This thesis analyzes fourteen open-source SVG generation models to understand how their internal design and evaluation choices affect the structure of produced SVG. The analysis is shaped around two dimensions: how models represent geometry of vector internally, and what supervision signals lead the generation process. These two dimensions interact rather than operate independently. The same loss function can produce different structural outcomes depending on the representation it acts through, and the same representation behaves differently under different supervision. The central finding is a trade-off between visual realism and editability: methods that generate the most visually detailed outputs tend to produce the most fragmented and unusable SVG files, while methods that constrain their representation or learn from structured data produce cleaner results within narrower domains. To address the gap between what current metrics measure and what actually matters for practical use, the thesis proposes a multi-dimensional evaluation framework that includes structural and practical criteria. The work does not propose a new generation model. It provides an analytical framework for understanding why current models produce the structures they do, and what would need to change for generated SVGs to be usable in real design workflows.
 \section*{Abstract (de)}
-We are in germany so include a translation.
+Aktuelle generative Modelle können visuell hochwertige Rasterbilder aus Text oder Bildeingaben erzeugen, doch im Bereich der Vektorgrafiken bleibt das Feld aufgrund deren komplexer Natur zurück. Eine SVG-Datei ist ein strukturiertes Dokument mit Pfaden, Ebenen und Hierarchie. Das bedeutet, ihr Zweck ist nicht nur, etwas semantisch darzustellen, sondern sie muss auch strukturell sauber und ordentlich sein. Diese Anforderungen schaffen weit mehr Probleme, die es beim Bau eines Modells zur SVG-Generierung zu überwinden gilt. Die vorliegende Arbeit analysiert vierzehn quelloffene SVG-Generierungsmodelle, um zu verstehen, wie deren interne Design- und Evaluierungsentscheidungen die Struktur der erzeugten SVGs beeinflussen. Die Analyse ist um zwei Dimensionen aufgebaut: wie Modelle die Geometrie von Vektorgrafiken intern repräsentieren und welche Supervisionssignale den Generierungsprozess leiten. Diese beiden Dimensionen wirken zusammen, statt unabhängig voneinander zu operieren. Dieselbe Verlustfunktion kann unterschiedliche strukturelle Ergebnisse erzeugen, je nachdem auf welche Repräsentation sie wirkt, und dieselbe Repräsentation verhält sich unterschiedlich unter verschiedener Supervision. Der zentrale Befund ist ein Kompromiss zwischen visuellem Realismus und Editierbarkeit: Methoden, die visuell besonders detaillierte Ausgaben erzeugen, produzieren tendenziell die fragmentiertesten und am wenigsten nutzbaren SVG-Dateien, während Methoden mit eingeschränkter Repräsentation oder strukturierten Trainingsdaten sauberere Ergebnisse innerhalb engerer Domänen liefern. Um die Lücke zwischen dem, was aktuelle Metriken messen, und dem, was für die praktische Nutzung tatsächlich relevant ist, zu schließen, schlägt die Arbeit ein mehrdimensionales Evaluierungsframework vor, das strukturelle und praktische Kriterien einbezieht. Die Arbeit schlägt kein neues Generierungsmodell vor. Sie liefert einen analytischen Rahmen, um zu verstehen, warum aktuelle Modelle die Strukturen erzeugen, die sie erzeugen, und was sich ändern müsste, damit generierte SVGs in realen Designworkflows nutzbar werden.
 
 \newpage
 \chapter*{Acknowledgment}
-Here you can thank your friends who helped you throughout the studies, your parents for supporting you generally, if you wish your supervisor or any other profs and generally everybody you value.
+I want to thank Prof. Dr. Magda Gregorova and Philipp Vaeth for supervising this thesis.
+In the beginning of process, I had no clear direction and their guidance 
+is what kept me focused and moving forward. 
+Every session gave me something concrete to work with. 
+I am also grateful for the freedom they gave me to shape the analytical approach on my own terms.
+
+I thank Prof. Dr. Pascal Meissner, as second examiner.
+
+Special thanks to Ismail Eyyublu, a designer at McKinsey in Baku, 
+who helped me understand SVG from the perspective of someone who actually works with it. 
+His explanations of what designers expect from generated vector graphics shaped 
+how I thought about editability throughout this thesis.
+
+Finally, I thank Shabnam Huseynova for her support during the thesis period.

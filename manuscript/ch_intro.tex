@@ -1,47 +1,37 @@
 \chapter{Introduction}
 \label{ch:Introduction}
 
-Vector graphics differ fundamentally from raster images. 
+Vector graphics differ fundamentally from raster images.
 Raster images represent visual content as grids of pixels, 
-where each pixel stores color information independently 
-of its neighbors. Vector graphics instead describe images 
-using mathematical primitives: lines, curves, shapes, 
-and groups defined parametrically. Because the geometry 
-is encoded rather than sampled, vector graphics scale 
-without loss and can be edited at the level of individual 
-components.
+where each pixel stores color information independently of its neighbors. 
+Vector graphics instead describe images using mathematical primitives: 
+lines, curves, shapes, and groups defined parametrically. 
+Because the geometry is encoded, rather than sampled, vector graphics scale without loss 
+and can be edited at the level of individual components. 
+Among vector formats, Scalable Vector Graphics (SVG) has become 
+the dominant web standard. Its structured nature makes it programmable: 
+SVG files can be generated, modified, and animated through code, 
+which is why the format underlies most of what is drawn on the web. 
+A 2024 survey by W3Techs found that over 
+65 % of all websites use SVG for their graphics [1].
 
-Among vector formats, Scalable Vector Graphics (SVG) has 
-become the dominant web standard. SVG is a text-based 
-format that encodes geometry, styling, and hierarchical 
-relationships between elements. Its structured nature 
-makes it programmable: SVG files can be generated, 
-modified, and animated through code, which is why the 
-format underlies most of what is drawn on the web. A 
-2024 survey by W3Techs found that over 65\% of all 
-websites use SVG for their graphics.
-
-From the perspective of generative modeling, this 
-structure introduces challenges that do not arise in 
-raster synthesis. SVG graphics explicitly encode 
-geometry and topology. A generated SVG must therefore 
-satisfy two requirements simultaneously: it must look 
-correct, and it must be structurally sound. An output 
-that contains redundant paths, broken hierarchy, or 
-unstable geometry may appear visually plausible while 
-being impossible to edit or reuse. Visual quality and 
-structural quality are distinct properties, and current 
-evaluation practice does not consistently distinguish 
-between them.
+In terms of generative modelling,
+the structure of SVG introduces challenges that do not arise in raster synthesis.
+SVG graphics encode both geometry and topology. 
+So a generated SVG must satisfy two requirements simultaneously: 
+it must look correct and it must be structurally clean. 
+Although it may seem visually plausible, an output with redundant paths 
+and unstable geometry cannot be edited or reused. 
+Visual quality and structural quality are distinct properties, 
+and current evaluation practice does not consistently distinguish between them.
 
 Before learning-based approaches, vector graphics were 
 produced through algorithmic vectorization: tools that 
 approximate raster images using geometric primitives 
 via edge detection, contour tracing, and polygon 
-approximation. These methods remain in widespread use 
+approximation. These methods remain in use 
 but rely on heuristic rules and struggle with complex 
-scenes, stylized content, or semantic guidance. The 
-emergence of learning-based approaches introduces new 
+scenes. Learning-based approaches introduces new 
 possibilities, but also raises questions about how 
 models construct vector structure internally and 
 whether the outputs they produce are usable in practice.
@@ -49,91 +39,67 @@ whether the outputs they produce are usable in practice.
 
 \section{Motivation}
 
-In recent years, generative models have substantially 
-changed what is possible in visual content creation. 
-Diffusion models, large-scale multimodal systems, and 
-transformer-based architectures have demonstrated that 
-high-quality image synthesis from text prompts is no 
-longer a research prototype. Systems such as Stable 
-Diffusion, DALL-E, and Midjourney produce raster images 
-that are often indistinguishable from photographs or 
-hand-drawn illustrations. Progress in this area has 
-been fast and sustained.
+In recent years, generative models have substantially changed what 
+is possible in visual content creation. Diffusion models, large-scale 
+multimodal systems, and transformer based architectures have demonstrated 
+that high-quality image synthesis from text prompts is no longer 
+a research prototype. Systems such as Stable Diffusion, DALL-E, and 
+Midjourney produce raster images that are often indistinguishable from 
+photographs or hand-drawn illustrations. Progress in this area has been 
+fast. But this progress has not extended equally to vector graphics. 
+Research on SVG generation has grown, but the reliability and structural 
+quality of generated outputs remain open problems. It worth considering that, 
+vector graphics have not become less important. Instead, icons, logos, 
+interface elements, illustrations, and data visualizations are created 
+and maintained in vector formats precisely because they remain editable 
+and resolution-independent. The formats used by Adobe Illustrator, 
+Figma, and every major web browser are vector-based.
 
-This progress has not extended equally to vector 
-graphics. Research on SVG generation has grown, but 
-the reliability, controllability, and structural 
-quality of generated outputs remain open problems. 
-At the same time, vector graphics have not become 
-less important. Icons, logos, interface elements, 
-illustrations, and data visualizations are created 
-and maintained in vector formats precisely because 
-they must remain editable and resolution-independent. 
-The formats used by Adobe Illustrator, Figma, and 
-every major web browser are vector-based.
 
-The gap between raster and vector generation is not 
-simply a matter of technical difficulty. It reflects 
-a deeper mismatch between how generative models are 
-trained and evaluated and what vector graphics 
-actually require. A model trained to minimize pixel 
-reconstruction error has no reason to produce clean 
-paths or interpretable layers. A model evaluated by 
-FID score is rewarded for visual plausibility, not 
-structural usability. Closing this gap requires 
-understanding what current methods actually produce 
-at the structural level, and why their outputs differ.
 
-This is the motivation for the present work. Rather 
-than proposing a new generation model, this thesis 
-analyzes existing methods from the inside: how they 
-represent vector graphics, what supervision signals 
-they use, and how those choices shape the structure 
-of the outputs they generate.
-
+The gap between raster and vector generation is not only technical 
+difficulty. It reflects a mismatch between how 
+generative models are trained and evaluated and what vector graphics 
+actually require. A model trained to minimize pixel reconstruction error 
+has no reason to produce clean paths or interpretable layers or a model 
+evaluated by FID score is rewarded for visual plausibility, not 
+structural usability. Those are just few examples which we will see 
+more over the time. It is understandable, because early generative 
+models focused on raster images which led the vector graphics 
+field to be partially dependent to raster images and its features. 
+But still there are different methods and techniques used to generate 
+SVG. The thesis examines them in detail. Rather than proposing a new 
+generation model, this thesis analyzes existing methods from the inside: 
+how they represent vector graphics, what supervision signals they use, 
+and how those choices shape the structure of the outputs they generate.
 
 \section{Research Problem}
 
-SVG generation research has expanded across several 
-directions. Sequence-based models treat SVG as a 
-stream of drawing commands. Optimization-driven 
-approaches refine vector parameters directly against 
-a target. Neural implicit representations define 
-geometry through learned functions. Multimodal 
-pipelines combine text encoders, diffusion models, 
-and differentiable rasterizers. These methods differ 
-not only in architecture but in how they internally 
-represent vector structure and what signals they use 
-to guide generation.
+SVG generation research has divided across different directions. 
+Some models treat SVG as a stream of drawing commands, other approaches
+refine vector parameters directly against a raster target,
+it is even possible to define geometry through learned functions. 
 
-Despite this diversity, a systematic understanding 
-of how these design choices influence structural 
-outcomes is missing. Much of the literature reports 
-visual similarity metrics while leaving structural 
-properties (path count, layer organization, geometric 
-stability, editability) unmeasured. This means that 
-two models may achieve similar FID scores while 
-producing outputs with very different structural 
-properties. Comparison between approaches is 
-difficult because reported results are heterogeneous, 
-and the metrics used do not capture the properties 
-that matter most for practical use.
+These methods differ not only in architecture but in how they internally 
+represent vector structure and what signals they use to guide generation.
+Despite this diversity, a systematic understanding of how these design 
+choices influence the structure of what gets produced is missing. 
+Models use different representations, different supervision signals, 
+and different optimization strategies, but no existing work traces 
+how those choices connect to the structural properties of the output. 
+Two models may achieve similar FID scores while producing outputs with 
+completely different path counts, layer organization, and editability. 
+The field has many methods but no shared framework for understanding why 
+they produce the structures they do.
 
-A further difficulty is that evaluation practices 
-for SVG generation remain inconsistent. Quantitative 
-metrics such as FID and LPIPS are adapted from 
-raster synthesis and measure visual similarity, not 
-structural quality. There is no widely adopted 
-benchmark for SVG editability, path economy, or 
-layer coherence. Consequently, the field currently 
-lacks the tools needed to systematically compare 
-structural outcomes across generation approaches.
-
+Evaluation makes this harder. The metrics most commonly used 
+(FID, LPIPS, CLIP score) are all borrowed from raster synthesis and 
+operate on rendered pixels. They cannot detect redundant paths, broken 
+hierarchy, or unusable geometry. There is no widely adopted benchmark 
+for SVG editability, path economy, or layer coherence.
 This combination (heterogeneous architectures, 
-unmeasured structural properties, and inconsistent 
-evaluation) constitutes the research gap addressed 
-by this thesis.
-
+untraced design-to-structure relationships, and evaluation that ignores 
+structure) constitutes the research gap addressed by this thesis.
 
 \section{Thesis Objective}
 
@@ -150,10 +116,7 @@ or clearly defined architectural components. Large
 language model approaches, which treat SVG generation 
 as code synthesis, are reviewed as a distinct and 
 growing direction but excluded from the main analysis. 
-Their generation process is distributed across billions 
-of parameters rather than explicitly tied to geometric 
-operations, which limits the kind of representation-level 
-analysis this thesis pursues. A full justification is 
+A full justification is 
 provided in Appendix~\ref{app:llm_exclusion}.
 
 To support systematic comparison, the analysis is 
@@ -221,8 +184,8 @@ observed across current methods.
 
 \section{Thesis Structure}
 
-Chapter~\ref{ch:SLR} describes the systematic literature 
-review that guided model selection. The background~\ref{ch:Background} chapter 
+Chapter~\ref{ch:Systematic Literature Review} describes the systematic literature 
+review that guided model selection. Chapter~\ref{ch:Background} 
 introduces the foundational concepts required to understand 
 vector graphics generation: SVG structure, representation 
 types, differentiable rendering, and the supervision 

@@ -186,29 +186,47 @@ research question.
 
 \section*{Personal Takeaways}
 
-Working on this thesis changed how I think about 
-evaluation in machine learning. Before starting, I 
-assumed that standard metrics like FID would be 
-sufficient to compare SVG generation models. The 
-discovery that structurally different outputs can 
-score identically on raster-based metrics was the 
-turning point that shaped the analytical framework 
-of the thesis.
+When I started this thesis, I was thinking about SVG 
+generation from the perspective of a designer. Over time, 
+reading papers and articles about it made me realize that 
+there are specific patterns used across the field in its progress.
+In the early research phase, I 
+thought it would be enough to find a couple of generation 
+models and compare them. I did not even know that there 
+are different types of methods to generate SVGs, that 
+each method has its own architecture, representation, 
+and supervision strategy. It was messy and complex to 
+understand and compare them at first. 
+But as I started analyzing the models more closely, I 
+noticed that some patterns kept showing up. Either one 
+model was building on a previous one, or they were using 
+the same core architecture but adding a different tool 
+or loss function on top. Once I saw that, I was able to 
+categorize them, partly inspired by how other papers in 
+the field organize their surveys. From there, it became 
+much easier to analyze and compare them systematically.
 
-The most challenging part was maintaining analytical 
-consistency across fourteen models with different 
-architectures, training strategies, and evaluation 
-practices. Building the comparison tables required 
-reading each paper multiple times and cross-checking 
-claims against reported numbers, which taught me 
-that published results are not always directly 
-comparable even when they use the same metric names.
+One thing I did take away is that if someone 
+wants to build an SVG generator without depending on 
+token limits or API restrictions of LLM-based services, 
+the optimization-based and dataset-driven methods 
+analyzed here are the reliable path. They have their own 
+costs, mostly in hardware, but the models 
+and the code are open. I think those approaches will 
+prove more durable in the long run than closed 
+pipelines, and working with them directly will push the 
+field forward in ways that relying on proprietary 
+services cannot. Anyone going that route should pay 
+attention to the realism-editability trade-off 
+identified in Chapter~\ref{ch:synthesis}, and to the 
+five conditions for clean and editable SVG output 
+listed there. Those were the most concrete findings of 
+this thesis, and they are the ones I would use myself 
+if I were building something.
 
-If I were to start this thesis again, I would begin 
-by defining the evaluation framework 
-(Chapter~\ref{ch:Evaluation}) before analyzing 
-individual models, rather than developing it 
-alongside the analysis. Having the six dimensions 
-clear from the start would have made the 
-model-by-model analysis more systematic from the 
-beginning.
+I regret that I was not able to compare the models 
+quantitatively and run them locally to see the qualitative results 
+for myself and judge whether they are practically 
+useful. That would have made the evaluation framework 
+in Chapter~\ref{ch:Evaluation} stronger, and it is the 
+most obvious direction for extending this work.

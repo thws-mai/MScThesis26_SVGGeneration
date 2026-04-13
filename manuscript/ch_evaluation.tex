@@ -4,18 +4,13 @@
 Evaluating SVG generation is harder than evaluating raster 
 image generation. A raster image is just pixels, the only thing that matters is how it looks.
 An SVG is a structured artifact 
-that has to look right, be geometrically stable, and remain 
+that has to look right(semantical alignment), be geometrically stable, and remain 
 editable. These three requirements do not always point in 
 the same direction, and the metrics most commonly used in 
 the literature only measure the first one. 
-This chapter examines how the fourteen models analyzed in 
-this thesis are actually evaluated, where those practices 
+This chapter examines how those 14 models evaluated, which metrics used, where those practices 
 fall short, and what a more complete framework would need 
-to include. The argument is not that FID and CLIP score 
-are useless, but that 
-relying on them alone systematically misses what makes a 
-vector graphic useful in practice.
-
+to include.
 
 \section{Evaluation Metrics in Current Practice}
 \label{sec:current_eval}
@@ -27,11 +22,10 @@ research. The most common are Fréchet Inception Distance
 scores~\cite{radfordLearningTransferableVisual2021}, 
 perceptual similarity measures such as 
 LPIPS~\cite{zhangUnreasonableEffectivenessDeep2018}, 
-pixel-level reconstruction metrics such as MSE, and human 
-preference studies. All of these share one property: they 
+pixel-level reconstruction metrics such as MSE.
+All of these share one property: they 
 operate on rasterized outputs. The SVG file itself, its 
-path structure, layer organization, and geometric properties, 
-is invisible to every one of them.
+path structure, is invisible to every one of them.
 
 FID measures the statistical distance between 
 distributions of generated and reference images in a feature 
@@ -49,10 +43,9 @@ smaller test sets, which makes cross-paper comparison unreliable.
 
 CLIP score measures semantic alignment between a rendered 
 image and a text 
-prompt~\cite{radfordLearningTransferableVisual2021}, as 
-described in Section~\ref{ch:Background}. It is useful for 
-text-to-SVG tasks where the goal is conceptual correctness, 
-but like FID it operates entirely in image space. A model 
+prompt~\cite{radfordLearningTransferableVisual2021}. It is useful for 
+text-to-SVG tasks where the goal is semantic correctness, 
+but like FID it operates entirely in pixel-space. A model 
 can achieve strong CLIP scores while producing structurally 
 fragmented or completely uneditable SVG output.
 
@@ -64,33 +57,32 @@ MSE and is used in vectorization tasks where reconstruction
 fidelity against a reference image matters. SAMVG uses LPIPS 
 as part of its optimization 
 loss~\cite{zhuSAMVGMultistageImage2023}, and it appears as 
-an evaluation metric in several vectorization papers. The 
-limitation is the same: it measures rendered appearance, 
+an evaluation metric too. The 
+limitation is the same, it measures rendered appearance, 
 not vector structure.
 
 Mean squared error (MSE) measures pixel-level difference between
 rendered output and reference image. LIVE explicitly avoids it as 
 a training loss because it produces blurry, color-averaged 
 outputs~\cite{maLayerwiseImageVectorization2022}, yet several
-papers still report it for comparability.
+papers still use it for comparability.
 
 Human evaluation remains the most practically 
 meaningful signal, but also the hardest to standardize. 
-Papers typically show curated qualitative examples or run 
+Papers typically show qualitative examples or run 
 small user studies asking participants to rate realism, 
 prompt alignment, or preference. These assessments capture 
 properties that numerical metrics miss, but they are 
-subjective, expensive to run at scale, and rarely reported 
-with enough methodological detail to allow replication.
+subjective and rarely reported 
+with enough methodological detail to understand the ratings.
 
-Table~\ref{tab:metrics_used} maps which of these evaluation 
-signals each of the fourteen models actually reports. The 
-pattern is clear: FID and CLIP dominate text-to-SVG models, 
+Table~\ref{tab:metrics_used} maps which evaluation metrics,
+each of the fourteen models actually reports. The 
+pattern is clear, FID and CLIP dominate text-to-SVG models, 
 MSE and LPIPS appear in vectorization models, and structural 
 metrics are almost entirely absent across both groups. 
-Human evaluation is present in roughly half the papers but 
-inconsistently defined. No model evaluates layer quality 
-as a quantitative metric.
+Human evaluation is present in roughly half the papers.
+
 
 \begin{table}[h!]
 \centering
@@ -142,16 +134,15 @@ only model that evaluates geometric smoothness and it
 does so precisely because smoothness is central to its 
 architectural claim, not because it is a standard metric 
 in the field. Third, DeepIcon is the only model that reports contour-based 
-metrics (IoU and Chamfer 
+metrics (Chamfer 
 Distance)~\cite{bingDeepIconHierarchicalNetwork2024}, which 
 measure shape overlap rather than pixel similarity. No other 
 model uses these. This pattern suggests that models tend to 
 report metrics that favor their specific contributions while 
-structural properties remain systematically unmeasured. 
-
-Emerging benchmarks have begun to recognize this gap. 
+structural properties remain unmeasured. 
+Some benchmarks have begun to recognize this gap. 
 SVGEditBench~\cite{nishinaSVGEditBenchBenchmarkDataset2024} 
-and its successor SVGEditBench 
+and SVGEditBench 
 V2~\cite{nishinaSVGEditBenchV22025} introduce structured 
 editing tasks and evaluate outputs using raster-based, 
 contour-based, and description-based metrics including MSE, 
@@ -161,8 +152,7 @@ generation dimensions. However, both benchmarks are
 designed primarily for LLM-based SVG processing, and 
 neither addresses the structural properties of 
 optimization-based or dataset-trained generation methods. 
-The evaluation gap identified here therefore persists 
-even in the most recent specialized benchmarks.
+
 
 
 \section{Evaluation Gaps}
@@ -249,7 +239,7 @@ learned to measure.
 \section{Efficiency and Reproducibility}
 \label{sec:efficiency}
 
-Inference speed and reproducibility are not peripheral 
+Inference speed and reproducibility are not preferable 
 concerns for SVG generation, they directly determine 
 whether a method can be used in practice. 
 Table~\ref{tab:reproducibility} summarizes code 
@@ -257,7 +247,7 @@ availability, hardware requirements, and inference time
 across all fourteen models.
 
 The efficiency gap between optimization-based and 
-dataset-trained methods is substantial. LIVE, the 
+dataset-trained methods is worth to consider. LIVE, the 
 simplest reconstruction-supervised method, requires 
 between 2,600 and 10,000 seconds per image on an RTX 
 3090 depending on path count~\cite{maLayerwiseImageVectorization2022}. 
@@ -270,37 +260,29 @@ hardware~\cite{xingSVGDreamerTextGuided2024,xingSVGDreamerAdvancingEditability20
 By contrast, LayerTracer generates a layered SVG in 27 
 to 34 seconds~\cite{songLayerTracerCognitiveAlignedLayered2025}, 
 and SVGFusion in 24 to 36 
-seconds~\cite{xingSVGFusionScalableTexttoSVG2025}. The 
-difference is not marginal, it is two to three orders 
-of magnitude. This gap follows directly from architecture: 
-optimization-based methods refine parameters iteratively 
-at inference time, while dataset-trained models generate 
-through a single forward pass.
+seconds~\cite{xingSVGFusionScalableTexttoSVG2025}. That differences are not small. 
+Optimization-based methods take minutes to hours because they refine parameters iteratively at inference time.
+Dataset-trained models do it in seconds through a single forward pass.
 
 Hardware requirements follow the same pattern but with 
 an important exception. Dataset-trained models are faster, 
 but several require enterprise-grade infrastructure during 
-training: SVGFusion trains on multiple A800 GPUs, and 
+training, such as, SVGFusion trains on multiple A800 GPUs, and 
 LayerTracer on a single A100 with 80GB VRAM. Once trained, 
 these models can run inference on less demanding hardware, 
 but the training cost creates a barrier for independent 
-replication.
+replication on untrained models.
 
 Reproducibility is a separate and equally important 
-concern. Four of the fourteen models have no public 
+concern for those whom wants to replicate the work.
+Four of the fourteen models have no public 
 code release: SAMVG, VectorFusion, DeepIcon, and 
-SVGFusion. For these models, reported metrics cannot 
-be independently verified or recomputed on shared test 
-sets. NiVeL's implementation is listed as pending. This 
-fragmentation has direct consequences for the evaluation 
-inconsistencies described in Section~\ref{sec:current_eval}: 
-when models cannot be run, cross-model comparisons rely 
+SVGFusion. For these models, metrics cannot 
+be independently tested on shared test 
+sets. NiVeL's code is listed as pending. 
+When models cannot be run, cross-model comparisons rely 
 entirely on self-reported numbers, which may reflect 
-favorable experimental conditions rather than typical 
-performance. That five of the fourteen models report no inference 
-time at all (Table~\ref{tab:reproducibility}). But it is itself 
-a data point, it suggests that computational cost is not 
-treated as a first-class evaluation criterion.
+favorable experimental conditions. 
 
 
 \begin{table}[h!]
@@ -337,37 +319,26 @@ LayerTracer  & Public   & A100 (80GB)     & 27--34 s        \\
 \end{tabularx}
 \end{table}
 
-The pattern in Table~\ref{tab:reproducibility} divides 
-cleanly along family lines: optimization-based methods 
+Table~\ref{tab:reproducibility} divides 
+along family lines: optimization-based methods 
 are slow and generally reproducible, while several 
-dataset-trained models are fast but lack public 
-implementations entirely. Taken together, efficiency and 
-reproducibility reveal a tension that runs through the 
-entire field. The optimization-based methods with the 
-strongest structural control are the slowest and most 
-hardware-intensive. The dataset-trained forward decoders 
-are the fastest but often the least reproducible. No 
-current model in the analyzed set is simultaneously fast, 
-reproducible, and structurally strong.
+dataset-trained models are fast but require strong hardware in training step.
 
 
 \section{Toward a Multi-Dimensional Evaluation Framework}
 \label{sec:framework}
 
-The preceding sections establish one clear finding: 
-current evaluation practices measure appearance well 
-and structure poorly. FID and CLIP score are useful 
-but insufficient. Structural metrics are almost never 
-reported. Editability is discussed qualitatively at 
-best. What follows proposes six evaluation dimensions 
-that together would provide a more complete picture 
-of SVG quality.
+The quantitative metrics tell you how the output looks. 
+But they tell you nothing about what the SVG file actually contains.
+Every metric in Table~\ref{tab:eval_signals} operates on rendered pixels,
+not on the SVG itself. What follows is an attempt to fix that: 
+six evaluation dimensions that cover both visual and structural quality.
 
 \paragraph{Semantic alignment.} Does the generated SVG 
 represent the intended concept? FID and CLIP score 
 approximate this for text-to-SVG tasks and remain 
 the most established signals. They should be computed 
-on sample sizes above 1,000 and against reference 
+on sample sizes above 10,000 and against reference 
 distributions that do not overlap with training data.
 
 \paragraph{Path economy.} How efficiently does the 
@@ -423,9 +394,7 @@ speed and infrastructure cost are primary constraints.
 Table~\ref{tab:framework} applies these six dimensions 
 to all fourteen models based on their architectural 
 properties. Most ratings reflect design characteristics 
-rather than measured outcomes. The 
-pattern that emerges is consistent: no single model 
-scores well across all six dimensions simultaneously. 
+rather than measured outcomes. No model scores well across all six dimensions. 
 Optimization-based methods tend to score well on 
 semantic alignment and layer organization but poorly 
 on path economy, geometric quality, and efficiency. 
@@ -439,13 +408,8 @@ architectural design and reported metrics, but its ratings
 cannot be independently verified because no public 
 implementation is available 
 (Table~\ref{tab:reproducibility}).
-
 The table maps trade-offs rather than ranking models. 
-The absence of a model shows a finding which reflects that 
-the field has optimized for what is easy to measure 
-rather than what is useful in practice. Closing that 
-gap is the practical motivation behind the analysis 
-in this thesis.
+
 
 
 \begin{table}[h!]
@@ -470,11 +434,11 @@ and~\ref{ch:supervision}.}
 \midrule
 \multicolumn{7}{l}{\textit{Optimization-Based}} \\
 \midrule
-LIVE         & -*              & -*              & \textasciitilde* & +*& -               & \textasciitilde \\
-SAMVG        & -*              & \textasciitilde & \textasciitilde  & +*& \textasciitilde & \textasciitilde\\
+LIVE         & -*              & -*              & \textasciitilde* & - & -               & \textasciitilde \\
+SAMVG        & -*              & \textasciitilde & \textasciitilde  & - & \textasciitilde & \textasciitilde\\
 VectorFusion & +*              & -               & -                & - & -               & \textasciitilde \\
-SVGDreamer   & +*              & \textasciitilde*& \textasciitilde  & +*& \textasciitilde & \textasciitilde \\
-SVGDreamer++ & +*              & \textasciitilde & +                & +*& \textasciitilde & \textasciitilde \\
+SVGDreamer   & +*              & \textasciitilde*& \textasciitilde  & - & \textasciitilde & \textasciitilde \\
+SVGDreamer++ & +*              & \textasciitilde & +                & - & \textasciitilde & \textasciitilde \\
 NiVeL        & +               & +               & +                & + & \textasciitilde & \textasciitilde \\
 NeuralSVG    & +*              & +*              & +                & + & +               & \textasciitilde \\
 Im2Vec       & \textasciitilde & \textasciitilde & \textasciitilde  & - & \textasciitilde & + \\
@@ -484,7 +448,7 @@ Im2Vec       & \textasciitilde & \textasciitilde & \textasciitilde  & - & \texta
 DeepSVG      & \textasciitilde & \textasciitilde & \textasciitilde  & - & \textasciitilde & + \\
 DeepIcon     & \textasciitilde & +               & +*               & - & \textasciitilde & + \\
 SVGFusion    & +*              & +               & +                & + & +               & + \\
-T2V-NPR      & +*              & +*              & +*               & + & \textasciitilde & - \\
+T2V-NPR      & +*              & +*              & +*               & - & \textasciitilde & - \\
 LayerTracer  & +*              & +*              & +*               & + & +*              & + \\
 \bottomrule
 \end{tabularx}

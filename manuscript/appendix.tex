@@ -1,17 +1,186 @@
-% Magda Gregorova, 2025-01-10
+\section*{Exclusion of Large Language Model Approaches}
+\label{app:llm_exclusion}
 
-\addsec{Great table.}
-\label{appendix:table}
-\begin{table}[H]
+Large language models have become an active direction in SVG generation. 
+Methods such as StarVector, OmniSVG, LLM4SVG, and InternSVG treat SVG 
+as structured code and generate it through transformer architectures 
+pretrained on large-scale text and image collections. Commercial 
+services have followed the same path: SVGMaker.io, for instance, 
+generates SVG graphics from text prompts using an LLM-based pipeline 
+without exposing the underlying architecture or training details.
+
+SVG is sequential XML, so language models are a natural structural fit 
+for the format. The visual quality of recent LLM-based outputs has 
+improved substantially over earlier sequence models. However, these 
+approaches are excluded from the main analysis for a specific reason: 
+the core question of this thesis is how architectural decisions in 
+representation and supervision shape the structure of generated SVGs. 
+In optimization-based and dataset-driven methods, that relationship 
+can be traced directly. A parametric representation produces a certain 
+kind of geometry. A diffusion-based loss pushes optimization in a 
+specific direction. The connection between design choice and structural 
+outcome is observable.
+
+In LLM-based generation, that connection is distributed across billions 
+of parameters. The model generates SVG tokens, but why it chose a 
+particular path structure, how it decides on primitive count, or what 
+internal signal drives layer organization cannot be isolated in the 
+same way. This does not make LLM approaches less valuable. It makes 
+them less suited to the kind of representation-level analysis this 
+thesis pursues. A systematic comparison of LLM-based SVG generation 
+methods, including both open-source and commercial systems, remains an 
+important direction for future work. Malashenko et al.~\cite{LeveragingLargeLanguage} 
+provide an initial survey of this space.
+
+
+
+
+\chapter{Table of chosen approaches}
+
+The following tables summarize the fourteen models analyzed in this thesis. 
+Optimization-based models are listed first, followed by implicit neural methods and 
+dataset-trained methods. For optimization-based methods, "trainables" refers to per-instance 
+SVG parameters refined at inference time rather than learned model weights. 
+Models listed as using semantic distillation (SDS or VSD) optimize vector parameters 
+at inference time using gradients backpropagated from a frozen pretrained diffusion model. 
+No training dataset is required for these methods. 
+Dataset-driven models learn generation behavior during training and produce SVGs through 
+a forward pass at inference.    
+
+\begin{landscape}
+    \thispagestyle{empty} % Optional: removes headers/footers for more space
+    \centering
+    \null\vfill % Vertical centering
+    \small
+    \section*{Inference Time Overview} % Optional title
+    \begin{tabularx}{\linewidth}{l | l | l | l | l | l | X}
+        \toprule
+        \textbf{Model} & \textbf{Task Type} & \textbf{Inference} & \textbf{Input} & \textbf{Output} & \textbf{Supervision} & \textbf{Core Idea} \\
+        \midrule
+        VectorFusion & Text-to-SVG & Iterative Opt. & Text & Paths & Self-Sup & Distills diffusion priors via differentiable rasterization. \\ \hline
+        SVGFusion & Text-to-SVG & Forward Dec. & Text & Paths & Supervised & Continuous latent space learning using SVGX dataset. \\ \hline
+        SVGDreamer & Text-to-SVG & Iterative Opt. & Text & Paths & Self-Sup & Semantic-driven vectorization (SIVE) and Particle SDS. \\ \hline
+        SVGDreamer++ & Text-to-SVG & Iterative Opt. & Text & Paths & Self-Sup & Hierarchical optimization with adaptive primitive control. \\ \hline
+        T2V-NPR & Text-to-SVG & Iterative Opt. & Text & Layers/Paths & Self-Sup & Dual-branch VAE learns path latent space constraints. \\ \hline
+        LayerTracer & System/Pipeline & Hybrid & Text/Img & Layers/Paths & Supervised & Models designer construction logic via DiT sequences. \\ \hline
+        Im2Vec & Vectorization & Forward Dec. & Img & Paths & Self-Sup & Differentiable rasterizer allows learning from appearance. \\ \hline
+        SAMVG & Vectorization & Iterative Opt. & Image & Paths & Opt.-based & Uses SAM for semantic initialization in vectorization. \\ \hline
+        NIVeL & Text-to-SVG & Iterative Opt. & Text & Layers/Paths & Self-Sup & Implicit neural layers as optimization domain for SDS. \\ \hline
+        NeuralSVG & Text-to-SVG & Iterative Opt. & Text & Layers/Paths & Self-Sup & Scene encoded in MLP weights for layered shapes. \\ \hline
+        LIVE & Vectorization & Iterative Opt. & Image & Layers/Paths & Opt.-based & Layer-wise hierarchical optimization of vector graphs. \\ \hline
+        DeepSVG & Generation & Forward Dec. & None & Paths & Supervised & Hierarchical Transformer for shape/command disentanglement. \\ \hline
+        DeepIcon & Vectorization & Forward Dec. & Image & Layers/Paths & Supervised & Hierarchical network for direct image-to-SVG translation. \\ \hline
+        \bottomrule
+    \end{tabularx}
+    \vfill\null
+    \end{landscape}
+
+
+
+
+
+
+\begin{landscape}
+\thispagestyle{empty}
 \centering
-\begin{tabular}{|l|p{9cm}|}
-\hline
-\textbf{Headline 1} & \textbf{Headline 2} \\
-\hline
-Titel 1 & Description 1 \\
-\hline
-Titel 2 & Description 2 \\
-\hline
-\end{tabular}
-\caption{Overview in a great table.}
-\end{table}
+\small
+\section*{Training Architecture – Optimization-Based Methods}
+
+\begin{tabularx}{\linewidth}{
+>{\raggedright\arraybackslash}p{2.3cm} |
+>{\raggedright\arraybackslash}p{3cm} |
+>{\raggedright\arraybackslash}p{2.2cm} |
+>{\raggedright\arraybackslash}p{2cm} |
+>{\raggedright\arraybackslash}p{2.5cm} |
+>{\raggedright\arraybackslash}p{2.8cm} |
+X}
+\toprule
+\textbf{Model} & \textbf{Trainables} & \textbf{Training Data} & \textbf{Init.} & \textbf{Supervision} & \textbf{Representation} & \textbf{Priors} \\
+\midrule
+LIVE & SVG parameters & None & Raster-driven & None & Parametric (flat) & None \\ \hline
+SAMVG & None & None & Mask-based & None & Parametric (mask-derived) & SAM \\ \hline
+VectorFusion & SVG parameters & None & Random / Trace & SDS (Stable Diff.) & Parametric (flat) & Stable Diff. \\ \hline
+SVGDreamer & SVG parameters / LoRA & None & Random paths & VPSD & Parametric (flat) & Stable Diff. \\ \hline
+SVGDream++ & SVG parameters / LoRA & None & Random + HIVE & VPSD + HIVE loss & Structured parametric & Stable Diff. + SAM \\ \hline
+NeuralSVG & MLP weights + colors/ LoRA & None & Saliency-based & SDS & Implicit neural fields & Stable Diff. \\ \hline
+NIVeL & MLP weights + layer colors & None & Random weights & SDS & Implicit neural fields & DeepFloyd + CLIP \\
+\bottomrule
+\end{tabularx}
+\end{landscape}
+
+
+
+\begin{landscape}
+\thispagestyle{empty}
+\centering
+\small
+\section*{Training Architecture – Dataset-Trained Methods}
+
+\begin{tabularx}{\linewidth}{
+>{\raggedright\arraybackslash}p{2.3cm} |
+>{\raggedright\arraybackslash}p{3cm} |
+>{\raggedright\arraybackslash}p{2.5cm} |
+>{\raggedright\arraybackslash}p{2cm} |
+>{\raggedright\arraybackslash}p{2.5cm} |
+>{\raggedright\arraybackslash}p{2.8cm} |
+X}
+\toprule
+\textbf{Model} & \textbf{Trainables} & \textbf{Training Data} & \textbf{Init.} & \textbf{Supervision} & \textbf{Representation} & \textbf{Priors} \\
+\midrule
+DeepSVG & VAE (Transformer) weights & SVGIcons8 & Latent sampling & Recon. + KL & Sequential path tokens & None \\ \hline
+DeepIcon & Transformer weights & SVGIcons8 & CLIP embedding & Reconstruction & Sequential path tokens & CLIP encoder \\ \hline
+SVGFusion & VP-VAE + VS-DiT & SVGX & Random latent & Recon. + Denoising & Continuous latent space & CLIP + DINO-v2 \\ \hline
+T2V-NPR & NPR-VAE + Latents + LoRA & FIGR-8 & Random path latents & VSD & Neural Path Repr. & Stable Diff. + CLIP \\ \hline
+Im2Vec & Encoder + RNN + 1D CNN & Raster images & Image encoding & Reconstruction & Parametric paths & None \\ \hline
+LayerTracer & DiT + LoRA & Serpentine dataset & Diffusion noise & Denoising loss & Layered pixel sequences & Flux DiT + Florence-2 \\
+\bottomrule
+\end{tabularx}
+\end{landscape}
+
+
+
+
+
+\begin{landscape}
+\thispagestyle{empty}
+\centering
+\null\vfill
+\small
+\section*{Reproducibility Overview}
+
+\begin{tabularx}{\linewidth}{l | l | l | l | l | X}
+\toprule
+\textbf{Model} & 
+\textbf{Code} & 
+\textbf{Pre-trained} & 
+\textbf{Hardware} & 
+\textbf{Cost of time} & 
+\textbf{Reproduction Feasibility} \\
+\midrule
+
+LIVE & Yes & No & RTX 3090 & 2,600--10,000 s & Feasible on high-end consumer GPU (slow). \\ \hline
+SAMVG & No & No & RTX 3090 & 139--2,000 s & Re-implementation possible but requires effort. \\ \hline
+VectorFusion & No & No & Not specified & Unknown & Not reproducible due to lack of public implementation. \\ \hline
+SVGDreamer & Yes & No & V100 ($\geq$31GB VRAM) & 7--14 min & Requires high-VRAM GPU and LoRA pretraining. \\ \hline
+SVGDreamer++ & Yes & No & A800 ($\geq$31GB VRAM) & ~7 min & Requires high-VRAM GPU and LoRA pretraining. \\ \hline
+NeuralSVG & Yes & No & Not stated & Unknown & Hardware requirements unclear. \\ \hline
+NIVeL & Pending & No & A100 & ~5 min & High-end GPU required. \\ \hline
+T2V-NPR & Yes & VAE (unknown)& RTX 3090 & ~13 min & Feasible on high-end consumer GPU. \\ \hline
+DeepSVG & Yes & VAE (unknown) & 2×1080Ti (training) & Unknown & Feasible on consumer GPU. \\ \hline
+DeepIcon & No & Transformer (unknown) & Not specified & -- & Not reproducible (no official code). \\ \hline
+SVGFusion & No & VP-VAE + VS-DiT (unknown) & Multi-A800 & 24--36 s & No official implementation available. \\ \hline
+Im2Vec & Yes & VAE (unknown) & Not specified & Unknown & Likely feasible on consumer GPU. \\ \hline
+LayerTracer & Yes & DiT + LoRA (unknown) & A100 (80GB) & 27--34 s & Enterprise GPU required. \\
+
+\bottomrule
+
+\end{tabularx}
+
+
+\vfill\null
+\end{landscape}
+
+
+
+
+

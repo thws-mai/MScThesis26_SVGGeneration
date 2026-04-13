@@ -1,42 +1,35 @@
 \chapter{Comparative Synthesis}
 \label{ch:synthesis}
 
-The preceding chapters established what SVG generation methods do 
-and how they should be evaluated. This chapter examines what they 
-reveal when compared directly. Using the representational and 
-supervisory dimensions introduced in Chapters~\ref{ch:representation} 
-and~\ref{ch:supervision}, and the evaluation framework from 
-Chapter~\ref{ch:Evaluation}, the analysis identifies recurring 
-patterns across the fourteen models that explain why certain 
-approaches produce outputs that are structurally clean and editable 
-while others prioritize visual realism at the cost of usability.
+The previous chapters analyzed representation and supervision 
+separately. This chapter discuss their impact to final output together.
+The goal is to compare the methods directly, explain why some 
+produce clean, editable SVGs while others produce visually 
+rich outputs that fall apart when you try to edit them.
+Three aspects cover the chapter: how representation and 
+supervision interact to shape what comes out, where the 
+realism-editability trade-off shows itself, and 
+what conditions are required to produce usable SVG output.
 
-The findings are organized around three observations: how 
-representation and supervision interact to shape structural 
-outcomes, how the realism-editability trade-off manifests 
-concretely across models, and what conditions lead to 
-outputs that are both visually plausible and structurally 
-usable.
 
 \section{How Representation and Supervision Shape Structure}
 \label{sec:rep_sup_interaction}
 
-The central analytical finding of this thesis is that 
-representation and supervision do not act independently 
-on the structure of generated SVGs. The same supervision 
-signal produces different geometric outcomes depending on 
-the representation it operates through, and the same 
-representation produces different outputs depending on 
-what signal drives it. Table~\ref{tab:representation_outcomes} 
-maps these combinations across all fourteen models; the 
-patterns visible in that table are the subject of the 
-analysis that follows.
+Already mentioned many times during previous chapters that 
+representation and supervision do not work independently. 
+Choices of each one depend on the other and together they determine the structure of the output.  
+Changing the representation under the same supervision signal 
+produces a completely different output. Also choice of same representation, changing the supervision signal, 
+immediately impact the result. 
+Table~\ref{tab:interaction} maps these combinations across 
+all analyzed models.
+
 
 \begin{table}[h!]
 \centering
 \caption{Representation type, supervision signal, 
-and observed structural outcomes across the fourteen 
-analyzed models.}
+and observed structural outcomes across the 
+analyzed papers.}
 \label{tab:representation_outcomes}
 \small
 \begin{tabularx}{\textwidth}{l l l X}
@@ -47,9 +40,6 @@ analyzed models.}
 Parametric    & Pixel recon.   & LIVE, SAMVG       
               & High path count, accurate boundaries, 
                 fragmented structure \\
-Parametric    & Pixel recon.   & Im2Vec            
-              & Compact paths, limited topological 
-                complexity \\
 Parametric    & SDS            & VectorFusion      
               & Semantically rich, dense primitives, 
                 low editability \\
@@ -75,95 +65,81 @@ Layered sequences & Denoising  & LayerTracer
 \end{tabularx}
 \end{table}
 
-Consider what happens when diffusion-based supervision 
-(SDS or VPSD) meets different representations. Applied to 
-explicit B\'{e}zier paths, as in VectorFusion and SVGDreamer, 
-it drives primitive count upward because the only way to 
-approximate high-frequency visual detail with unconstrained 
-parametric paths is to add more of 
-them~\cite{jainVectorFusionTexttoSVGAbstracting2022, 
-xingSVGDreamerTextGuided2024}. Applied to a neural implicit 
-space, as in NeuralSVG, the same class of signal produces 
-comparable visual quality with a fixed set of 16 
-shapes~\cite{polaczekNeuralSVGImplicitRepresentation2025}, 
-because the representation itself constrains how geometry 
-can be arranged. The supervision did not change. The 
-representation did, and with it the entire structural 
-character of the output.
+Diffusion-based supervision can be a very good example. VectorFusion 
+and SVGDreamer both use it to optimize explicit B\'{e}zier 
+paths~\cite{jainVectorFusionTexttoSVGAbstracting2022, 
+xingSVGDreamerTextGuided2024}. It end up with hundreds of 
+primitives, because that is the only way unconstrained 
+parametric paths can approximate fine visual detail.
+However, NeuralSVG uses the same kind of signal running it through 
+an implicit neural representation and gets comparable 
+visual quality with 16 
+shapes~\cite{polaczekNeuralSVGImplicitRepresentation2025},
+which less primitives or shapes means, better SVG file.
+Just changing the representation alone changed the entire structural character of the output.
 
-The same pattern appears with reconstruction losses. LIVE 
-and SAMVG both minimize pixel error through 
+Reconstruction losses shows the same example from a different 
+angle. LIVE and SAMVG both minimize pixel error through 
 DiffVG~\cite{maLayerwiseImageVectorization2022, 
-zhuSAMVGMultistageImage2023}. LIVE initializes randomly and 
-ends up with 160 overlapping paths. SAMVG initializes from 
-segmentation masks and produces cleaner boundaries with 
-fewer primitives (Chapter~\ref{ch:supervision}, 
-Figure~\ref{fig:init_comparison}). The loss function is 
-identical. What changed is where optimization started, 
-which shaped what the representation converged toward.
+zhuSAMVGMultistageImage2023}. Same loss function. But LIVE 
+starts from random initialization and ends up with 160 
+overlapping paths. SAMVG starts from segmentation masks and 
+produces cleaner boundaries with fewer primitives 
+(Figure~\ref{fig:init_comparison}). 
+That means, where optimization started, also made the difference.
 
-Dataset-trained methods show the reverse pattern: 
-representation is constrained by design, and structural 
-quality comes from what the training data contains rather 
-than from the supervision signal directly. DeepSVG and 
-DeepIcon produce compact, well-organized icons because 
-the SVG-Icons8 dataset consists of simple graphics with 
-small path 
-counts~\cite{carlierDeepSVGHierarchicalGenerative2020}. 
-The reconstruction loss did not teach them to be tidy. The 
-data did. LayerTracer takes this further: its training 
-data encodes step-by-step construction order, so the model 
-absorbs layering as a structural convention rather than 
-discovering it through 
+Dataset-trained methods are constrained, so some approaches may have similar --- icon-wise and simple results. 
+Representation is fixed by design and whatever structure 
+shows up in the output is learned from the training data.
+DeepSVG and DeepIcon produce clean, compact 
+icons because the SVG-Icons8 dataset contains simple graphics 
+with small path 
+counts~\cite{carlierDeepSVGHierarchicalGenerative2020}. The 
+reconstruction loss teach them to be tidy through the data.
+LayerTracer pushes this further: its training data 
+encodes step-by-step construction order, so the model picks 
+up layering as a convention rather than discovering it through 
 optimization~\cite{songLayerTracerCognitiveAlignedLayered2025}. 
-SVGFusion and T2V-NPR occupy a middle position, combining 
-learned latent structure with semantic supervision, which 
-produces outputs that are more coherent than unconstrained 
-optimization but bounded by the training 
-distribution~\cite{xingSVGFusionScalableTexttoSVG2025, 
+SVGFusion and T2V-NPR sit in between, combining learned 
+latent structure with semantic supervision. Their outputs are 
+more coherent than unconstrained optimization but still 
+bounded by what the training corpus 
+contains~\cite{xingSVGFusionScalableTexttoSVG2025, 
 zhangTexttoVectorGenerationNeural2024}.
 
-Two conclusions follow from these comparisons. First, 
-representations that constrain decomposition (implicit 
-fields, learned latent spaces, layered sequences) 
-consistently produce cleaner outputs than representations 
-that leave primitive count unconstrained (explicit 
-parametric paths). This holds regardless of what 
-supervision signal is applied 
-(Table~\ref{tab:repr_consequences}). Second, supervision 
-operating within a structured representation space produces 
-more stable geometry than supervision operating directly 
-in raster space. NeuralSVG using SDS within an implicit 
-representation, and T2V-NPR using VSD within a learned 
-path latent, both exhibit this 
-effect~\cite{polaczekNeuralSVGImplicitRepresentation2025, 
-zhangTexttoVectorGenerationNeural2024}. The interaction 
-between these two dimensions, not either one alone, 
-determines whether a generated SVG is structurally usable.
+Representations that constrain 
+decomposition (implicit fields, learned latent spaces, layered 
+sequences) produce cleaner outputs than 
+representations that not limited primitive count, 
+regardless of the supervision signal 
+(Table~\ref{tab:rep_structure}). And supervision operating 
+within a structured representation space produces more stable 
+geometry than supervision operating directly in pixel space. 
+NeuralSVG with SDS inside an implicit representation and 
+T2V-NPR with VSD inside a learned path latent both are  
+example to this~\cite{polaczekNeuralSVGImplicitRepresentation2025, 
+zhangTexttoVectorGenerationNeural2024}.
 
 \section{The Realism--Editability Trade-off}
 \label{sec:tradeoff}
 
-The most consistent pattern across the fourteen models is the 
-tension between visual realism and editability. This tension 
-is not theoretical, it is observable in specific models and 
-has direct practical consequences.
-
+The most consistent pattern across models is the 
+tension between visual realism and editability. 
+The tension is observable in specific models.
 Methods driven by diffusion-based supervision achieve visually 
-convincing outputs by refining geometry until the rendered image 
+detailed outputs by refining geometry until the rendered image 
 aligns with learned image priors. This refinement increases 
-structural complexity in ways that undermine usability. LIVE, 
-following the optimization protocol also adopted by VectorFusion, 
-represents a single image using up to 160 paths distributed 
-across multiple layers~\cite{maLayerwiseImageVectorization2022}. At this scale, 
+structural complexity, but undermine usability at the same time. LIVE, VectorFusion 
+following the optimization protocol which
+represents a single image using up to ~150 paths distributed 
+across multiple layers~\cite{maLayerwiseImageVectorization2022}. In that, 
 selecting or modifying a single visual component requires 
-identifying and adjusting dozens of overlapping primitives in 
-standard design tools. SVGDreamer++ explicitly acknowledges this 
-failure mode, noting that optimization-based approaches produce 
+unlimited patience. SVGDreamer++ explicitly acknowledges this 
+failure, noting that optimization-based approaches produce 
 outputs where objects are entangled across paths, making 
 component-level editing effectively 
 impossible~\cite{xingSVGDreamerAdvancingEditability2025}.
-However, this structural cost comes with a genuine visual benefit, 
+However, this structural cost comes with a visual benefit, 
 as Figure~\ref{fig:realism_editability} illustrates.
 
 
@@ -189,47 +165,35 @@ as Figure~\ref{fig:realism_editability} illustrates.
     \label{fig:realism_editability}
 \end{figure}
 
-This structural cost comes with a genuine visual benefit. 
-VectorFusion and SVGDreamer consistently produce the most 
+SVGDreamer and SVGDreamer++ consistently produce the most 
 visually rich and semantically detailed outputs among the 
-analyzed methods~\cite{jainVectorFusionTexttoSVGAbstracting2022, xingSVGDreamerTextGuided2024}.
+analyzed methods~\cite{xingSVGDreamerTextGuided2024,xingSVGDreamerAdvancingEditability2025}.
 The unconstrained primitive growth guided by strong diffusion priors that 
 fragments structures is precisely what enables 
-photorealistic rendering quality. The trade-off is genuine: 
-neither side is simply better. The appropriate choice depends 
-on whether the intended use prioritizes visual output quality 
-or downstream editability. The multi-dimensional framework in 
+photorealistic quality.
+
+The correct choice of models and methods depends 
+on whether the use prioritizes visual output quality 
+or editability. The multi-dimensional framework in 
 Table~\ref{tab:framework} makes this trade-off 
-quantifiable: models that score highest on semantic 
+quantifiable, models that score highest on semantic 
 alignment (VectorFusion, SVGDreamer) consistently 
-score lowest on path economy and editability.
-
-Models that constrain representation tend to produce outputs 
-that are easier to edit, even when visual abstraction is 
-introduced. NeuralSVG represents complex scenes using a small 
-fixed number of layers, improving usability despite reduced 
+score lowest on path economy.
+Models that constrain representation tend to produce outputs which less primitves. 
+NeuralSVG represents complex scenes using a small 
+fixed number of shapes, improving usability despite reduced 
 photorealistic detail~\cite{polaczekNeuralSVGImplicitRepresentation2025}. 
-Dataset-trained models such as DeepSVG and DeepIcon inherit 
-structural simplicity from their training data, producing 
-directly editable outputs bounded by the style distribution 
-of the dataset~\cite{carlierDeepSVGHierarchicalGenerative2020}.
-
-LayerTracer represents a distinct route toward editability. 
-Rather than constraining an optimization process, it is trained 
-directly on layered construction sequences that reflect how 
-designers build SVG graphics step by 
-step~\cite{songLayerTracerCognitiveAlignedLayered2025}. 
-Editability is not an emergent property but a learned one, 
-the model produces layered outputs because it was explicitly 
-supervised to construct graphics that way. This makes 
-LayerTracer structurally closer to designer workflows than 
-any optimization-based method analyzed here.
+But even though it is contrained to certain number of shapes, 
+its visual quality as showed in~\ref{fig:supervision_comparison} 
+is not falling behind from the compared models, in terms of photorealistic quality.
 
 
 
+
+              
 The realism--editability trade-off emerges from the interaction 
-between supervision strength and representational constraints. 
-When supervision strongly prioritizes visual similarity without 
+between strength of supervision and constraints from representation. 
+When supervision prioritizes visual similarity without 
 structural regularization, primitive counts increase and 
 editability degrades. When representation enforces decomposition 
 or limits complexity, editability improves but visual detail 

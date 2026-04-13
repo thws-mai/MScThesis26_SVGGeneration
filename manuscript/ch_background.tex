@@ -218,14 +218,14 @@ parameters.
 \subsection{Latent Representation}
 \label{sec:latent_repr}
 
-Latent representation works differently from the three above, 
+Latent representation works differently from the first three representations, 
 it is not a vector representation in the geometric sense.
 There are no control points, no path commands, no shape boundaries 
 stored anywhere. Latent space is compressing many graphics
 into a shared numerical embedding learned during training. 
 Kingma and Welling~\cite{kingmaAutoEncodingVariationalBayes2022} 
 formalized this idea through the Variational Autoencoder: 
-an encoder compresses an input into a short vector, and a 
+an encoder compresses an input into a short vector and a 
 decoder reconstructs the original from it.
 
 For SVG generation, the actual geometry is always produced 
@@ -241,6 +241,7 @@ how those models actually construct their outputs.
 \section{Differentiable Rendering}
 \label{sec:diffvg}
 
+DiffVG~\cite{liDifferentiableVectorGraphics2020a} is one of the main bridge between vector and pixel spaces. 
 Before neural networks can optimize vector graphics using 
 image-based loss functions, there needs to be a way to connect 
 the two spaces. Vector parameters (control points, stroke widths, colors) live
@@ -261,7 +262,7 @@ a perceptual loss, or a signal from a pretrained semantic model)
 can be backpropagated all the way through to the 
 vector parameters themselves. The system learns which control 
 point to move, and in which direction, to reduce the error. 
-The tricky part is handling edges and anti-aliasing — places 
+The tricky part is handling edges and anti-aliasing, places 
 where a tiny shift in a path boundary causes a sudden pixel 
 change. DiffVG approximates these discontinuities in a way 
 that still produces usable gradients~\cite{liDifferentiableVectorGraphics2020a}.
@@ -432,7 +433,7 @@ in Chapter~\ref{ch:supervision}. The complete optimization
 loops for SDS and VSD are shown in 
 Figures~\ref{fig:sds_loop} and~\ref{fig:svgdreamer_vpsd}, 
 where the role of the diffusion model as a supervision 
-signal becomes concrete.
+signal becomes solid.
 
 
 

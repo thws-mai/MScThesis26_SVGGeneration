@@ -1,45 +1,36 @@
 \chapter{Systematic Literature Review}
-\label{ch:Systematic Literature Review}
+\label{ch:slr}
 
+Kitchenham's guidelines were originally developed for evidence-based
+software engineering and have become one of the most widely adopted 
+standards for conducting systematic literature reviews in computer 
+science \cite{kitchenhamProceduresPerformingSystematic2004a}. The methodology provides 
+domain-specific procedures for planning, searching, selecting, and 
+synthesizing studies in areas where research outputs are heterogeneous, 
+such as machine learning architectures or engineering pipelines. 
+Unlike biomedical-focused protocols such as 
+PRISMA \cite{moherPreferredReportingItems2009a}, which were designed for clinical 
+trials with standardized quantitative outcomes, Kitchenham addresses 
+challenges specific to computational research: diversity of study 
+designs, inconsistent terminology, non-uniform evaluation metrics, 
+and code-based artifacts instead of comparable statistical datasets. 
+Frameworks like SALSA \cite{boothSystematicApproachesSuccessful2012} emphasize 
+high-level structuring but do not prescribe step-by-step operational 
+procedures for reproducibility.
 
-Kitchenham’s guidelines were originally developed for evidence-based software engineering 
-and have become one of the most widely adopted standards for conducting systematic 
-literature reviews in computer science and technical research disciplines 
-\cite{kitchenham_procedures_2004}. 
-The methodology provides detailed, domain-specific procedures for planning, searching, 
-selecting, and synthesizing studies in areas where research outputs are often 
-heterogeneous—such as algorithmic models, machine learning architectures, or engineering 
-pipelines. Unlike biomedical-focused protocols such as PRISMA 
-\cite{moher_preferred_2009}, which were designed primarily for clinical trials 
-and human-subject research with standardized quantitative outcomes, Kitchenham addresses challenges unique to computational research: diversity of study designs, 
-inconsistent terminology, non-uniform evaluation metrics, and the frequent presence of 
-code-based or algorithmic artifacts instead of comparable statistical datasets. 
-Similarly, frameworks like SALSA \cite{noauthor_typology_nodate} emphasize high-level 
-structuring but do not prescribe the step-by-step operational procedures needed for 
-reproducibility in technical fields.
+For this thesis, a Kitchenham-style SLR is needed because the SVG 
+generation literature consists of diverse model architectures, 
+varied input modalities, and different evaluation criteria. 
+Kitchenham's protocol provides structured phases 
+(planning, conducting, and reporting) that guide the reviewer through 
+research question formulation, search strategy definition, 
+study selection, quality assessment, data extraction, and 
+narrative synthesis. This structure minimizes bias and ensures that 
+the review captures the full range of relevant approaches.
 
-For this thesis—situated within deep learning, machine learning, and vector-graphics 
-generation—a Kitchenham-style SLR is needed because the literature consists of diverse 
-model architectures, varied input modalities, and different evaluation criteria. 
-Kitchenham’s protocol supports this complexity by providing structured phases (planning, 
-conducting, and reporting) that guide the reviewer through formulating rigorous research 
-questions, defining search strategies, conducting selection criteria, assessing quality, data extraction and performing narrative synthesis. This structure minimizes 
-bias, increases reproducibility, and ensures that the review captures the full range of 
-relevant deep-learning and vectorization approaches. 
+\section{Phase 1 --- Planning}
 
-\section{Phase 1 — Planning}
-
-% \subsection{1. Justifying the Need for an SLR}
-
-% To ensure methodological rigor, this study adopts the Kitchenham guidelines for conducting Systematic Literature Reviews (SLRs) in computer science. Several existing works (e.g., \textit{Multiscale Visualization: A Structured Literature Analysis}, \textit{Systematic Review of Synthetic CT Generation Methodologies}, \textit{A Systematic Literature Review of Deep Learning Approaches for Sketch-Based Image Retrieval}) follow similar approaches using Kitchenham or PRISMA-based SLR structures.
-
-% Before conducting the SLR, the following questions must be addressed:
-% \begin{itemize}
-%    \item Is a similar SLR already published in the domain?
-%    \item Is there sufficient primary literature available to support an SLR?
-% \end{itemize}
-
-\subsection {Review Protocol}
+\subsection{Review Protocol}
 
 \paragraph{Databases}
 
@@ -49,8 +40,8 @@ relevant deep-learning and vectorization approaches.
     \item ACM Digital Library
 \end{itemize}
 
-
 \paragraph{Search Strings/Keywords}
+
 \subparagraph{SVG Generation}
 \begin{verbatim}
 "SVG generation"
@@ -76,7 +67,6 @@ relevant deep-learning and vectorization approaches.
 "text-to-vector graphics"
 \end{verbatim}
 
-
 \subparagraph{Structure of SVG, Editability and Quality}
 \begin{verbatim}
 "SVG Basics"
@@ -85,7 +75,7 @@ relevant deep-learning and vectorization approaches.
 "SVG editability"
 "editable SVG"
 "SVG path simplification"
-"layered SVG" AND generation" 
+"layered SVG" AND generation
 \end{verbatim}
 
 \subparagraph{Survey and Review Searches}
@@ -99,79 +89,6 @@ relevant deep-learning and vectorization approaches.
 "image vectorization" AND benchmark
 \end{verbatim}
 
-
-
-% \paragraph{Population (P):}
-% \begin{itemize}
-%     \item SVG properties
-%     \item SVG generation methods
-%     \item Deep learning and machine learning architectures used for SVG generation
-%     \item Output structures
-%     \item Evaluation approaches
-%     \item Quality across models
-% \end{itemize}
-
-% \paragraph{Intervention (I):}
-% \begin{itemize}
-%     \item Diffusion-based or generative models that output SVG-like structures
-%     \item Sketch-to-SVG pipelines
-%     \item Image-to-SVG vectorization pipelines
-%     \item LLM-based SVG generation
-%     \item Hybrid multimodal SVG generation (text + image)
-%     \item ML and DL architectures (Transformers, VAEs, autoregressive models)
-% \end{itemize}
-
-% \paragraph{Comparison (C):}
-% \begin{itemize}
-%     \item Comparison across different deep learning models
-%     \item Rule-based vectorization vs. ML-based vectorization
-%     \item Structured SVG generation vs. raster-only generative models
-%     \item Different input modalities (sketch, raster image, text, multimodal)
-%     \item Editability of SVG outputs
-% \end{itemize}
-
-% \paragraph{Outcomes (O):}
-
-% Primary outcomes:
-% \begin{itemize}
-%     \item SVG quality
-%     \item SVG editability (e.g., number of nodes, clean paths, human-editable structure)
-%     \item Structural characteristics (hierarchy, grouping, path consistency)
-%     \item Reported performance metrics
-%     \item Comparative performance between open-source models
-% \end{itemize}
-
-% Secondary outcomes:
-% \begin{itemize}
-%     \item Practical usability for downstream editing or integration
-% \end{itemize}
-
-% \subsection{3. Creating the Review Protocol}
-
-% \paragraph{3.1 Search Strategy}
-
-% \textbf{Databases:}
-% \begin{itemize}
-%     \item ACM Digital Library
-%     \item IEEE Xplore
-%     \item arXiv
-%     \item Google Scholar
-% \end{itemize}
-
-% \textbf{Example Search Strings:}
-% \begin{verbatim}
-% ("SVG" OR "vector representation" OR "vectorized image" OR
-%  "vector data representation" OR "Scalable Vector Graphics" OR
-%  "vectorization" OR "image-to-vector" OR "raster-to-vector" OR
-%  "raster-to-SVG" OR "vector structure analysis" OR "sketch-to-vector" OR
-%  "text-to-SVG" OR "SVG generation" OR
-%  "deep learning" OR "machine learning" OR "transformer" OR "diffusion" OR
-%  "generative model" OR "vector quality evaluation" OR
-%  "survey" OR "systematic literature review")
-% \end{verbatim}
-
-% Search fields include title, abstract, and keywords.
-
 \paragraph{Study Selection Criteria}
 
 \subparagraph{Inclusion Criteria:}
@@ -179,22 +96,10 @@ relevant deep-learning and vectorization approaches.
     \item \textbf{Language and Publication:} Written in English and published in a peer-reviewed journal, conference, or workshop.
     \item \textbf{Time Range:} Published between 2020--2025 (post-emergence of modern SVG generative models such as DeepSVG).
     \item \textbf{Domain Relevance:} Falls within computer vision, computer graphics, AI, machine learning, or deep learning.
-    \item \textbf{Reproducibility:} Provides an open-source implementation or references a publicly available repository. Availability of pre-trained weights is preferred, but source code alone is sufficient if the method is reproducible.
-    \item \textbf{SVG Output Requirement:} Describes a model, method, or architecture that directly generates SVG or structured vector outputs, including:
-        \begin{itemize}
-            \item Bézier curves,
-            \item SVG \texttt{<path>} commands,
-            \item layered or hierarchical SVG structure,
-            \item vector strokes or SVG-like stroke sequences,
-            \item structured outputs suitable for editability analysis.
-        \end{itemize}
-    \item \textbf{Input Modalities:} Supports at least one of:
-        \begin{itemize}
-            \item image-to-SVG vectorization,
-            \item text-to-SVG generation,
-            \item multimodal SVG generation,
-        \end{itemize}
-    \item \textbf{Architectural Transparency:} Provides sufficient technical detail to extract the model architecture and internal SVG representation (e.g., decoder design, transformer layers, vector tokenization, differentiable rasterization, or geometric parameterization).
+    \item \textbf{Reproducibility:} Provides an open-source implementation or references a publicly available repository. Source code alone is sufficient if the method is reproducible.
+    \item \textbf{SVG Output Requirement:} Describes a model or architecture that directly generates SVG or structured vector outputs, including B\'{e}zier curves, SVG \texttt{<path>} commands, layered or hierarchical SVG structure, vector strokes, or structured outputs suitable for editability analysis.
+    \item \textbf{Input Modalities:} Supports at least one of: image-to-SVG vectorization, text-to-SVG generation, or multimodal SVG generation.
+    \item \textbf{Architectural Transparency:} Provides sufficient technical detail to extract the model architecture and internal SVG representation.
     \item \textbf{Evaluation:} Provides quantitative metrics and qualitative SVG examples that allow analysis of structural quality and editability.
 \end{itemize}
 
@@ -202,20 +107,14 @@ relevant deep-learning and vectorization approaches.
 \begin{itemize}
     \item \textbf{No Vector Output:} The method does not generate vector or SVG outputs (pixel-only image generation).
     \item \textbf{Non-ML Methods:} Purely rule-based or classical algorithmic vectorization methods without machine learning or deep learning.
-    \item \textbf{Closed-Source Systems:} No publicly available code, weights or sufficient technical detail for reproduction.
-    \item \textbf{Insufficient Evaluation:} Papers lacking SVG evaluation, qualitative vector examples or structural analysis of outputs.
+    \item \textbf{Closed-Source Systems:} No publicly available code, weights, or sufficient technical detail for reproduction.
+    \item \textbf{Insufficient Evaluation:} Papers lacking SVG evaluation, qualitative vector examples, or structural analysis of outputs.
     \item \textbf{Out-of-Scope Vector Work:} Studies focused on vector editing, rendering, compression, markup optimization, or stylistic modification without SVG generation.
-    \item \textbf{Domain Mismatch:} 
-        \begin{itemize}
-            \item handwriting synthesis,
-            \item font generation,
-            \item datasets,
-            \item sketch generation not intended for SVG graphics.
-        \end{itemize}
+    \item \textbf{Domain Mismatch:} Handwriting synthesis, font generation, datasets, or sketch generation not intended for SVG graphics.
     \item \textbf{Temporal Exclusion:} Studies published before 2020, except when cited for background context only.
     \item \textbf{LLM Restriction:} Exclude proprietary LLMs that generate SVG text but do not provide architecture, training details, or reproducibility.
-
 \end{itemize}
+
 \paragraph{Study Selection Procedure}
 
 \begin{itemize}
@@ -223,31 +122,19 @@ relevant deep-learning and vectorization approaches.
     \item Duplicate removal
     \item Title/abstract screening
     \item Full-text assessment
-    \item Final included studies
+    \item Quality assessment
+    \item Final model selection for analysis
 \end{itemize}
-
 
 \subsubsection{Quality Assessment Criteria}
 
-Following the recommendations by Kitchenham for evidence-based software 
-engineering \cite{kitchenham_procedures_2004,
-kitchenham_systematic_2009}, each primary study must be assessed for quality, 
-the assessment criteria must be explicitly described, applied consistently, and 
-the overall quality of each study should be reported (e.g., high, medium, or low 
-quality). The four Kitchenham categories used in this review are reporting 
-quality, methodological rigor, reproducibility, and result validity. The criteria 
-are listed below.
-
-The following Kitchenham-style quality criteria were applied to all studies that 
-passed the full-text screening. Each criterion was evaluated as \textbf{Yes = 1} or 
-\textbf{No = 0}. The total score was then used to classify studies as high, medium, 
-or low quality.
+Following Kitchenham's recommendations \cite{kitchenhamProceduresPerformingSystematic2004a, kitchenhamSystematicReviewProcess2009}, each study that passed full-text screening was assessed for quality across four categories: reporting quality, methodological rigor, reproducibility, and result validity. Each criterion was scored as \textbf{Yes = 1} or \textbf{No = 0}, and the total score classified studies as high, medium, or low quality.
 
 \paragraph{Reporting Quality}
 \begin{itemize}
     \item The study states its research aim clearly.
     \item The model or method architecture is described in enough detail.
-    \item The SVG/vector representation (paths, strokes, Béziers, etc.) is explained.
+    \item The SVG/vector representation (paths, strokes, B\'{e}ziers, etc.) is explained.
 \end{itemize}
 
 \paragraph{Methodological Rigor}
@@ -268,188 +155,22 @@ or low quality.
 
 \paragraph{Scoring and Classification}
 
-Each criterion was scored as either \textbf{Yes = 1} or \textbf{No = 0}. The total 
-score determined the study’s quality classification:
 \begin{itemize}
     \item \textbf{6--7 points:} High quality
     \item \textbf{4--5 points:} Medium quality
-    \item \textbf{0--3 points:} Low quality (may be excluded)
+    \item \textbf{0--3 points:} Low quality (excluded from primary analysis)
 \end{itemize}
 
-Kitchenham recommends that “studies should be classified as high, medium or low 
-quality based on quality criteria” \cite{kitchenham_procedures_2004}.
-% reproducibility -> from scratch or just run in the local?!
+\paragraph{Data Extraction}
 
-    % \paragraph{Quality Assessment Criteria}
-
-    % Based on Kitchenham:
-    % \begin{itemize}
-    %     \item Clear aims and objectives
-    %     \item Clear description of methodology
-    %     \item Clear model/method architecture
-    %     \item Appropriate study design
-    %     \item Evaluation methodology
-    %     \item Clear results
-    %     \item Discussion of limitations
-    %     \item Open-source implementation
-    % \end{itemize}
-
-\paragraph{Data Extraction Plan}
-
-    
-According to Kitchenham’s guidelines for evidence-based software engineering, 
-the purpose of data extraction is to systematically collect all information 
-required to answer the research questions in a consistent and reproducible way.  
-Kitchenham emphasises that a predefined data extraction form must be created 
-\emph{during the planning phase} to ensure uniformity and reduce subjective 
-variation among reviewers \cite{kitchenham_procedures_2004}.
-
-\subparagraph{Predefined Data Extraction Form}
-Kitchenham states that researchers should develop a structured data extraction 
-form before conducting the review. This prevents ad-hoc decisions and ensures 
-that all necessary information is collected consistently across all studies 
-\cite{kitchenham_procedures_2004}.
-
-\subparagraph{Alignment with Research Questions}
-Kitchenham notes that extracted data must be driven directly by the review’s 
-research questions. The form should therefore include only fields that support 
-answering the research questions or performing the planned synthesis 
-\cite{kitchenham_procedures_2004}.
-
-\subparagraph{Information to Extract}
-The guidelines specify that extraction should capture both bibliographic 
-information and structured study attributes, including study context, aims, 
-methodology, data used, experimental setup, and results. Kitchenham emphasises 
-that the level of detail must be sufficient for later comparison and synthesis 
-\cite{kitchenham_procedures_2004}.
-
-\subparagraph{Reviewer Consistency}
-Kitchenham recommends that extracted data should be validated—ideally by a 
-second reviewer—to minimise bias and ensure consistency. If this is not 
-possible, reviewers should re-check their own extraction for consistency 
-\cite{kitchenham_procedures_2004}.  
-
-\subparagraph{Structured (Not Free-Form) Fields}
-Kitchenham advises the use of structured or semi-structured fields to minimise 
-subjectivity and ensure that comparable information is extracted across studies. 
-Examples include fixed fields for model architecture, datasets, evaluation 
-metrics, and SVG output structure \cite{kitchenham_procedures_2004}.
-
-\subparagraph{Avoiding Unnecessary Information}
-Only data needed for answering the research questions or for synthesis should be 
-extracted. Kitchenham warns that recording irrelevant details increases effort 
-and contributes no value to the final review \cite{kitchenham_systematic_2009}.
-
-\subparagraph{Ensuring Comparability Across Studies}
-Finally, Kitchenham highlights that the extraction process must ensure that the 
-information gathered from different studies is comparable and suitable for 
-aggregation or narrative synthesis \cite{kitchenham_systematic_2009}.  
-Using a consistent extraction form enables systematic comparison of SVG 
-generation models.
+Following Kitchenham's guidelines \cite{kitchenhamProceduresPerformingSystematic2004a}, a structured data extraction form was prepared before conducting the review. The form captured information aligned directly with the research questions: model architecture, internal vector representation, supervision strategy, evaluation metrics, output structure, and reproducibility details. Structured fields were used to ensure comparability across studies and reduce subjective variation. Only information needed to answer the research questions was extracted.
 
 
-
-% \begin{table}[H]
-% \centering
-% \caption{Data Extraction Form for Included Studies}
-% \label{tab:data-extraction-template}
-% \begin{tabular}{p{4cm} p{10cm}}
-% \hline
-% \textbf{Field} & \textbf{Extracted Information} \\
-% \hline
-
-% \textbf{Bibliographic Information} & \\
-% Title & \\
-% Authors & \\
-% Year & \\
-% Venue & \\
-
-% \hline
-% \textbf{Study Aim (RQ1)} & 
-% What the paper aims to achieve; problem being solved; contribution. \\
-
-% \hline
-% \textbf{Input Modality (RQ2)} & 
-% Image-to-SVG, Text-to-SVG or Multimodal. \\
-
-% \hline
-% \textbf{Model Architecture (RQ3)} & 
-% Core model type (Transformer, Diffusion, VAE, autoregressive decoder, DiT, implicit model, VLM/LLM, etc.); 
-% training strategy; important modules; optimization method. \\
-
-% \hline
-% \textbf{Internal SVG Representation (RQ4)} & 
-% How the model represents vector graphics internally:
-% paths, Bézier curves, control points, strokes, layers, hierarchy, tokens, neural implicit representation, etc. \\
-
-% \hline
-% \textbf{SVG Output Structure (RQ4)} & 
-% Description of the output SVG structure: number of shapes, path types, hierarchy, style constraints, editability features. \\
-
-% \hline
-% \textbf{Evaluation Metrics (RQ5)} & 
-% Quantitative metrics;  
-% Qualitative evaluation. \\
-
-% \hline
-% \textbf{Editability Assessment (RQ1 \& RQ5)} & 
-% Any information on path simplicity, layer structure, number of Bézier curves, redundancy, cleanliness, or user-editability. \\
-
-% \hline
-% \textbf{Results Summary (RQ6)} & 
-% Key results: performance vs baselines, strengths, weaknesses, notable findings. \\
-
-% \hline
-% \textbf{Open-Source Availability (RQ7)} & 
-% Code URL; availability of pretrained weights; reproducibility details. \\
-
-% \hline
-% \textbf{Suitability for Testing (RQ8)} & 
-% Is this model appropriate for downstream testing and comparison? Why? \\
-
-% \hline
-% \textbf{Additional Notes} & 
-% Any extra information relevant for synthesis. \\
-
-% \hline
-% \end{tabular}
-% \end{table}
-
-
-% \begin{itemize}
-%     \item Bibliographic metadata
-%     \item Study context and goals
-%     \item Model/method characteristics
-%     \item Vector structure and SVG properties
-%     \item Evaluation metrics and results
-%     \item Reproducibility details
-% \end{itemize}
-
-% \paragraph{Data Synthesis Plan}
-
-% Narrative synthesis includes:
-% \begin{itemize}
-%     \item Categorization by input modality, model type, output structure, evaluation type, reproducibility
-%     \item Identification of evaluation gaps
-%     \item Analysis of structural/editability challenges
-%     \item Architectural pattern comparison
-%     \item Model selection analysis (suitability, runtime feasibility)
-% \end{itemize}
-
-% \paragraph{Protocol Review}
-
-% The protocol may be reviewed by supervisors prior to execution.
-
-\section{Phase 2 — Conducting the Review}
+\section{Phase 2 --- Conducting the Review}
 
 \subsection{Execution of the Search Strategy}
-The search strings defined in Phase~1 were executed across the selected databases 
-(Google Scholar, arXiv, and ACM Digital Library) to identify relevant literature on 
-SVG generation and vector-based deep learning methods. Searches were performed using 
-the conceptual string groups defined in the search strategy, with database-specific 
-syntax adjustments where necessary. All records retrieved by these searches were 
-exported and documented before any filtering or removal of duplicates. Table~\ref{tab:searchlog} 
-summarises the number of studies returned by each search group and database.
+
+The search strings defined in Phase~1 were executed across Google Scholar, arXiv, and ACM Digital Library. All records were exported and documented before filtering. Table~\ref{tab:searchlog} summarizes the results by search group and database.
 
 \begin{table}[h!]
 \centering
@@ -459,44 +180,28 @@ summarises the number of studies returned by each search group and database.
 \hline
 \textbf{Search Group} & \textbf{Google Scholar} & \textbf{arXiv} & \textbf{ACM DL} & \textbf{Total} \\
 \hline
-SVG Generation & 14 & 12 & 4 & 30 \\
-Raster-to-Vector & 7 & 10 & 2 & 19 \\
-Text-to-SVG  & 7 & 6 & 5 & 18 \\
-Surveys/Benchmarks/Reviews & 6 & 3 & 1 & 10 \\
-SVG Fundamentals / Background & 3 & 3 & 2 & 8 \\
+SVG Generation          & 14 & 12 & 4 & 30 \\
+Raster-to-Vector        & 7  & 10 & 2 & 19 \\
+Text-to-SVG             & 7  & 6  & 5 & 18 \\
+Surveys/Benchmarks/Reviews & 6  & 3  & 1 & 10 \\
+SVG Fundamentals / Background & 3  & 3  & 2 & 8 \\
 \hline
-\textbf{Total Initial findings} & \textbf{37} & \textbf{34} & \textbf{14} & \textbf{85} \\
+\textbf{Total}          & \textbf{37} & \textbf{34} & \textbf{14} & \textbf{85} \\
 \hline
 \end{tabular}
 \end{table}
 
-\subsection{Removing of Duplications}
-After merging all search results, duplicate records—including repeated titles and preprint–conference duplicates—were removed. This resulted in 72 unique studies.
+\subsection{Duplicate Removal}
+
+After merging all search results, duplicate records (including repeated titles and preprint-conference duplicates) were removed, resulting in 72 unique studies.
 
 \subsection{Study Selection}
-\begin{itemize}
-    \item Stage 1: Title, Keywords and Abstract screening.
 
-After removing duplicates, \textbf{72} unique studies remained. A brief title and 
-abstract screening excluded works clearly unrelated to SVG generation (e.g., 
-sketch-only models, raster methods, classical vectorization, or closed-source LLMs), 
-resulting in \textbf{37} papers proceeding to full-text review.
+\paragraph{Stage 1: Title and Abstract Screening.}
+A title and abstract screening excluded works clearly unrelated to SVG generation (e.g., sketch-only models, raster methods, classical vectorization, or closed-source LLMs), reducing the set from 72 to 37 papers.
 
-
-    \item Stage 2: Full-text screening
-
-A full-text assessment was conducted on the \textbf{37} studies that passed the 
-title and abstract screening. Each paper was examined for reproducibility, 
-architectural transparency, and whether it genuinely produced SVG or structured 
-vector outputs as defined by the inclusion criteria. In total, \textbf{10} studies 
-were excluded at this stage: four lacked any open-source implementation, two were 
-benchmark papers evaluating proprietary LLMs such as GPT, Gemini, or Claude, two 
-used non-reproducible LLM-based pipelines without sufficient methodological detail, 
-and one relied on a purely rule-based vectorization approach. Following this 
-eligibility check, \textbf{27} studies remained for quality assessment.
-\end{itemize}
-
-
+\paragraph{Stage 2: Full-Text Screening.}
+Each of the 37 papers was examined for reproducibility, architectural transparency, and whether it produced SVG or structured vector outputs as defined by the inclusion criteria. In total, 23 studies were excluded at this stage for the reasons listed in Table~\ref{tab:exclusion-reasons}. Following this screening, 14 studies remained as the primary models for the comparative analysis in Chapters~4 through~8.
 
 \begin{table}[H]
 \centering
@@ -506,53 +211,33 @@ eligibility check, \textbf{27} studies remained for quality assessment.
 \hline
 \textbf{Exclusion Reason} & \textbf{Count} \\
 \hline
-No open-source implementation & 4 \\
+No open-source implementation                          & 4 \\
 Proprietary LLM benchmark studies (GPT, Gemini, Claude) & 2 \\
-Non-reproducible LLM-based pipeline & 2 \\
-Purely rule-based vectorization method & 2 \\
+Non-reproducible LLM-based pipeline                    & 2 \\
+Purely rule-based vectorization method                 & 2 \\
+Background/foundational work                           & 7 \\
+Below quality threshold (score 0--3)                   & 4 \\
+Survey or review paper (no generation model)           & 2 \\
 \hline
-\textbf{Total Excluded} & 10 \\
+\textbf{Total Excluded} & 23 \\
 \hline
 \end{tabular}
 \end{table}
 
+The 14 selected models are listed in Table~\ref{tab:model_overview} (Chapter~4). The remaining excluded studies include foundational methods cited for background context throughout the thesis (such as SketchRNN \cite{haNeuralRepresentationSketch2017} and DiffVG \cite{liDifferentiableVectorGraphics2020a}), survey papers, and models that did not meet the quality or reproducibility thresholds defined in Phase~1.
 
 \begin{table}[H]
 \centering
-\caption{Study Selection Summary Across Screening Stages}
+\caption{Study Selection Summary}
 \label{tab:selection-summary}
 \begin{tabular}{l c}
 \hline
-\textbf{Selection Stage} & \textbf{Number of Studies} \\
+\textbf{Selection Stage} & \textbf{Studies} \\
 \hline
-Initial search results (all databases) & 8  5 \\
-After duplicate removal & 72 \\
-After title and abstract screening & 37 \\
-After full-text screening & 27 \\
+Initial search results (all databases)  & 85 \\
+After duplicate removal                 & 72 \\
+After title and abstract screening      & 37 \\
+After full-text screening and quality assessment & 14 \\
 \hline
 \end{tabular}
 \end{table}
-
-
-
-
-
-
-
-
-
-% \subsection{Quality Assessment}
-
-
-% \subsection{8. Data Synthesis}
-
-% \paragraph{8.1 Narrative Synthesis}
-% Summarize findings, patterns, and categories.
-
-% \paragraph{8.2 Sensitivity Analysis}
-% Remove low-quality studies and reassess.
-
-% \section{Phase 3 — Reporting}
-
-% \subsection{9. Prepare the SLR Report}
-% Document all methodology, results, synthesis, and identified gaps.
