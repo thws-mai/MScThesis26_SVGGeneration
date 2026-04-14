@@ -6,13 +6,13 @@ Current generative models can produce visually high-quality raster images from i
 text or image, but the field falls short in vector graphics format due to its complex
 nature. An SVG file is a document that contains paths, layers, and hierarchy and it
 means its purpose is not just to represent something semantically, it should be structurally clean and neat. 
-Those requirements create far more problems to overcome to
-build a model for SVG generation. This thesis analyze SVG generation methods around fourteen open-source model 
+Those requirements create far more problems for 
+building a model that generates SVG. This thesis analyzes SVG generation methods around fourteen open-source models 
 to understand how internal design choices affect the structure of output. The analysis is shaped around three dimensions, 
 how models represent geometry of vector internally, what supervision signals lead the generation process and which metrics 
 are useful to evaluate the SVG. Representation and supervision interact rather than operate independently and they are two 
 main parts of internal design of models. The analysis showed that same loss function can produce different structural outcomes 
-depending on different representation choices and the same representation behaves differently under different supervision. 
+depending on the representation choice and the same representation behaves differently under different supervision. 
 The most consistent pattern across the models is a trade-off between visual realism and editability. Models that generate the 
 most visually detailed outputs also produce the most fragmented SVG files, although methods that constrain their representation 
 or learn from data produce cleaner results but within narrower domains. Current evaluation metrics (FID, CLIP, LPIPS) all operate 
@@ -35,9 +35,13 @@ I am also grateful for the freedom they gave me to shape the analytical approach
 
 I thank Prof. Dr. Pascal Meissner, as second examiner.
 
+I thank Shabnam Huseynova for her support during the thesis period.
+
 Special thanks to Ismail Eyyublu, a designer at McKinsey in Baku, 
 who helped me understand SVG from the perspective of someone who actually works with it. 
 His explanations of what designers expect from generated vector graphics shaped 
 how I thought about editability throughout this thesis.
 
-Finally, I thank Shabnam Huseynova for her support during the thesis period.
+
+AI language model Claude (Anthropic) was used during the preparation of this thesis for brainstorming, literature comprehension, 
+text editing, and translation. 

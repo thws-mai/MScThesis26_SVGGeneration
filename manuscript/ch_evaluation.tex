@@ -8,7 +8,7 @@ that has to look right(semantical alignment), be geometrically stable, and remai
 editable. These three requirements do not always point in 
 the same direction, and the metrics most commonly used in 
 the literature only measure the first one. 
-This chapter examines how those 14 models evaluated, which metrics used, where those practices 
+This chapter examines how those 14 models are evaluated, which metrics are used, where those practices 
 fall short, and what a more complete framework would need 
 to include.
 
@@ -38,7 +38,7 @@ technical sensitivities: it is unstable at sample sizes below
 significantly depending on the reference distribution. When 
 models are evaluated against datasets that overlap with their 
 training data, scores appear artificially favorable. Several papers 
-in the SVG generation still compute it on substantially 
+in SVG generation still compute it on substantially 
 smaller test sets, which makes cross-paper comparison unreliable.
 
 CLIP score measures semantic alignment between a rendered 
@@ -239,7 +239,7 @@ learned to measure.
 \section{Efficiency and Reproducibility}
 \label{sec:efficiency}
 
-Inference speed and reproducibility are not preferable 
+Inference speed and reproducibility are not peripheral 
 concerns for SVG generation, they directly determine 
 whether a method can be used in practice. 
 Table~\ref{tab:reproducibility} summarizes code 
@@ -330,7 +330,7 @@ dataset-trained models are fast but require strong hardware in training step.
 
 The quantitative metrics tell you how the output looks. 
 But they tell you nothing about what the SVG file actually contains.
-Every metric in Table~\ref{tab:eval_signals} operates on rendered pixels,
+Every metric in Table~\ref{tab:metrics_used} operates on rendered pixels,
 not on the SVG itself. What follows is an attempt to fix that: 
 six evaluation dimensions that cover both visual and structural quality.
 

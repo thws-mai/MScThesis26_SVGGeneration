@@ -8,7 +8,7 @@ prompt or a reference image. Others learn from datasets and generate
 SVGs through a trained decoder. A group of models avoids explicit
 geometric primitives entirely and uses neural functions to
 define shapes indirectly. 
-Theese approaches reflect fundamentally different
+These approaches reflect fundamentally different
 assumptions about what a good SVG output should look like,
 and they lead to very different trade-offs between visual
 quality and structural organization.
@@ -16,11 +16,11 @@ quality and structural organization.
 This chapter introduces the fourteen models that form the whole thesis.
 They were selected among a broader research landscape that also includes sequence-based
 sketch models, retrieval-based vectorization systems, and large language model approaches to SVG
-synthesis. That wider context is sketced below to
+synthesis. That wider context is sketched below to
 clarify where the selected models sit and why they were
 chosen. The organizing principle is simple, these fourteen
 models together cover the full range of design decisions of models
-in two dimensions as mentioned: representation and supervision, that shape how SVG
+in two dimensions already mentioned: representation and supervision, that shape how SVG
 structure emerges from a generation pipeline. A summary of
 all fourteen models is provided in
 Table~\ref{tab:model_overview}.
@@ -87,7 +87,7 @@ What varies across methods in this family is what that
 supervision signal is and how geometry is represented
 during optimization.
 
-All of them relying on DiffVG~\cite{liDifferentiableVectorGraphics2020a} to work.
+All of them rely on DiffVG~\cite{liDifferentiableVectorGraphics2020a} to work.
 The optimization loop across all methods 
 follows the same render-compare-update cycle, 
 but differs in what loss drives it and how geometry is represented.
@@ -162,11 +162,11 @@ NiVeL~\cite{thamizharasanNIVeLNeuralImplicit2024} and
 NeuralSVG~\cite{polaczekNeuralSVGImplicitRepresentation2025} take 
 a different approach to the same optimization loop. 
 They store geometry as the weights of a small MLP, instead of 
-storing geometry as explicit B\'{e}zier coordinates that 
+storing geometry as explicit B\'{e}zier coordinates that are 
 adjusted directly. The network takes a number (shape index) 
 and outputs the geometry for that shape. Nothing is stored as an explicit path.
 
-This brings different aspects to optimization based approaches. Comparing to 
+This brings different properties to optimization based approaches. Compared to 
 parametric methods, where each path is an independent object and 
 optimization can push them in different directions. But with an 
 MLP, all shapes come from the same learned function, which 

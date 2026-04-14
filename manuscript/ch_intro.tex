@@ -12,8 +12,7 @@ Among vector formats, Scalable Vector Graphics (SVG) has become
 the dominant web standard. Its structured nature makes it programmable: 
 SVG files can be generated, modified, and animated through code, 
 which is why the format underlies most of what is drawn on the web. 
-A 2024 survey by W3Techs found that over 
-65 % of all websites use SVG for their graphics [1].
+A 2024 survey by W3Techs found that over 65\% of all websites use SVG for their graphics [1].
 
 In terms of generative modelling,
 the structure of SVG introduces challenges that do not arise in raster synthesis.
@@ -31,8 +30,8 @@ approximate raster images using geometric primitives
 via edge detection, contour tracing, and polygon 
 approximation. These methods remain in use 
 but rely on heuristic rules and struggle with complex 
-scenes. Learning-based approaches introduces new 
-possibilities, but also raises questions about how 
+scenes. Learning-based approaches introduce new 
+possibilities, but also raise questions about how 
 models construct vector structure internally and 
 whether the outputs they produce are usable in practice.
 
@@ -48,7 +47,7 @@ Midjourney produce raster images that are often indistinguishable from
 photographs or hand-drawn illustrations. Progress in this area has been 
 fast. But this progress has not extended equally to vector graphics. 
 Research on SVG generation has grown, but the reliability and structural 
-quality of generated outputs remain open problems. It worth considering that, 
+quality of generated outputs remain open problems. It is worth considering that 
 vector graphics have not become less important. Instead, icons, logos, 
 interface elements, illustrations, and data visualizations are created 
 and maintained in vector formats precisely because they remain editable 
@@ -63,12 +62,12 @@ generative models are trained and evaluated and what vector graphics
 actually require. A model trained to minimize pixel reconstruction error 
 has no reason to produce clean paths or interpretable layers or a model 
 evaluated by FID score is rewarded for visual plausibility, not 
-structural usability. Those are just few examples which we will see 
-more over the time. It is understandable, because early generative 
+structural usability. Those are just a few examples which we will see 
+more over time. It is understandable, because early generative 
 models focused on raster images which led the vector graphics 
 field to be partially dependent to raster images and its features. 
 But still there are different methods and techniques used to generate 
-SVG. The thesis examines them in detail. Rather than proposing a new 
+SVG. Rather than proposing a new 
 generation model, this thesis analyzes existing methods from the inside: 
 how they represent vector graphics, what supervision signals they use, 
 and how those choices shape the structure of the outputs they generate.
@@ -97,9 +96,9 @@ Evaluation makes this harder. The metrics most commonly used
 operate on rendered pixels. They cannot detect redundant paths, broken 
 hierarchy, or unusable geometry. There is no widely adopted benchmark 
 for SVG editability, path economy, or layer coherence.
-This combination (heterogeneous architectures, 
+This combination --- heterogeneous architectures, 
 untraced design-to-structure relationships, and evaluation that ignores 
-structure) constitutes the research gap addressed by this thesis.
+structure --- constitutes the research gap addressed by this thesis.
 
 \section{Thesis Objective}
 
@@ -184,7 +183,7 @@ observed across current methods.
 
 \section{Thesis Structure}
 
-Chapter~\ref{ch:Systematic Literature Review} describes the systematic literature 
+Chapter~\ref{ch:slr} describes the systematic literature 
 review that guided model selection. Chapter~\ref{ch:Background} 
 introduces the foundational concepts required to understand 
 vector graphics generation: SVG structure, representation 

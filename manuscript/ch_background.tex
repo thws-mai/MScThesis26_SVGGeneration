@@ -156,7 +156,7 @@ vector graphics the same way internally in generation processes. Obviously, the 
 always a text-based file or SVG itself as image. What differs is the internal representation 
 used during learning or optimization. This choice directly 
 affects which algorithms can be applied, how stable training 
-is, what structural properties tend to emerge and quality of final output. 
+is, what structural properties tend to emerge and the quality of final output. 
 The following sections introduce the four representation types 
 that appear across the models analyzed in this thesis.
 
@@ -241,7 +241,7 @@ how those models actually construct their outputs.
 \section{Differentiable Rendering}
 \label{sec:diffvg}
 
-DiffVG~\cite{liDifferentiableVectorGraphics2020a} is one of the main bridge between vector and pixel spaces. 
+DiffVG~\cite{liDifferentiableVectorGraphics2020a} is one of the main bridges between vector and pixel spaces. 
 Before neural networks can optimize vector graphics using 
 image-based loss functions, there needs to be a way to connect 
 the two spaces. Vector parameters (control points, stroke widths, colors) live
@@ -256,7 +256,7 @@ DiffVG, introduced by Li et al.~\cite{liDifferentiableVectorGraphics2020a},
 solves this by approximating rasterization in a way that 
 supports gradient computation. Given a set of vector 
 parameters as input, DiffVG renders a pixel image as output. 
-Because the rendering step is differentiable, loss computed 
+Because the rendering step is differentiable, the loss computed 
 on the output image (whether a pixel reconstruction loss,
 a perceptual loss, or a signal from a pretrained semantic model) 
 can be backpropagated all the way through to the 
@@ -359,6 +359,7 @@ image. In text-to-SVG settings, where no target image
 exists, alternative guidance strategies are needed.
 
 \subsection{CLIP}
+\label{sec:clip}
 
 CLIP (Contrastive Language--Image Pretraining), introduced 
 by Radford et al.~\cite{radfordLearningTransferableVisual2021}, 
@@ -378,7 +379,7 @@ will be low. Because CLIP is differentiable with respect
 to its image input, and because images can be produced 
 from vector parameters via differentiable rendering, the 
 CLIP similarity score can serve as an optimization signal. 
-CLIP does not generate images in this setup, it acts as 
+CLIP does not generate images in this setup: it acts as 
 a semantic evaluator that provides a direction for 
 improvement. In several of the models analyzed in 
 Chapter~\ref{ch:supervision}, CLIP-based guidance serves 

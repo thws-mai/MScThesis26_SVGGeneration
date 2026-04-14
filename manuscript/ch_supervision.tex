@@ -41,7 +41,7 @@ Reconstruction supervision also requires a reference image, so it cannot support
 \section{Semantic Guidance with Vision--Language Models}
 \label{sec:clip_guidance}
 
-CLIP-based guidance (Section~\ref{sec:clip}) can score how well a rendered SVG matches a text prompt, when no refrence image is exist. 
+CLIP-based guidance (Section~\ref{sec:clip}) can score how well a rendered SVG matches a text prompt, when no refrence image exists. 
 This makes open-ended generation possible without paired SVG datasets.
 CLIP measures alignment in embedding space, not structural correctness. 
 Optimization can introduce extra primitives to push the embedding score higher, 
@@ -56,7 +56,7 @@ and early SVGDreamer configurations.
 \label{sec:diffusion_supervision}
 
 Diffusion-based supervision has become the dominant strategy for text-to-SVG generation. 
-these methods use a pretrained diffusion model as a perceptual prior, instead of relying on reference images, same as CLIP. 
+These methods use a pretrained diffusion model as a perceptual prior, instead of relying on reference images, same as CLIP. 
 The diffusion model has already learned what images should look like. 
 The SVG parameters get adjusted until the diffusion model thinks the rendered output looks right for the given text prompt.
 
@@ -221,5 +221,5 @@ Initialization tells you where it starts. That starting point often determines w
 Visual quality always comes first.
 Clean structure, when it shows up, is a side effect. 
 Some models get closer to editability through their training data or initialization, 
-but none of the fourteen directly optimizes for it
+but none of the fourteen directly optimizes for it.
 

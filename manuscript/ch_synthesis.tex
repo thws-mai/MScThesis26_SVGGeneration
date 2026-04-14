@@ -15,13 +15,13 @@ what conditions are required to produce usable SVG output.
 \section{How Representation and Supervision Shape Structure}
 \label{sec:rep_sup_interaction}
 
-Already mentioned many times during previous chapters that 
+As already mentioned in the previous chapters that 
 representation and supervision do not work independently. 
 Choices of each one depend on the other and together they determine the structure of the output.  
 Changing the representation under the same supervision signal 
 produces a completely different output. Also choice of same representation, changing the supervision signal, 
 immediately impact the result. 
-Table~\ref{tab:interaction} maps these combinations across 
+Table~\ref{tab:representation_outcomes} maps these combinations across 
 all analyzed models.
 
 
@@ -38,25 +38,24 @@ analyzed papers.}
 \textbf{Models} & \textbf{Structural Outcome} \\
 \midrule
 Parametric    & Pixel recon.   & LIVE, SAMVG       
-              & High path count, accurate boundaries, 
+              & High path count, 
                 fragmented structure \\
 Parametric    & SDS            & VectorFusion      
               & Semantically rich, dense primitives, 
-                low editability \\
+                not editable \\
 Parametric    & VPSD           & SVGDreamer, SVGDreamer++ 
               & Improved diversity, object-aware 
-                decomposition, still dense \\
+                decomposition, dense \\
 Neural implicit & SDS          & NiVeL, NeuralSVG  
               & Fixed layer count, constrained 
                 structure, moderate editability \\
 Sequential tokens & Reconstruction & DeepSVG, DeepIcon 
-              & Clean paths within training domain, 
-                poor generalization outside it \\
+              & Clean paths within training domain \\
 Neural path latent & VSD       & T2V-NPR           
-              & Smooth geometry, stable paths, 
-                dataset-bounded style \\
+              & Smooth, stable paths, 
+                dataset-bounded \\
 Continuous latent & Denoising  & SVGFusion         
-              & Logical construction order, coherent 
+              & Logical construction order, 
                 layers, fast inference \\
 Layered sequences & Denoising  & LayerTracer       
               & Designer-aligned layers, explicit 
@@ -68,14 +67,14 @@ Layered sequences & Denoising  & LayerTracer
 Diffusion-based supervision can be a very good example. VectorFusion 
 and SVGDreamer both use it to optimize explicit B\'{e}zier 
 paths~\cite{jainVectorFusionTexttoSVGAbstracting2022, 
-xingSVGDreamerTextGuided2024}. It end up with hundreds of 
+xingSVGDreamerTextGuided2024}. They end up with hundreds of 
 primitives, because that is the only way unconstrained 
 parametric paths can approximate fine visual detail.
 However, NeuralSVG uses the same kind of signal running it through 
 an implicit neural representation and gets comparable 
 visual quality with 16 
 shapes~\cite{polaczekNeuralSVGImplicitRepresentation2025},
-which less primitives or shapes means, better SVG file.
+which fewer primitives or shapes means, better SVG file.
 Just changing the representation alone changed the entire structural character of the output.
 
 Reconstruction losses shows the same example from a different 
@@ -129,8 +128,8 @@ The tension is observable in specific models.
 Methods driven by diffusion-based supervision achieve visually 
 detailed outputs by refining geometry until the rendered image 
 aligns with learned image priors. This refinement increases 
-structural complexity, but undermine usability at the same time. LIVE, VectorFusion 
-following the optimization protocol which
+structural complexity, but undermines usability at the same time. LIVE and VectorFusion 
+follow the optimization protocol which
 represents a single image using up to ~150 paths distributed 
 across multiple layers~\cite{maLayerwiseImageVectorization2022}. In that, 
 selecting or modifying a single visual component requires 
@@ -179,7 +178,7 @@ Table~\ref{tab:framework} makes this trade-off
 quantifiable, models that score highest on semantic 
 alignment (VectorFusion, SVGDreamer) consistently 
 score lowest on path economy.
-Models that constrain representation tend to produce outputs which less primitves. 
+Models that constrain representation tend to produce outputs where fewer primitves are used. 
 NeuralSVG represents complex scenes using a small 
 fixed number of shapes, improving usability despite reduced 
 photorealistic detail~\cite{polaczekNeuralSVGImplicitRepresentation2025}. 
