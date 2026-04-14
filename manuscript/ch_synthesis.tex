@@ -188,142 +188,55 @@ its visual quality as showed in~\ref{fig:supervision_comparison}
 is not falling behind from the compared models, in terms of photorealistic quality.
 
 
-
-
-              
-The realism--editability trade-off emerges from the interaction 
-between strength of supervision and constraints from representation. 
-When supervision prioritizes visual similarity without 
-structural regularization, primitive counts increase and 
-editability degrades. When representation enforces decomposition 
-or limits complexity, editability improves but visual detail 
-is reduced. Hybrid approaches that integrate structural priors 
-with semantic guidance, as in NeuralSVG and T2V-NPR, 
-suggest that both objectives can be partially reconciled, though 
-no current model satisfies both simultaneously at the level 
-required for professional design workflows.
-
-
 \section{Conditions for Clean and Editable SVG}
 \label{sec:conditions}
 
-Across the fourteen models, five conditions consistently 
-correlate with cleaner and more editable SVG outputs. These 
-are not isolated design choices but interacting factors that 
-together determine whether a generated SVG is structurally 
-usable.
+The analysis in Sections~\ref{sec:rep_sup_interaction} 
+and~\ref{sec:tradeoff} points to five conditions that 
+consistently separate editable outputs from fragmented 
+ones. Table~\ref{tab:conditions} lists them with the 
+models that satisfy each.
 
-\textbf{Primitive count control.} Methods that limit path 
-count, either through explicit budgets, latent space 
-constraints, or neural parameterization, produce outputs 
-with less redundancy. Unconstrained primitive growth, common 
-in pixel-supervised optimization, is the primary source of 
-structural fragmentation.~\cite{maLayerwiseImageVectorization2022,
-xingSVGDreamerAdvancingEditability2025}
-
-\textbf{Semantically aligned decomposition.} SVGs become 
-more editable when primitives correspond to meaningful visual 
-components rather than arbitrary geometric fragments. 
-Initialization strategies that use segmentation or saliency 
-maps~\cite{zhuSAMVGMultistageImage2023, 
-polaczekNeuralSVGImplicitRepresentation2025} and 
-architectures that model layer-wise 
-construction~\cite{songLayerTracerCognitiveAlignedLayered2025} 
-both encourage this alignment.
-
-\textbf{Constrained supervision domain.} When supervision 
-acts within a structured representation space rather than 
-directly in raster space, geometric behavior is more 
-regulated. T2V-NPR and NeuralSVG both demonstrate 
-this~\cite{zhangTexttoVectorGenerationNeural2024, 
-polaczekNeuralSVGImplicitRepresentation2025}.
-
-\textbf{Informed initialization.} Random initialization 
-with unconstrained optimization leads to unstable structure. 
-Semantically meaningful starting points reduce the need for 
-excessive primitive refinement and improve structural 
-coherence from the 
-outset~\cite{zhuSAMVGMultistageImage2023, 
-xingSVGDreamerTextGuided2024}.
-
-\textbf{Design-aware architectural priors.} Models that 
-incorporate layering, sequential construction, or scene 
-composition logic produce outputs that more closely reflect 
-designer intent. LayerTracer is the clearest 
-example~\cite{songLayerTracerCognitiveAlignedLayered2025}.
-
-
-\begin{table}[h!]
+\begin{table}[ht]
 \centering
-\caption{Conditions for clean and editable SVG and the 
-models that satisfy each.}
+\caption{Five conditions for clean and editable SVG 
+output, derived from the representation and supervision 
+analysis in Chapters~\ref{ch:representation} 
+and~\ref{ch:supervision}.}
 \label{tab:conditions}
-\small
-\begin{tabularx}{\textwidth}{l l l}
-\toprule
-\textbf{Condition} & \textbf{Models} & \textbf{Effect} \\
-\midrule
-Primitive count control   & NeuralSVG, NiVeL, T2V-NPR      
-                          & Reduces fragmentation \\
-Semantic decomposition    & SAMVG, NeuralSVG, LayerTracer   
-                          & Improves element grouping \\
-Constrained supervision   & NeuralSVG, T2V-NPR              
-                          & Stabilizes geometry \\
-Informed initialization   & SAMVG, SVGDreamer, NeuralSVG    
-                          & Reduces redundant refinement \\
-Design-aware priors       & LayerTracer, SVGFusion          
-                          & Editability by design \\
-\bottomrule
-\end{tabularx}
+\begin{tabular}{p{4cm} p{4.5cm} p{4.5cm}}
+\hline
+\textbf{Condition} & \textbf{Models} & \textbf{Where analyzed} \\
+\hline
+Primitive count control & NeuralSVG, NiVeL, T2V-NPR & Section~\ref{sec:parametric}, Table~\ref{tab:rep_structure} \\
+Semantic decomposition & SAMVG, NeuralSVG, LayerTracer & Section~\ref{sec:init_priors} \\
+Constrained supervision & NeuralSVG, T2V-NPR & Section~\ref{sec:diffusion_supervision} \\
+Informed initialization & SAMVG, SVGDreamer, NeuralSVG & Section~\ref{sec:init_priors} \\
+Design-aware priors & LayerTracer, SVGFusion & Section~\ref{sec:dataset_vs_instance} \\
+\hline
+\end{tabular}
 \end{table}
 
-No current model satisfies all five conditions simultaneously. 
-NeuralSVG comes closest among optimization-based methods. 
-LayerTracer comes closest among dataset-trained methods. 
-The gap between them reflects the broader realism--editability 
-trade-off: NeuralSVG produces more flexible outputs but requires 
-more compute, while LayerTracer produces consistently structured 
-outputs bounded by its training distribution.
+No model satisfies all five. NeuralSVG comes closest 
+on the optimization side. LayerTracer comes closest on 
+the dataset side. NeuralSVG is more flexible but slower. 
+LayerTracer is faster but limited to what its training 
+data covers.
 
-A related limitation is domain coverage. Dataset-trained 
-models are bounded by their training distribution: DeepSVG 
-and DeepIcon generate only icons, T2V-NPR produces 
-stylized non-photorealistic outputs, and SVGFusion 
-operates within the scope of its SVGX training 
-corpus~\cite{carlierDeepSVGHierarchicalGenerative2020, 
+Domain coverage is a related limitation. Dataset-trained 
+models only generate what they were trained on: icons 
+(DeepSVG, DeepIcon), stylized graphics (T2V-NPR), or 
+the SVGX corpus 
+(SVGFusion)~\cite{carlierDeepSVGHierarchicalGenerative2020, 
 bingDeepIconHierarchicalNetwork2024, 
 zhangTexttoVectorGenerationNeural2024, 
 xingSVGFusionScalableTexttoSVG2025}. Optimization-based 
-methods handle broader visual domains through their 
-pretrained diffusion priors, but at the structural costs 
-described above. No current model in the analyzed set 
-covers specialized design domains such as typography, 
-technical illustration, or character design.
+methods handle broader domains through diffusion priors 
+but with the structural costs described in 
+Section~\ref{sec:rep_sup_interaction}. None of the 
+fourteen covers typography, technical illustration, or 
+character design.
 
 
-\section{Implications for Future Work}
-\label{sec:implications}
 
-Two directions follow from the analysis.
 
-The first is tighter integration between representation design 
-and supervision. The analysis consistently shows that supervision 
-operating within constrained representations produces better 
-structural outcomes than supervision operating in raster space. 
-Future models that explicitly co-design representation 
-constraints and supervision signals, rather than treating 
-them as independent architectural decisions, are likely to 
-make more progress on the realism--editability trade-off than 
-approaches that improve either dimension alone.
-
-The second is the formalization of editability as a training 
-objective rather than an evaluation afterthought. LayerTracer 
-demonstrates that models can be trained directly on designer 
-construction logic, producing editability by design rather than 
-by constraint. Extending this approach to richer scene types, 
-larger datasets, and more expressive representations would 
-address the generalization limitations that currently bound 
-dataset-trained methods. Combining this with the geometric 
-stability advantages of neural implicit representations 
-represents a direction that none of the fourteen analyzed 
-models has yet explored fully.

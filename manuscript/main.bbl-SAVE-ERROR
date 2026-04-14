@@ -2776,6 +2776,15 @@
       \verb C:\Users\fikre\Zotero\storage\XRSPT3BW\Kitchenham et al. - 2009 - Systematic literature reviews in software engineer.pdf
       \endverb
     \endentry
+    \entry{loo_structural_2026}{misc}{}{}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labeltitlesource}{title}
+      \field{note}{arXiv:2604.08809}
+      \field{title}{Structural Evaluation Metrics for SVG Generation via Leave-One-Out Analysis}
+      \field{year}{2026}
+      \true{nocite}
+    \endentry
   \enddatalist
 \endrefsection
 \endinput

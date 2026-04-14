@@ -3,13 +3,12 @@
 
 This thesis examined how SVG generation methods construct 
 vector graphics and why their structural outcomes differ. 
-The analysis was organized around two dimensions (representation 
-and supervision) and applied across fourteen open-source 
-models spanning optimization-based, neural implicit, and 
-dataset-driven approaches. The following sections address 
-each research question in turn and summarize the 
-contributions of the work.
-
+The analysis was organized around three dimensions 
+(representation, supervision, and evaluation) and applied 
+across fourteen open-source models. The goal was to provide 
+a clear reference for anyone working on SVG generation: 
+what current models do, how their design choices shape 
+the output, and where the field still falls short.
 
 \section*{Answers to the Research Questions}
 
@@ -131,6 +130,10 @@ supervision, informed initialization, and design-logic
 priors) which represent a checklist for future model 
 design that does not currently exist in the literature.
 
+Additionally, architectural pipeline diagrams were 
+created to visualize how the optimization-based 
+methods share and diverge in their generation loops 
+(Appendix~\ref{app:pipelines}).
 
 \section*{Limitations}
 
@@ -138,23 +141,21 @@ The analysis is bounded by the set of publicly
 available, open-source models with documented 
 implementations. Several models with reported strong 
 results, including VectorFusion and DeepIcon, did not 
-have accessible code at the time of writing, limiting 
-the depth of implementation-level analysis for those 
-methods. Quantitative comparison across models was not 
-feasible because reported metrics are heterogeneous: 
+have accessible code at the time of writing, the depth of implementation-level analysis 
+is limited for those methods. Quantitative comparison across models was not 
+feasible because reported metrics are heterogeneous,
 different models evaluate on different datasets, use 
 different implementations of shared metrics, and report 
-results under different experimental conditions. The 
-evaluation framework proposed in 
+results under different experimental conditions. The framework proposed in 
 Chapter~\ref{ch:Evaluation} is conceptual rather than 
-empirically validated.
+being practically applicable.
 
 
 \section*{Future Work}
 
 Three directions follow directly from the findings.
 
-Evaluation protocols that explicitly measure structural 
+Evaluation protocols that measure structural 
 quality remain the most immediate gap. A benchmark 
 combining path economy, layer coherence, and editability 
 scores alongside visual fidelity metrics would enable 
