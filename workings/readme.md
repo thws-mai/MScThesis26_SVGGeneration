@@ -20,12 +20,6 @@ Most AI-generated SVGs look decent as images but are structurally unusable. Why?
 
 This thesis argues that the structural quality of generated SVGs is primarily shaped by the interaction between two architectural decisions: **how the SVG is represented** (Bézier paths, shape primitives, latent codes) and **what supervision signal drives the learning** (pixel reconstruction, text-guided diffusion, dataset-driven training).
 
-## What's Inside
-
-```
-manuscript/     Thesis document (LaTeX source + compiled PDF)
-papers/         Reference papers analyzed in the survey
-```
 
 ## Key Contributions
 
