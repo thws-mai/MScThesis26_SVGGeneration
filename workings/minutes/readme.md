@@ -26,7 +26,9 @@ Ninth Meeting -> on 9th of December w/Philipp and Prof. Magda about an hour.
 
 Tenth Meeting -> on 16th of December w/Philipp and Prof. Magda about an hour. 
 
-Eleventh Meeting -> on 13th of January (2026) w/ Philipp and Prof. Magda
+Eleventh Meeting -> on 13th of January (2026) w/ Philipp and Prof. Magda.
+
+Twelfth Meeting -> on 6th of February w/ Philipp and Prof. Magda.
 
 
 
