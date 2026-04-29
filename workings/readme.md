@@ -25,7 +25,6 @@ This thesis argues that the structural quality of generated SVGs is primarily sh
 ```
 manuscript/     Thesis document (LaTeX source + compiled PDF)
 papers/         Reference papers analyzed in the survey
-code/           Supporting analysis and evaluation code
 ```
 
 ## Key Contributions
