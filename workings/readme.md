@@ -60,4 +60,4 @@ Dataset-driven: DeepSVG, DeepIcon, SVGFusion, T2V w/ NPR, LayerTracer
 
 - GitHub: [@mutallimof](https://github.com/mutallimof)
 - Email: fikretmutallimov@gmail.com
-- LinkedIn: [Fikrat Mutallimov](https://www.linkedin.com/in/fikratmutallimov-5b72152b4)
+- LinkedIn: [Fikrat Mutallimov](https://www.linkedin.com/in/fikrat-mutallimov-5b72152b4/)
