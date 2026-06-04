@@ -2,9 +2,11 @@
 
 **MSc Thesis — Technical University of Applied Sciences Würzburg-Schweinfurt (THWS)**  
 **Author:** Fikrat Mutallimov  
-**Supervisor:** Prof. Mária Gregorová  
+**Supervisor:** Prof. Magda Gregorová  
 **Program:** Applied Computer Science — Artificial Intelligence  
 **Date:** 2026
+
+**Thesis text:** [./manuscript/main.pdf](./manuscript/main.pdf) 
 
 ---
 
