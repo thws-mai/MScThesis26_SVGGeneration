@@ -3,7 +3,7 @@
     % The template is provided "as is" without any guarantees.
     % You are free to use and modify as you see fit.
 
-    \documentclass[12pt,twoside=false,a4paper,parskip]{scrbook} % koma-script book environment for cleaner typesetting and more flexibility
+    \documentclass[12pt,twoside=false,a4paper,parskip,listof=totoc,appendixprefix=true,numbers=noenddot]{scrbook} % koma-script book environment for cleaner typesetting and more flexibility
     % \documentclass[12pt,twoside,a4paper,parskip,openright]{scrbook} % use this for double-sided printing
 
     %% ========== preamble ========== %%
@@ -26,6 +26,9 @@
                 ]{biblatex}
     \DeclareDelimFormat{nameyeardelim}{\addcomma\space} % comma to separate name and year in cite command
     \addbibresource{references.bib} % your bibliography file
+    \setcounter{biburllcpenalty}{7000} % allow line breaks in long URLs
+    \setcounter{biburlucpenalty}{8000}
+    \setcounter{biburlnumpenalty}{9000}
 
     \input{custom_commands.tex}
 
@@ -47,7 +50,6 @@
     \mainmatter
 
     \input{ch_intro}
-    \input{ch_methodology.tex}
     \input{ch_background.tex}
     \input{ch_body.tex}
     \input{ch_representation.tex}
@@ -55,23 +57,17 @@
     \input{ch_evaluation.tex}
     \input{ch_synthesis.tex}
     \input{ch_conclusion.tex}
-    \addcontentsline{toc}{chapter}{Bibliography}
-    \nocite{*}
-
-    \printbibliography
-
-    \backmatter
+    \printbibliography[heading=bibintoc]
 
     \listoffigures
-    \addcontentsline{toc}{chapter}{List of Figures}
 
     \appendix
-    \addchap{Appendix}
+    % number the appendix chapters (A, B, C) after the bibliography
+    \makeatletter\@mainmattertrue\makeatother
 
     \input{appendix}
-    
-    
-    \newpage
+
+    \backmatter
 
 
     % this you need to sign and include the signed pdf

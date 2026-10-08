@@ -1,599 +1,344 @@
-@misc{bingDeepIconHierarchicalNetwork2024,
+@inproceedings{bingDeepIconHierarchicalNetwork2024,
   title = {{{DeepIcon}}: {{A Hierarchical Network}} for {{Layer-wise Icon Vectorization}}},
-  shorttitle = {{{DeepIcon}}},
   author = {Bing, Qi and Zhang, Chaoyi and Cai, Weidong},
-  year = {2024},
-  month = oct,
-  number = {arXiv:2410.15760},
-  eprint = {2410.15760},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2410.15760},
-  urldate = {2025-11-23},
-  abstract = {In contrast to the well-established technique of rasterization, vectorization of images poses a significant challenge in the field of computer graphics. Recent learning-based methods for converting raster images to vector formats frequently suffer from incomplete shapes, redundant path prediction, and a lack of accuracy in preserving the semantics of the original content. These shortcomings severely hinder the utility of these methods for further editing and manipulation of images. To address these challenges, we present DeepIcon, a novel hierarchical image vectorization network specifically tailored for generating variable-length icon vector graphics based on the raster image input. Our experimental results indicate that DeepIcon can efficiently produce Scalable Vector Graphics (SVGs) directly from raster images, bypassing the need for a differentiable rasterizer while also demonstrating a profound understanding of the image contents.},
-  archiveprefix = {arXiv},
-  keywords = {Editable},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\U6Q8E2Y5\\Bing et al. - 2024 - DeepIcon A Hierarchical Network for Layer-wise Ic.pdf;C\:\\Users\\fikre\\Zotero\\storage\\XN5K4Q4E\\2410.html}
+  booktitle = {International Conference on Digital Image Computing: Techniques and Applications ({{DICTA}})},
+  pages = {70--77},
+  year = {2024}
 }
 
 @inproceedings{carlierDeepSVGHierarchicalGenerative2020,
   title = {{{DeepSVG}}: {{A Hierarchical Generative Network}} for {{Vector Graphics Animation}}},
-  booktitle = {Advances in {{Neural Information Processing Systems}}},
   author = {Carlier, Alexandre and Danelljan, Martin and Alahi, Alexandre and Timofte, Radu},
-  editor = {Larochelle, H. and Ranzato, M. and Hadsell, R. and Balcan, M. F. and Lin, H.},
-  year = {2020},
+  booktitle = {Advances in {{Neural Information Processing Systems}}},
   volume = {33},
   pages = {16351--16361},
-  publisher = {Curran Associates, Inc.}
+  year = {2020}
 }
 
 @book{eisenbergSVGEssentialsProducing20,
   title = {{{SVG}} Essentials: Producing Scalable Vector Graphics with {{XML}}},
-  shorttitle = {{{SVG}} Essentials},
   author = {Eisenberg, J. David},
-  year = {20},
-  edition = {Repr.},
   publisher = {O'Reilly},
-  address = {Beijing K{\"o}ln},
-  isbn = {978-0-596-00223-7},
-  langid = {english},
-  file = {C:\Users\fikre\Zotero\storage\P86T8JXJ\Eisenberg - SVG essentials producing scalable vector graphics.pdf}
+  year = {2002}
 }
 
-@misc{jainVectorFusionTexttoSVGAbstracting2022,
+@inproceedings{jainVectorFusionTexttoSVGAbstracting2022,
   title = {{{VectorFusion}}: {{Text-to-SVG}} by {{Abstracting Pixel-Based Diffusion Models}}},
-  shorttitle = {{{VectorFusion}}},
   author = {Jain, Ajay and Xie, Amber and Abbeel, Pieter},
-  year = {2022},
-  month = nov,
-  number = {arXiv:2211.11319},
-  eprint = {2211.11319},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2211.11319},
-  urldate = {2025-10-22},
-  abstract = {Diffusion models have shown impressive results in text-to-image synthesis. Using massive datasets of captioned images, diffusion models learn to generate raster images of highly diverse objects and scenes. However, designers frequently use vector representations of images like Scalable Vector Graphics (SVGs) for digital icons or art. Vector graphics can be scaled to any size, and are compact. We show that a text-conditioned diffusion model trained on pixel representations of images can be used to generate SVG-exportable vector graphics. We do so without access to large datasets of captioned SVGs. By optimizing a differentiable vector graphics rasterizer, our method, VectorFusion, distills abstract semantic knowledge out of a pretrained diffusion model. Inspired by recent text-to-3D work, we learn an SVG consistent with a caption using Score Distillation Sampling. To accelerate generation and improve fidelity, VectorFusion also initializes from an image sample. Experiments show greater quality than prior work, and demonstrate a range of styles including pixel art and sketches. See our project webpage at https://ajayj.com/vectorfusion .},
-  archiveprefix = {arXiv},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\WU3NQ3PR\\Jain et al. - 2022 - VectorFusion Text-to-SVG by Abstracting Pixel-Bas.pdf;C\:\\Users\\fikre\\Zotero\\storage\\X4ZJQ3DN\\2211.html}
+  booktitle = {Proceedings of the {{IEEE/CVF}} Conference on Computer Vision and Pattern Recognition ({{CVPR}})},
+  pages = {1911--1920},
+  year = {2023}
 }
 
 @article{liDifferentiableVectorGraphics2020a,
   title = {Differentiable Vector Graphics Rasterization for Editing and Learning},
   author = {Li, Tzu-Mao and Luk{\'a}{\v c}, Michal and Gharbi, Micha{\"e}l and {Ragan-Kelley}, Jonathan},
-  year = {2020},
-  month = nov,
-  journal = {ACM Trans. Graph.},
+  journal = {ACM Transactions on Graphics},
   volume = {39},
   number = {6},
   pages = {193:1--193:15},
-  issn = {0730-0301},
-  doi = {10.1145/3414685.3417871},
-  urldate = {2025-12-01},
-  abstract = {We introduce a differentiable rasterizer that bridges the vector graphics and raster image domains, enabling powerful raster-based loss functions, optimization procedures, and machine learning techniques to edit and generate vector content. We observe that vector graphics rasterization is differentiable after pixel prefiltering. Our differentiable rasterizer offers two prefiltering options: an analytical prefiltering technique and a multisampling anti-aliasing technique. The analytical variant is faster but can suffer from artifacts such as conflation. The multisampling variant is still efficient, and can render high-quality images while computing unbiased gradients for each pixel with respect to curve parameters.We demonstrate that our rasterizer enables new applications, including a vector graphics editor guided by image metrics, a painterly rendering algorithm that fits vector primitives to an image by minimizing a deep perceptual loss function, new vector graphics editing algorithms that exploit well-known image processing methods such as seam carving, and deep generative models that generate vector content from raster-only supervision under a VAE or GAN training objective.},
-  file = {C:\Users\fikre\Zotero\storage\FN5T3NQP\Li et al. - 2020 - Differentiable vector graphics rasterization for e.pdf}
+  year = {2020}
 }
 
-@misc{maLayerwiseImageVectorization2022,
+@inproceedings{maLayerwiseImageVectorization2022,
   title = {Towards {{Layer-wise Image Vectorization}}},
   author = {Ma, Xu and Zhou, Yuqian and Xu, Xingqian and Sun, Bin and Filev, Valerii and Orlov, Nikita and Fu, Yun and Shi, Humphrey},
-  year = {2022},
-  month = jun,
-  number = {arXiv:2206.04655},
-  eprint = {2206.04655},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2206.04655},
-  urldate = {2025-10-22},
-  abstract = {Image rasterization is a mature technique in computer graphics, while image vectorization, the reverse path of rasterization, remains a major challenge. Recent advanced deep learning-based models achieve vectorization and semantic interpolation of vector graphs and demonstrate a better topology of generating new figures. However, deep models cannot be easily generalized to out-of-domain testing data. The generated SVGs also contain complex and redundant shapes that are not quite convenient for further editing. Specifically, the crucial layer-wise topology and fundamental semantics in images are still not well understood and thus not fully explored. In this work, we propose Layer-wise Image Vectorization, namely LIVE, to convert raster images to SVGs and simultaneously maintain its image topology. LIVE can generate compact SVG forms with layer-wise structures that are semantically consistent with human perspective. We progressively add new bezier paths and optimize these paths with the layer-wise framework, newly designed loss functions, and component-wise path initialization technique. Our experiments demonstrate that LIVE presents more plausible vectorized forms than prior works and can be generalized to new images. With the help of this newly learned topology, LIVE initiates human editable SVGs for both designers and other downstream applications. Codes are made available at https://github.com/Picsart-AI-Research/LIVE-Layerwise-Image-Vectorization.},
-  archiveprefix = {arXiv},
-  keywords = {Editable},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\AWRHFKIP\\Ma et al. - 2022 - Towards Layer-wise Image Vectorization.pdf;C\:\\Users\\fikre\\Zotero\\storage\\39MS9WG6\\2206.html}
+  booktitle = {Proceedings of the {{IEEE/CVF}} Conference on Computer Vision and Pattern Recognition ({{CVPR}})},
+  pages = {16314--16323},
+  year = {2022}
 }
 
-@misc{polaczekNeuralSVGImplicitRepresentation2025,
+@inproceedings{polaczekNeuralSVGImplicitRepresentation2025,
   title = {{{NeuralSVG}}: {{An Implicit Representation}} for {{Text-to-Vector Generation}}},
-  shorttitle = {{{NeuralSVG}}},
   author = {Polaczek, Sagi and Alaluf, Yuval and Richardson, Elad and Vinker, Yael and {Cohen-Or}, Daniel},
-  year = {2025},
-  publisher = {arXiv},
-  doi = {10.48550/ARXIV.2501.03992},
-  urldate = {2025-11-30},
-  abstract = {Vector graphics are essential in design, providing artists with a versatile medium for creating resolution-independent and highly editable visual content. Recent advancements in vision-language and diffusion models have fueled interest in text-to-vector graphics generation. However, existing approaches often suffer from over-parameterized outputs or treat the layered structure - a core feature of vector graphics - as a secondary goal, diminishing their practical use. Recognizing the importance of layered SVG representations, we propose NeuralSVG, an implicit neural representation for generating vector graphics from text prompts. Inspired by Neural Radiance Fields (NeRFs), NeuralSVG encodes the entire scene into the weights of a small MLP network, optimized using Score Distillation Sampling (SDS). To encourage a layered structure in the generated SVG, we introduce a dropout-based regularization technique that strengthens the standalone meaning of each shape. We additionally demonstrate that utilizing a neural representation provides an added benefit of inference-time control, enabling users to dynamically adapt the generated SVG based on user-provided inputs, all with a single learned representation. Through extensive qualitative and quantitative evaluations, we demonstrate that NeuralSVG outperforms existing methods in generating structured and flexible SVG.},
-  copyright = {arXiv.org perpetual, non-exclusive license},
-  keywords = {Editable}
+  booktitle = {Proceedings of the {{IEEE/CVF}} International Conference on Computer Vision ({{ICCV}})},
+  pages = {15458--15468},
+  year = {2025}
 }
 
 @article{quintScalableVectorGraphics2003,
   title = {Scalable Vector Graphics},
   author = {Quint, A.},
-  year = {2003},
-  month = jul,
-  journal = {IEEE Multimedia},
+  journal = {IEEE MultiMedia},
   volume = {10},
   number = {3},
   pages = {99--102},
-  issn = {1070-986X},
-  doi = {10.1109/MMUL.2003.1218261},
-  urldate = {2025-11-03},
-  copyright = {https://ieeexplore.ieee.org/Xplorehelp/downloads/license-information/IEEE.html},
-  langid = {english},
-  file = {C:\Users\fikre\Zotero\storage\B4GQ6IRH\Quint - 2003 - Scalable vector graphics.pdf}
+  year = {2003}
 }
 
-@misc{reddyIm2VecSynthesizingVector2021,
+@inproceedings{reddyIm2VecSynthesizingVector2021,
   title = {{{Im2Vec}}: {{Synthesizing Vector Graphics}} without {{Vector Supervision}}},
-  shorttitle = {{{Im2Vec}}},
   author = {Reddy, Pradyumna and Gharbi, Michael and Lukac, Michal and Mitra, Niloy J.},
-  year = {2021},
-  month = apr,
-  number = {arXiv:2102.02798},
-  eprint = {2102.02798},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2102.02798},
-  urldate = {2025-10-22},
-  abstract = {Vector graphics are widely used to represent fonts, logos, digital artworks, and graphic designs. But, while a vast body of work has focused on generative algorithms for raster images, only a handful of options exists for vector graphics. One can always rasterize the input graphic and resort to image-based generative approaches, but this negates the advantages of the vector representation. The current alternative is to use specialized models that require explicit supervision on the vector graphics representation at training time. This is not ideal because large-scale high quality vector-graphics datasets are difficult to obtain. Furthermore, the vector representation for a given design is not unique, so models that supervise on the vector representation are unnecessarily constrained. Instead, we propose a new neural network that can generate complex vector graphics with varying topologies, and only requires indirect supervision from readily-available raster training images (i.e., with no vector counterparts). To enable this, we use a differentiable rasterization pipeline that renders the generated vector shapes and composites them together onto a raster canvas. We demonstrate our method on a range of datasets, and provide comparison with state-of-the-art SVG-VAE and DeepSVG, both of which require explicit vector graphics supervision. Finally, we also demonstrate our approach on the MNIST dataset, for which no groundtruth vector representation is available. Source code, datasets, and more results are available at geometry.cs.ucl.ac.uk/projects/2021/Im2Vec/},
-  archiveprefix = {arXiv},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\9DWI2KLB\\Reddy et al. - 2021 - Im2Vec Synthesizing Vector Graphics without Vecto.pdf;C\:\\Users\\fikre\\Zotero\\storage\\LFB5LDIG\\2102.html}
+  booktitle = {Proceedings of the {{IEEE/CVF}} Conference on Computer Vision and Pattern Recognition ({{CVPR}})},
+  pages = {7342--7351},
+  year = {2021}
 }
 
-@misc{songLayerTracerCognitiveAlignedLayered2025,
+@inproceedings{songLayerTracerCognitiveAlignedLayered2025,
   title = {{{LayerTracer}}: {{Cognitive-Aligned Layered SVG Synthesis}} via {{Diffusion Transformer}}},
-  shorttitle = {{{LayerTracer}}},
   author = {Song, Yiren and Chen, Danze and Shou, Mike Zheng},
-  year = {2025},
-  month = aug,
-  number = {arXiv:2502.01105},
-  eprint = {2502.01105},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2502.01105},
-  urldate = {2025-11-23},
-  abstract = {Generating cognitive-aligned layered SVGs remains challenging due to existing methods' tendencies toward either oversimplified single-layer outputs or optimization-induced shape redundancies. We propose LayerTracer, a diffusion transformer based framework that bridges this gap by learning designers' layered SVG creation processes from a novel dataset of sequential design operations. Our approach operates in two phases: First, a text-conditioned DiT generates multi-phase rasterized construction blueprints that simulate human design workflows. Second, layer-wise vectorization with path deduplication produces clean, editable SVGs. For image vectorization, we introduce a conditional diffusion mechanism that encodes reference images into latent tokens, guiding hierarchical reconstruction while preserving structural integrity. Extensive experiments demonstrate LayerTracer's superior performance against optimization-based and neural baselines in both generation quality and editability, effectively aligning AI-generated vectors with professional design cognition.},
-  archiveprefix = {arXiv},
-  keywords = {Editable},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\AXUZF6FD\\Song et al. - 2025 - LayerTracer Cognitive-Aligned Layered SVG Synthes.pdf;C\:\\Users\\fikre\\Zotero\\storage\\WNC8T2QS\\2502.html}
+  booktitle = {Proceedings of the {{IEEE/CVF}} International Conference on Computer Vision ({{ICCV}})},
+  year = {2025}
 }
 
-@misc{thamizharasanNIVeLNeuralImplicit2024,
+@inproceedings{thamizharasanNIVeLNeuralImplicit2024,
   title = {{{NIVeL}}: {{Neural Implicit Vector Layers}} for {{Text-to-Vector Generation}}},
-  shorttitle = {{{NIVeL}}},
   author = {Thamizharasan, Vikas and Liu, Difan and Fisher, Matthew and Zhao, Nanxuan and Kalogerakis, Evangelos and Lukac, Michal},
-  year = {2024},
-  month = may,
-  number = {arXiv:2405.15217},
-  eprint = {2405.15217},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2405.15217},
-  urldate = {2025-10-22},
-  abstract = {The success of denoising diffusion models in representing rich data distributions over 2D raster images has prompted research on extending them to other data representations, such as vector graphics. Unfortunately due to their variable structure and scarcity of vector training data, directly applying diffusion models on this domain remains a challenging problem. Using workarounds like optimization via Score Distillation Sampling (SDS) is also fraught with difficulty, as vector representations are non trivial to directly optimize and tend to result in implausible geometries such as redundant or self-intersecting shapes. NIVeL addresses these challenges by reinterpreting the problem on an alternative, intermediate domain which preserves the desirable properties of vector graphics -- mainly sparsity of representation and resolution-independence. This alternative domain is based on neural implicit fields expressed in a set of decomposable, editable layers. Based on our experiments, NIVeL produces text-to-vector graphics results of significantly better quality than the state-of-the-art.},
-  archiveprefix = {arXiv},
-  keywords = {Editable},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\38NMNQUW\\Thamizharasan et al. - 2024 - NIVeL Neural Implicit Vector Layers for Text-to-V.pdf;C\:\\Users\\fikre\\Zotero\\storage\\F5S5496B\\2405.html}
+  booktitle = {Proceedings of the {{IEEE/CVF}} Conference on Computer Vision and Pattern Recognition ({{CVPR}})},
+  pages = {4589--4597},
+  year = {2024}
 }
 
 @article{xingSVGDreamerAdvancingEditability2025,
   title = {{{SVGDreamer}}++: {{Advancing Editability}} and {{Diversity}} in {{Text-Guided SVG Generation}}},
-  shorttitle = {{{SVGDreamer}}++},
   author = {Xing, Ximing and Yu, Qian and Wang, Chuang and Zhou, Haitao and Zhang, Jing and Xu, Dong},
-  year = {2025},
-  month = jul,
   journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
   volume = {47},
   number = {7},
   pages = {5397--5413},
-  issn = {0162-8828, 2160-9292, 1939-3539},
-  doi = {10.1109/TPAMI.2025.3547889},
-  urldate = {2025-10-22},
-  copyright = {https://ieeexplore.ieee.org/Xplorehelp/downloads/license-information/IEEE.html},
-  file = {C:\Users\fikre\Zotero\storage\RWDJJGEV\Xing et al. - 2025 - SVGDreamer++ Advancing Editability and Diversity .pdf}
+  year = {2025}
 }
 
-@misc{xingSVGDreamerTextGuided2024,
+@inproceedings{xingSVGDreamerTextGuided2024,
   title = {{{SVGDreamer}}: {{Text Guided SVG Generation}} with {{Diffusion Model}}},
-  shorttitle = {{{SVGDreamer}}},
   author = {Xing, Ximing and Zhou, Haitao and Wang, Chuang and Zhang, Jing and Xu, Dong and Yu, Qian},
-  year = {2024},
-  month = dec,
-  number = {arXiv:2312.16476},
-  eprint = {2312.16476},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2312.16476},
-  urldate = {2025-10-22},
-  abstract = {Recently, text-guided scalable vector graphics (SVGs) synthesis has shown promise in domains such as iconography and sketch. However, existing text-to-SVG generation methods lack editability and struggle with visual quality and result diversity. To address these limitations, we propose a novel text-guided vector graphics synthesis method called SVGDreamer. SVGDreamer incorporates a semantic-driven image vectorization (SIVE) process that enables the decomposition of synthesis into foreground objects and background, thereby enhancing editability. Specifically, the SIVE process introduces attention-based primitive control and an attention-mask loss function for effective control and manipulation of individual elements. Additionally, we propose a Vectorized Particle-based Score Distillation (VPSD) approach to address issues of shape over-smoothing, color over-saturation, limited diversity, and slow convergence of the existing text-to-SVG generation methods by modeling SVGs as distributions of control points and colors. Furthermore, VPSD leverages a reward model to re-weight vector particles, which improves aesthetic appeal and accelerates convergence. Extensive experiments are conducted to validate the effectiveness of SVGDreamer, demonstrating its superiority over baseline methods in terms of editability, visual quality, and diversity. Project page: https://ximinng.github.io/SVGDreamer-project/},
-  archiveprefix = {arXiv},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\C2U46WXG\\Xing et al. - 2024 - SVGDreamer Text Guided SVG Generation with Diffus.pdf;C\:\\Users\\fikre\\Zotero\\storage\\A2GN2MVS\\2312.html}
+  booktitle = {Proceedings of the {{IEEE/CVF}} Conference on Computer Vision and Pattern Recognition ({{CVPR}})},
+  pages = {4546--4555},
+  year = {2024}
 }
 
 @misc{xingSVGFusionScalableTexttoSVG2025,
   title = {{{SVGFusion}}: {{Scalable Text-to-SVG Generation}} via {{Vector Space Diffusion}}},
-  shorttitle = {{{SVGFusion}}},
   author = {Xing, Ximing and Hu, Juncheng and Zhang, Jing and Xu, Dong and Yu, Qian},
   year = {2025},
-  month = mar,
-  number = {arXiv:2412.10437},
   eprint = {2412.10437},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2412.10437},
-  urldate = {2025-10-22},
-  abstract = {In this work, we introduce SVGFusion, a Text-to-SVG model capable of scaling to real-world SVG data without relying on text-based discrete language models or prolonged Score Distillation Sampling (SDS) optimization. The core idea of SVGFusion is to utilize a popular Text-to-Image framework to learn a continuous latent space for vector graphics. Specifically, SVGFusion comprises two key modules: a Vector-Pixel Fusion Variational Autoencoder (VP-VAE) and a Vector Space Diffusion Transformer (VS-DiT). The VP-VAE processes both SVG codes and their corresponding rasterizations to learn a continuous latent space, while the VS-DiT generates latent codes within this space based on the input text prompt. Building on the VP-VAE, we propose a novel rendering sequence modeling strategy which enables the learned latent space to capture the inherent creation logic of SVGs. This allows the model to generate SVGs with higher visual quality and more logical construction, while systematically avoiding occlusion in complex graphic compositions. Additionally, the scalability of SVGFusion can be continuously enhanced by adding more VS-DiT blocks. To effectively train and evaluate SVGFusion, we construct SVGX-Dataset, a large-scale, high-quality SVG dataset that addresses the scarcity of high-quality vector data. Extensive experiments demonstrate the superiority of SVGFusion over existing SVG generation methods, establishing a new framework for SVG content creation. Code, model, and data will be released at: https://ximinng.github.io/SVGFusionProject/},
   archiveprefix = {arXiv},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\P2LS6L2J\\Xing et al. - 2025 - SVGFusion Scalable Text-to-SVG Generation via Vec.pdf;C\:\\Users\\fikre\\Zotero\\storage\\5JZ2YBK8\\2412.html}
+  note = {arXiv preprint arXiv:2412.10437 (v2)}
 }
 
-@misc{zhangTexttoVectorGenerationNeural2024,
+@article{zhangTexttoVectorGenerationNeural2024,
   title = {Text-to-{{Vector Generation}} with {{Neural Path Representation}}},
   author = {Zhang, Peiying and Zhao, Nanxuan and Liao, Jing},
-  year = {2024},
-  month = may,
-  number = {arXiv:2405.10317},
-  eprint = {2405.10317},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2405.10317},
-  urldate = {2025-11-23},
-  abstract = {Vector graphics are widely used in digital art and highly favored by designers due to their scalability and layer-wise properties. However, the process of creating and editing vector graphics requires creativity and design expertise, making it a time-consuming task. Recent advancements in text-to-vector (T2V) generation have aimed to make this process more accessible. However, existing T2V methods directly optimize control points of vector graphics paths, often resulting in intersecting or jagged paths due to the lack of geometry constraints. To overcome these limitations, we propose a novel neural path representation by designing a dual-branch Variational Autoencoder (VAE) that learns the path latent space from both sequence and image modalities. By optimizing the combination of neural paths, we can incorporate geometric constraints while preserving expressivity in generated SVGs. Furthermore, we introduce a two-stage path optimization method to improve the visual and topological quality of generated SVGs. In the first stage, a pre-trained text-to-image diffusion model guides the initial generation of complex vector graphics through the Variational Score Distillation (VSD) process. In the second stage, we refine the graphics using a layer-wise image vectorization strategy to achieve clearer elements and structure. We demonstrate the effectiveness of our method through extensive experiments and showcase various applications. The project page is https://intchous.github.io/T2V-NPR.},
-  archiveprefix = {arXiv},
-  keywords = {Editable},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\S33JDZ2Y\\Zhang et al. - 2024 - Text-to-Vector Generation with Neural Path Represe.pdf;C\:\\Users\\fikre\\Zotero\\storage\\T2I6MDT8\\2405.html}
+  journal = {ACM Transactions on Graphics},
+  volume = {43},
+  number = {4},
+  pages = {36},
+  year = {2024}
 }
 
-@misc{zhuSAMVGMultistageImage2023,
+@inproceedings{zhuSAMVGMultistageImage2023,
   title = {{{SAMVG}}: {{A Multi-stage Image Vectorization Model}} with the {{Segment-Anything Model}}},
-  shorttitle = {{{SAMVG}}},
   author = {Zhu, Haokun and Chong, Juang Ian and Hu, Teng and Yi, Ran and Lai, Yu-Kun and Rosin, Paul L.},
-  year = {2023},
-  month = dec,
-  number = {arXiv:2311.05276},
-  eprint = {2311.05276},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2311.05276},
-  urldate = {2025-10-22},
-  abstract = {Vector graphics are widely used in graphical designs and have received more and more attention. However, unlike raster images which can be easily obtained, acquiring high-quality vector graphics, typically through automatically converting from raster images remains a significant challenge, especially for more complex images such as photos or artworks. In this paper, we propose SAMVG, a multi-stage model to vectorize raster images into SVG (Scalable Vector Graphics). Firstly, SAMVG uses general image segmentation provided by the Segment-Anything Model and uses a novel filtering method to identify the best dense segmentation map for the entire image. Secondly, SAMVG then identifies missing components and adds more detailed components to the SVG. Through a series of extensive experiments, we demonstrate that SAMVG can produce high quality SVGs in any domain while requiring less computation time and complexity compared to previous state-of-the-art methods.},
-  archiveprefix = {arXiv},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\73A2NE3G\\Zhu et al. - 2023 - SAMVG A Multi-stage Image Vectorization Model wit.pdf;C\:\\Users\\fikre\\Zotero\\storage\\BYU94RSA\\Zhu et al. - 2023 - SAMVG A Multi-stage Image Vectorization Model wit.pdf;C\:\\Users\\fikre\\Zotero\\storage\\C2NIYLW4\\Zhu et al. - 2023 - SAMVG A Multi-stage Image Vectorization Model wit.pdf;C\:\\Users\\fikre\\Zotero\\storage\\HGKSYTME\\2311.html}
+  booktitle = {{{IEEE}} International Conference on Acoustics, Speech and Signal Processing ({{ICASSP}})},
+  pages = {4350--4354},
+  year = {2024}
 }
-
 
 @book{goodfellow2016deep,
-  title={Deep Learning},
-  author={Goodfellow, Ian and Bengio, Yoshua and Courville, Aaron},
-  year={2016},
-  publisher={MIT Press}
+  title = {Deep Learning},
+  author = {Goodfellow, Ian and Bengio, Yoshua and Courville, Aaron},
+  publisher = {MIT Press},
+  year = {2016}
 }
 
 @inproceedings{simonyan2015very,
-  title={Very Deep Convolutional Networks for Large-Scale Image Recognition},
-  author={Simonyan, Karen and Zisserman, Andrew},
-  booktitle={ICLR},
-  year={2015}
+  title = {Very Deep Convolutional Networks for Large-Scale Image Recognition},
+  author = {Simonyan, Karen and Zisserman, Andrew},
+  booktitle = {International Conference on Learning Representations ({{ICLR}})},
+  year = {2015}
 }
-@inproceedings{everingham2010pascal,
-  title={The PASCAL Visual Object Classes (VOC) Challenge},
-  author={Everingham, Mark and others},
-  booktitle={IJCV},
-  year={2010}
+
+@article{everingham2010pascal,
+  title = {The {{PASCAL Visual Object Classes}} ({{VOC}}) Challenge},
+  author = {Everingham, Mark and Van Gool, Luc and Williams, Christopher K. I. and Winn, John and Zisserman, Andrew},
+  journal = {International Journal of Computer Vision},
+  volume = {88},
+  number = {2},
+  pages = {303--338},
+  year = {2010}
 }
 
 @inproceedings{ho2020denoising,
-  title={Denoising Diffusion Probabilistic Models},
-  author={Ho, Jonathan and Jain, Ajay and Abbeel, Pieter},
-  booktitle={NeurIPS},
-  year={2020}
+  title = {Denoising Diffusion Probabilistic Models},
+  author = {Ho, Jonathan and Jain, Ajay and Abbeel, Pieter},
+  booktitle = {Advances in {{Neural Information Processing Systems}}},
+  volume = {33},
+  pages = {6840--6851},
+  year = {2020}
 }
 
-@misc{rodriguezStarVectorGeneratingScalable2025,
+@inproceedings{rodriguezStarVectorGeneratingScalable2025,
   title = {{{StarVector}}: {{Generating Scalable Vector Graphics Code}} from {{Images}} and {{Text}}},
-  shorttitle = {{{StarVector}}},
   author = {Rodriguez, Juan A. and Puri, Abhay and Agarwal, Shubham and Laradji, Issam H. and Rodriguez, Pau and Rajeswar, Sai and Vazquez, David and Pal, Christopher and Pedersoli, Marco},
-  year = {2025},
-  month = may,
-  number = {arXiv:2312.11556},
-  eprint = {2312.11556},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2312.11556},
-  urldate = {2025-10-22},
-  abstract = {Scalable Vector Graphics (SVGs) are vital for modern image rendering due to their scalability and versatility. Previous SVG generation methods have focused on curve-based vectorization, lacking semantic understanding, often producing artifacts, and struggling with SVG primitives beyond path curves. To address these issues, we introduce StarVector, a multimodal large language model for SVG generation. It performs image vectorization by understanding image semantics and using SVG primitives for compact, precise outputs. Unlike traditional methods, StarVector works directly in the SVG code space, leveraging visual understanding to apply accurate SVG primitives. To train StarVector, we create SVG-Stack, a diverse dataset of 2M samples that enables generalization across vectorization tasks and precise use of primitives like ellipses, polygons, and text. We address challenges in SVG evaluation, showing that pixel-based metrics like MSE fail to capture the unique qualities of vector graphics. We introduce SVG-Bench, a benchmark across 10 datasets, and 3 tasks: Image-to-SVG, Text-to-SVG generation, and diagram generation. Using this setup, StarVector achieves state-of-the-art performance, producing more compact and semantically rich SVGs.},
-  archiveprefix = {arXiv},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\2NHWSHZB\\Rodriguez et al. - 2025 - StarVector Generating Scalable Vector Graphics Co.pdf;C\:\\Users\\fikre\\Zotero\\storage\\G6YQLBMQ\\2312.html}
+  booktitle = {Proceedings of the {{IEEE/CVF}} Conference on Computer Vision and Pattern Recognition ({{CVPR}})},
+  pages = {16175--16186},
+  year = {2025}
 }
-@misc{xingEmpoweringLLMsUnderstand2025,
+
+@inproceedings{xingEmpoweringLLMsUnderstand2025,
   title = {Empowering {{LLMs}} to {{Understand}} and {{Generate Complex Vector Graphics}}},
   author = {Xing, Ximing and Hu, Juncheng and Liang, Guotao and Zhang, Jing and Xu, Dong and Yu, Qian},
-  year = {2025},
-  month = mar,
-  number = {arXiv:2412.11102},
-  eprint = {2412.11102},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2412.11102},
-  urldate = {2025-11-23},
-  abstract = {The unprecedented advancements in Large Language Models (LLMs) have profoundly impacted natural language processing but have yet to fully embrace the realm of scalable vector graphics (SVG) generation. While LLMs encode partial knowledge of SVG data from web pages during training, recent findings suggest that semantically ambiguous and tokenized representations within LLMs may result in hallucinations in vector primitive predictions. Additionally, LLM training typically lacks modeling and understanding of the rendering sequence of vector paths, which can lead to occlusion between output vector primitives. In this paper, we present LLM4SVG, an initial yet substantial step toward bridging this gap by enabling LLMs to better understand and generate vector graphics. LLM4SVG facilitates a deeper understanding of SVG components through learnable semantic tokens, which precisely encode these tokens and their corresponding properties to generate semantically aligned SVG outputs. Using a series of learnable semantic tokens, a structured dataset for instruction following is developed to support comprehension and generation across two primary tasks. Our method introduces a modular architecture to existing large language models, integrating semantic tags, vector instruction encoders, fine-tuned commands, and powerful LLMs to tightly combine geometric, appearance, and language information. To overcome the scarcity of SVG-text instruction data, we developed an automated data generation pipeline that collected our SVGX-SFT Dataset, consisting of high-quality human-designed SVGs and 580k SVG instruction following data specifically crafted for LLM training, which facilitated the adoption of the supervised fine-tuning strategy popular in LLM development.},
-  archiveprefix = {arXiv},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\6CAVP593\\Xing et al. - 2025 - Empowering LLMs to Understand and Generate Complex.pdf;C\:\\Users\\fikre\\Zotero\\storage\\Q76NI52C\\2412.html}
-}
-@misc{yangOmniSVGUnifiedScalable2025,
-  title = {{{OmniSVG}}: {{A Unified Scalable Vector Graphics Generation Model}}},
-  shorttitle = {{{OmniSVG}}},
-  author = {Yang, Yiying and Cheng, Wei and Chen, Sijin and Zeng, Xianfang and Yin, Fukun and Zhang, Jiaxu and Wang, Liao and Yu, Gang and Ma, Xingjun and Jiang, Yu-Gang},
-  year = {2025},
-  month = may,
-  number = {arXiv:2504.06263},
-  eprint = {2504.06263},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2504.06263},
-  urldate = {2025-10-22},
-  abstract = {Scalable Vector Graphics (SVG) is an important image format widely adopted in graphic design because of their resolution independence and editability. The study of generating high-quality SVG has continuously drawn attention from both designers and researchers in the AIGC community. However, existing methods either produces unstructured outputs with huge computational cost or is limited to generating monochrome icons of over-simplified structures. To produce high-quality and complex SVG, we propose OmniSVG, a unified framework that leverages pre-trained Vision-Language Models (VLMs) for end-to-end multimodal SVG generation. By parameterizing SVG commands and coordinates into discrete tokens, OmniSVG decouples structural logic from low-level geometry for efficient training while maintaining the expressiveness of complex SVG structure. To further advance the development of SVG synthesis, we introduce MMSVG-2M, a multimodal dataset with two million richly annotated SVG assets, along with a standardized evaluation protocol for conditional SVG generation tasks. Extensive experiments show that OmniSVG outperforms existing methods and demonstrates its potential for integration into professional SVG design workflows.},
-  archiveprefix = {arXiv},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\BXRL7FMH\\Yang et al. - 2025 - OmniSVG A Unified Scalable Vector Graphics Genera.pdf;C\:\\Users\\fikre\\Zotero\\storage\\35UCNZZ5\\2504.html}
-}
-@misc{wangInternSVGUnifiedSVG2025,
-  title = {{{InternSVG}}: {{Towards Unified SVG Tasks}} with {{Multimodal Large Language Models}}},
-  shorttitle = {{{InternSVG}}},
-  author = {Wang, Haomin and Yin, Jinhui and Wei, Qi and Zeng, Wenguang and Gu, Lixin and Ye, Shenglong and Gao, Zhangwei and Wang, Yaohui and Zhang, Yanting and Li, Yuanqi and Guo, Yanwen and Wang, Wenhai and Chen, Kai and Qiao, Yu and Zhang, Hongjie},
-  year = {2025},
-  month = oct,
-  number = {arXiv:2510.11341},
-  eprint = {2510.11341},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2510.11341},
-  urldate = {2025-10-22},
-  abstract = {General SVG modeling remains challenging due to fragmented datasets, limited transferability of methods across tasks, and the difficulty of handling structural complexity. In response, we leverage the strong transfer and generalization capabilities of multimodal large language models (MLLMs) to achieve unified modeling for SVG understanding, editing, and generation. We present the InternSVG family, an integrated data-benchmark-model suite. At its core is SAgoge, the largest and most comprehensive multimodal dataset for SVG tasks, encompassing both static graphics and dynamic animations. It covers icons, long-sequence illustrations, scientific diagrams, and dynamic animations, supporting tasks of varied difficulty levels and providing deeper hierarchies with richer attributes compared to previous datasets. Based on this resource, we introduce SArena, a companion benchmark with comprehensive task definitions and standardized evaluation that aligns with the domains and difficulty spectrum covered by SAgoge. Building on these foundations, we propose InternSVG, a unified MLLM for SVG understanding, editing, and generation with SVG-specific special tokens, subword-based embedding initialization, and a two-stage training strategy that progresses from short static SVGs to long-sequence illustrations and complex animations. This unified formulation induces positive transfer and improves overall performance. Experiments on SArena and prior benchmark confirm that InternSVG achieves substantial gains and consistently outperforms leading open and proprietary counterparts.},
-  archiveprefix = {arXiv},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\ZT45EJ84\\Wang et al. - 2025 - InternSVG Towards Unified SVG Tasks with Multimod.pdf;C\:\\Users\\fikre\\Zotero\\storage\\GBNPEX6G\\2510.html}
-}
-@misc{kingmaAutoEncodingVariationalBayes2022,
-  title = {Auto-{{Encoding Variational Bayes}}},
-  author = {Kingma, Diederik P. and Welling, Max},
-  year = {2022},
-  month = dec,
-  number = {arXiv:1312.6114},
-  eprint = {1312.6114},
-  primaryclass = {stat},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.1312.6114},
-  urldate = {2026-03-04},
-  abstract = {How can we perform efficient inference and learning in directed probabilistic models, in the presence of continuous latent variables with intractable posterior distributions, and large datasets? We introduce a stochastic variational inference and learning algorithm that scales to large datasets and, under some mild differentiability conditions, even works in the intractable case. Our contributions are two-fold. First, we show that a reparameterization of the variational lower bound yields a lower bound estimator that can be straightforwardly optimized using standard stochastic gradient methods. Second, we show that for i.i.d. datasets with continuous latent variables per datapoint, posterior inference can be made especially efficient by fitting an approximate inference model (also called a recognition model) to the intractable posterior using the proposed lower bound estimator. Theoretical advantages are reflected in experimental results.},
-  archiveprefix = {arXiv},
-  keywords = {Computer Science - Machine Learning,Statistics - Machine Learning},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\KF4L6LIB\\Kingma and Welling - 2022 - Auto-Encoding Variational Bayes.pdf;C\:\\Users\\fikre\\Zotero\\storage\\BLJR3YRW\\1312.html}
-}
-@misc{rombachHighResolutionImageSynthesis2021,
-  title = {High-{{Resolution Image Synthesis}} with {{Latent Diffusion Models}}},
-  author = {Rombach, Robin and Blattmann, Andreas and Lorenz, Dominik and Esser, Patrick and Ommer, Bj{\"o}rn},
-  year = {2021},
-  publisher = {arXiv},
-  doi = {10.48550/ARXIV.2112.10752},
-  urldate = {2025-10-27},
-  abstract = {By decomposing the image formation process into a sequential application of denoising autoencoders, diffusion models (DMs) achieve state-of-the-art synthesis results on image data and beyond. Additionally, their formulation allows for a guiding mechanism to control the image generation process without retraining. However, since these models typically operate directly in pixel space, optimization of powerful DMs often consumes hundreds of GPU days and inference is expensive due to sequential evaluations. To enable DM training on limited computational resources while retaining their quality and flexibility, we apply them in the latent space of powerful pretrained autoencoders. In contrast to previous work, training diffusion models on such a representation allows for the first time to reach a near-optimal point between complexity reduction and detail preservation, greatly boosting visual fidelity. By introducing cross-attention layers into the model architecture, we turn diffusion models into powerful and flexible generators for general conditioning inputs such as text or bounding boxes and high-resolution synthesis becomes possible in a convolutional manner. Our latent diffusion models (LDMs) achieve a new state of the art for image inpainting and highly competitive performance on various tasks, including unconditional image generation, semantic scene synthesis, and super-resolution, while significantly reducing computational requirements compared to pixel-based DMs. Code is available at https://github.com/CompVis/latent-diffusion .},
-  copyright = {arXiv.org perpetual, non-exclusive license}
-}
-@misc{haNeuralRepresentationSketch2017,
-  title = {A {{Neural Representation}} of {{Sketch Drawings}}},
-  author = {Ha, David and Eck, Douglas},
-  year = {2017},
-  month = may,
-  number = {arXiv:1704.03477},
-  eprint = {1704.03477},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.1704.03477},
-  urldate = {2025-10-22},
-  abstract = {We present sketch-rnn, a recurrent neural network (RNN) able to construct stroke-based drawings of common objects. The model is trained on thousands of crude human-drawn images representing hundreds of classes. We outline a framework for conditional and unconditional sketch generation, and describe new robust training methods for generating coherent sketch drawings in a vector format.},
-  archiveprefix = {arXiv},
-  keywords = {Computer Science - Neural and Evolutionary Computing,Statistics - Machine Learning},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\JCNBIR2T\\Ha and Eck - 2017 - A Neural Representation of Sketch Drawings.pdf;C\:\\Users\\fikre\\Zotero\\storage\\LNMCFZHD\\1704.html}
-}
-@misc{mildenhallNeRFRepresentingScenes2020,
-  title = {{{NeRF}}: {{Representing Scenes}} as {{Neural Radiance Fields}} for {{View Synthesis}}},
-  shorttitle = {{{NeRF}}},
-  author = {Mildenhall, Ben and Srinivasan, Pratul P. and Tancik, Matthew and Barron, Jonathan T. and Ramamoorthi, Ravi and Ng, Ren},
-  year = {2020},
-  month = aug,
-  number = {arXiv:2003.08934},
-  eprint = {2003.08934},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2003.08934},
-  urldate = {2026-03-04},
-  abstract = {We present a method that achieves state-of-the-art results for synthesizing novel views of complex scenes by optimizing an underlying continuous volumetric scene function using a sparse set of input views. Our algorithm represents a scene using a fully-connected (non-convolutional) deep network, whose input is a single continuous 5D coordinate (spatial location \$(x,y,z)\$ and viewing direction \$({\texttheta}, {$\varphi$})\$) and whose output is the volume density and view-dependent emitted radiance at that spatial location. We synthesize views by querying 5D coordinates along camera rays and use classic volume rendering techniques to project the output colors and densities into an image. Because volume rendering is naturally differentiable, the only input required to optimize our representation is a set of images with known camera poses. We describe how to effectively optimize neural radiance fields to render photorealistic novel views of scenes with complicated geometry and appearance, and demonstrate results that outperform prior work on neural rendering and view synthesis. View synthesis results are best viewed as videos, so we urge readers to view our supplementary video for convincing comparisons.},
-  archiveprefix = {arXiv},
-  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Graphics},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\XI8DHUXQ\\Mildenhall et al. - 2020 - NeRF Representing Scenes as Neural Radiance Field.pdf;C\:\\Users\\fikre\\Zotero\\storage\\TU8MHMEZ\\2003.html}
-}
-@misc{radfordLearningTransferableVisual2021,
-  title = {Learning {{Transferable Visual Models From Natural Language Supervision}}},
-  author = {Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and Krueger, Gretchen and Sutskever, Ilya},
-  year = {2021},
-  month = feb,
-  number = {arXiv:2103.00020},
-  eprint = {2103.00020},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2103.00020},
-  urldate = {2026-03-05},
-  abstract = {State-of-the-art computer vision systems are trained to predict a fixed set of predetermined object categories. This restricted form of supervision limits their generality and usability since additional labeled data is needed to specify any other visual concept. Learning directly from raw text about images is a promising alternative which leverages a much broader source of supervision. We demonstrate that the simple pre-training task of predicting which caption goes with which image is an efficient and scalable way to learn SOTA image representations from scratch on a dataset of 400 million (image, text) pairs collected from the internet. After pre-training, natural language is used to reference learned visual concepts (or describe new ones) enabling zero-shot transfer of the model to downstream tasks. We study the performance of this approach by benchmarking on over 30 different existing computer vision datasets, spanning tasks such as OCR, action recognition in videos, geo-localization, and many types of fine-grained object classification. The model transfers non-trivially to most tasks and is often competitive with a fully supervised baseline without the need for any dataset specific training. For instance, we match the accuracy of the original ResNet-50 on ImageNet zero-shot without needing to use any of the 1.28 million training examples it was trained on. We release our code and pre-trained model weights at https://github.com/OpenAI/CLIP.},
-  archiveprefix = {arXiv},
-  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\Z3PZ79E7\\Radford et al. - 2021 - Learning Transferable Visual Models From Natural L.pdf;C\:\\Users\\fikre\\Zotero\\storage\\ARBPMTCL\\2103.html}
-}
-@misc{pooleDreamFusionTextto3DUsing2022,
-  title = {{{DreamFusion}}: {{Text-to-3D}} Using {{2D Diffusion}}},
-  shorttitle = {{{DreamFusion}}},
-  author = {Poole, Ben and Jain, Ajay and Barron, Jonathan T. and Mildenhall, Ben},
-  year = {2022},
-  month = sep,
-  number = {arXiv:2209.14988},
-  eprint = {2209.14988},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2209.14988},
-  urldate = {2026-03-05},
-  abstract = {Recent breakthroughs in text-to-image synthesis have been driven by diffusion models trained on billions of image-text pairs. Adapting this approach to 3D synthesis would require large-scale datasets of labeled 3D data and efficient architectures for denoising 3D data, neither of which currently exist. In this work, we circumvent these limitations by using a pretrained 2D text-to-image diffusion model to perform text-to-3D synthesis. We introduce a loss based on probability density distillation that enables the use of a 2D diffusion model as a prior for optimization of a parametric image generator. Using this loss in a DeepDream-like procedure, we optimize a randomly-initialized 3D model (a Neural Radiance Field, or NeRF) via gradient descent such that its 2D renderings from random angles achieve a low loss. The resulting 3D model of the given text can be viewed from any angle, relit by arbitrary illumination, or composited into any 3D environment. Our approach requires no 3D training data and no modifications to the image diffusion model, demonstrating the effectiveness of pretrained image diffusion models as priors.},
-  archiveprefix = {arXiv},
-  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning,Statistics - Machine Learning},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\6SXEKPCU\\Poole et al. - 2022 - DreamFusion Text-to-3D using 2D Diffusion.pdf;C\:\\Users\\fikre\\Zotero\\storage\\JPY6B3XP\\2209.html}
-}
-@misc{johnsonPerceptualLossesRealTime2016,
-  title = {Perceptual {{Losses}} for {{Real-Time Style Transfer}} and {{Super-Resolution}}},
-  author = {Johnson, Justin and Alahi, Alexandre and {Fei-Fei}, Li},
-  year = {2016},
-  publisher = {arXiv},
-  doi = {10.48550/ARXIV.1603.08155},
-  urldate = {2025-10-27},
-  abstract = {We consider image transformation problems, where an input image is transformed into an output image. Recent methods for such problems typically train feed-forward convolutional neural networks using a {\textbackslash}emph\{per-pixel\} loss between the output and ground-truth images. Parallel work has shown that high-quality images can be generated by defining and optimizing {\textbackslash}emph\{perceptual\} loss functions based on high-level features extracted from pretrained networks. We combine the benefits of both approaches, and propose the use of perceptual loss functions for training feed-forward networks for image transformation tasks. We show results on image style transfer, where a feed-forward network is trained to solve the optimization problem proposed by Gatys et al in real-time. Compared to the optimization-based method, our network gives similar qualitative results but is three orders of magnitude faster. We also experiment with single-image super-resolution, where replacing a per-pixel loss with a perceptual loss gives visually pleasing results.},
-  copyright = {arXiv.org perpetual, non-exclusive license},
-  keywords = {Machine Learning (cs.LG)}
-}
-@misc{kirillovSegmentAnything2023,
-  title = {Segment {{Anything}}},
-  author = {Kirillov, Alexander and Mintun, Eric and Ravi, Nikhila and Mao, Hanzi and Rolland, Chloe and Gustafson, Laura and Xiao, Tete and Whitehead, Spencer and Berg, Alexander C. and Lo, Wan-Yen and Doll{\'a}r, Piotr and Girshick, Ross},
-  year = {2023},
-  month = apr,
-  number = {arXiv:2304.02643},
-  eprint = {2304.02643},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2304.02643},
-  urldate = {2026-03-10},
-  abstract = {We introduce the Segment Anything (SA) project: a new task, model, and dataset for image segmentation. Using our efficient model in a data collection loop, we built the largest segmentation dataset to date (by far), with over 1 billion masks on 11M licensed and privacy respecting images. The model is designed and trained to be promptable, so it can transfer zero-shot to new image distributions and tasks. We evaluate its capabilities on numerous tasks and find that its zero-shot performance is impressive -- often competitive with or even superior to prior fully supervised results. We are releasing the Segment Anything Model (SAM) and corresponding dataset (SA-1B) of 1B masks and 11M images at https://segment-anything.com to foster research into foundation models for computer vision.},
-  archiveprefix = {arXiv},
-  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\H2V5MHTS\\Kirillov et al. - 2023 - Segment Anything.pdf;C\:\\Users\\fikre\\Zotero\\storage\\4UNSLQNE\\2304.html}
-}
-@misc{ribeiroSketchformerTransformerbasedRepresentation2020,
-  title = {Sketchformer: {{Transformer-based Representation}} for {{Sketched Structure}}},
-  shorttitle = {Sketchformer},
-  author = {Ribeiro, Leo Sampaio Ferraz and Bui, Tu and Collomosse, John and Ponti, Moacir},
-  year = {2020},
-  month = feb,
-  number = {arXiv:2002.10381},
-  eprint = {2002.10381},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2002.10381},
-  urldate = {2026-03-10},
-  abstract = {Sketchformer is a novel transformer-based representation for encoding free-hand sketches input in a vector form, i.e. as a sequence of strokes. Sketchformer effectively addresses multiple tasks: sketch classification, sketch based image retrieval (SBIR), and the reconstruction and interpolation of sketches. We report several variants exploring continuous and tokenized input representations, and contrast their performance. Our learned embedding, driven by a dictionary learning tokenization scheme, yields state of the art performance in classification and image retrieval tasks, when compared against baseline representations driven by LSTM sequence to sequence architectures: SketchRNN and derivatives. We show that sketch reconstruction and interpolation are improved significantly by the Sketchformer embedding for complex sketches with longer stroke sequences.},
-  archiveprefix = {arXiv},
-  keywords = {Computer Science - Computer Vision and Pattern Recognition},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\5VSHED6S\\Ribeiro et al. - 2020 - Sketchformer Transformer-based Representation for.pdf;C\:\\Users\\fikre\\Zotero\\storage\\5GST7PY9\\2002.html}
-}
-@misc{ganinSynthesizingProgramsImages2018,
-  title = {Synthesizing {{Programs}} for {{Images}} Using {{Reinforced Adversarial Learning}}},
-  author = {Ganin, Yaroslav and Kulkarni, Tejas and Babuschkin, Igor and Eslami, S. M. Ali and Vinyals, Oriol},
-  year = {2018},  
-  month = apr,
-  number = {arXiv:1804.01118},
-  eprint = {1804.01118},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.1804.01118},
-  urldate = {2026-03-10},
-  abstract = {Advances in deep generative networks have led to impressive results in recent years. Nevertheless, such models can often waste their capacity on the minutiae of datasets, presumably due to weak inductive biases in their decoders. This is where graphics engines may come in handy since they abstract away low-level details and represent images as high-level programs. Current methods that combine deep learning and renderers are limited by hand-crafted likelihood or distance functions, a need for large amounts of supervision, or difficulties in scaling their inference algorithms to richer datasets. To mitigate these issues, we present SPIRAL, an adversarially trained agent that generates a program which is executed by a graphics engine to interpret and sample images. The goal of this agent is to fool a discriminator network that distinguishes between real and rendered data, trained with a distributed reinforcement learning setup without any supervision. A surprising finding is that using the discriminator's output as a reward signal is the key to allow the agent to make meaningful progress at matching the desired output rendering. To the best of our knowledge, this is the first demonstration of an end-to-end, unsupervised and adversarial inverse graphics agent on challenging real world (MNIST, Omniglot, CelebA) and synthetic 3D datasets.},
-  archiveprefix = {arXiv},
-  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning,Statistics - Machine Learning},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\2LWMDFQL\\Ganin et al. - 2018 - Synthesizing Programs for Images using Reinforced .pdf;C\:\\Users\\fikre\\Zotero\\storage\\U94YTWJK\\1804.html}
+  booktitle = {Proceedings of the {{IEEE/CVF}} Conference on Computer Vision and Pattern Recognition ({{CVPR}})},
+  pages = {19487--19497},
+  year = {2025}
 }
 
-@misc{lopesLearnedRepresentationScalable2019b,
+@inproceedings{yangOmniSVGUnifiedScalable2025,
+  title = {{{OmniSVG}}: {{A Unified Scalable Vector Graphics Generation Model}}},
+  author = {Yang, Yiying and Cheng, Wei and Chen, Sijin and Zeng, Xianfang and Yin, Fukun and Zhang, Jiaxu and Wang, Liao and Yu, Gang and Ma, Xingjun and Jiang, Yu-Gang},
+  booktitle = {Advances in {{Neural Information Processing Systems}}},
+  volume = {38},
+  year = {2025}
+}
+
+@inproceedings{wangInternSVGUnifiedSVG2025,
+  title = {{{InternSVG}}: {{Towards Unified SVG Tasks}} with {{Multimodal Large Language Models}}},
+  author = {Wang, Haomin and Yin, Jinhui and Wei, Qi and Zeng, Wenguang and Gu, Lixin and Ye, Shenglong and Gao, Zhangwei and Wang, Yaohui and Zhang, Yanting and Li, Yuanqi and Guo, Yanwen and Wang, Wenhai and Chen, Kai and Qiao, Yu and Zhang, Hongjie},
+  booktitle = {International Conference on Learning Representations ({{ICLR}})},
+  year = {2026}
+}
+
+@inproceedings{kingmaAutoEncodingVariationalBayes2022,
+  title = {Auto-{{Encoding Variational Bayes}}},
+  author = {Kingma, Diederik P. and Welling, Max},
+  booktitle = {International Conference on Learning Representations ({{ICLR}})},
+  year = {2014}
+}
+
+@inproceedings{rombachHighResolutionImageSynthesis2021,
+  title = {High-{{Resolution Image Synthesis}} with {{Latent Diffusion Models}}},
+  author = {Rombach, Robin and Blattmann, Andreas and Lorenz, Dominik and Esser, Patrick and Ommer, Bj{\"o}rn},
+  booktitle = {Proceedings of the {{IEEE/CVF}} Conference on Computer Vision and Pattern Recognition ({{CVPR}})},
+  pages = {10684--10695},
+  year = {2022}
+}
+
+@inproceedings{haNeuralRepresentationSketch2017,
+  title = {A {{Neural Representation}} of {{Sketch Drawings}}},
+  author = {Ha, David and Eck, Douglas},
+  booktitle = {International Conference on Learning Representations ({{ICLR}})},
+  year = {2018}
+}
+
+@inproceedings{mildenhallNeRFRepresentingScenes2020,
+  title = {{{NeRF}}: {{Representing Scenes}} as {{Neural Radiance Fields}} for {{View Synthesis}}},
+  author = {Mildenhall, Ben and Srinivasan, Pratul P. and Tancik, Matthew and Barron, Jonathan T. and Ramamoorthi, Ravi and Ng, Ren},
+  booktitle = {European Conference on Computer Vision ({{ECCV}})},
+  year = {2020}
+}
+
+@inproceedings{radfordLearningTransferableVisual2021,
+  title = {Learning {{Transferable Visual Models From Natural Language Supervision}}},
+  author = {Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and Krueger, Gretchen and Sutskever, Ilya},
+  booktitle = {Proceedings of the 38th International Conference on Machine Learning ({{ICML}})},
+  series = {PMLR},
+  volume = {139},
+  pages = {8748--8763},
+  year = {2021}
+}
+
+@inproceedings{pooleDreamFusionTextto3DUsing2022,
+  title = {{{DreamFusion}}: {{Text-to-3D}} Using {{2D Diffusion}}},
+  author = {Poole, Ben and Jain, Ajay and Barron, Jonathan T. and Mildenhall, Ben},
+  booktitle = {International Conference on Learning Representations ({{ICLR}})},
+  year = {2023}
+}
+
+@inproceedings{johnsonPerceptualLossesRealTime2016,
+  title = {Perceptual {{Losses}} for {{Real-Time Style Transfer}} and {{Super-Resolution}}},
+  author = {Johnson, Justin and Alahi, Alexandre and {Fei-Fei}, Li},
+  booktitle = {European Conference on Computer Vision ({{ECCV}})},
+  pages = {694--711},
+  year = {2016}
+}
+
+@inproceedings{kirillovSegmentAnything2023,
+  title = {Segment {{Anything}}},
+  author = {Kirillov, Alexander and Mintun, Eric and Ravi, Nikhila and Mao, Hanzi and Rolland, Chloe and Gustafson, Laura and Xiao, Tete and Whitehead, Spencer and Berg, Alexander C. and Lo, Wan-Yen and Doll{\'a}r, Piotr and Girshick, Ross},
+  booktitle = {Proceedings of the {{IEEE/CVF}} International Conference on Computer Vision ({{ICCV}})},
+  pages = {4015--4026},
+  year = {2023}
+}
+
+@inproceedings{ribeiroSketchformerTransformerbasedRepresentation2020,
+  title = {Sketchformer: {{Transformer-based Representation}} for {{Sketched Structure}}},
+  author = {Ribeiro, Leo Sampaio Ferraz and Bui, Tu and Collomosse, John and Ponti, Moacir},
+  booktitle = {Proceedings of the {{IEEE/CVF}} Conference on Computer Vision and Pattern Recognition ({{CVPR}})},
+  pages = {14153--14162},
+  year = {2020}
+}
+
+@inproceedings{ganinSynthesizingProgramsImages2018,
+  title = {Synthesizing {{Programs}} for {{Images}} Using {{Reinforced Adversarial Learning}}},
+  author = {Ganin, Yaroslav and Kulkarni, Tejas and Babuschkin, Igor and Eslami, S. M. Ali and Vinyals, Oriol},
+  booktitle = {Proceedings of the 35th International Conference on Machine Learning ({{ICML}})},
+  series = {PMLR},
+  volume = {80},
+  pages = {1666--1675},
+  year = {2018}
+}
+
+@inproceedings{lopesLearnedRepresentationScalable2019b,
   title = {A {{Learned Representation}} for {{Scalable Vector Graphics}}},
   author = {Lopes, Raphael Gontijo and Ha, David and Eck, Douglas and Shlens, Jonathon},
-  year = {2019},
-  month = apr,
-  number = {arXiv:1904.02632},
-  eprint = {1904.02632},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.1904.02632},
-  urldate = {2026-03-10},
-  abstract = {Dramatic advances in generative models have resulted in near photographic quality for artificially rendered faces, animals and other objects in the natural world. In spite of such advances, a higher level understanding of vision and imagery does not arise from exhaustively modeling an object, but instead identifying higher-level attributes that best summarize the aspects of an object. In this work we attempt to model the drawing process of fonts by building sequential generative models of vector graphics. This model has the benefit of providing a scale-invariant representation for imagery whose latent representation may be systematically manipulated and exploited to perform style propagation. We demonstrate these results on a large dataset of fonts and highlight how such a model captures the statistical dependencies and richness of this dataset. We envision that our model can find use as a tool for graphic designers to facilitate font design.},
-  archiveprefix = {arXiv},
-  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning,Statistics - Machine Learning},
-  file = {C\:\\Users\\fikre\\Zotero\\storage\\DTLK5Z9M\\Lopes et al. - 2019 - A Learned Representation for Scalable Vector Graph.pdf;C\:\\Users\\fikre\\Zotero\\storage\\CQGI87IC\\1904.html}
+  booktitle = {Proceedings of the {{IEEE/CVF}} International Conference on Computer Vision ({{ICCV}})},
+  pages = {7930--7939},
+  year = {2019}
 }
+
 @inproceedings{heuselGANsTrainedTwo2017,
-  title = {{{GANs}} Trained by a Two Time-Scale Update Rule 
-           Converge to a Local {{Nash}} Equilibrium},
-  author = {Heusel, Martin and Ramsauer, Hubert and 
-            Unterthiner, Thomas and Nessler, Bernhard and 
-            Hochreiter, Sepp},
-  booktitle = {Advances in Neural Information Processing 
-               Systems},
+  title = {{{GANs}} Trained by a Two Time-Scale Update Rule Converge to a Local {{Nash}} Equilibrium},
+  author = {Heusel, Martin and Ramsauer, Hubert and Unterthiner, Thomas and Nessler, Bernhard and Hochreiter, Sepp},
+  booktitle = {Advances in {{Neural Information Processing Systems}}},
   volume = {30},
-  year = {2017},
-  url = {https://arxiv.org/abs/1706.08500}
+  year = {2017}
 }
 
 @inproceedings{zhangUnreasonableEffectivenessDeep2018,
-  title = {The Unreasonable Effectiveness of Deep Features 
-           as a Perceptual Metric},
-  author = {Zhang, Richard and Isola, Phillip and Efros, 
-            Alexei A. and Shechtman, Eli and Wang, Oliver},
-  booktitle = {Proceedings of the {{IEEE/CVF}} Conference 
-               on Computer Vision and Pattern Recognition},
+  title = {The Unreasonable Effectiveness of Deep Features as a Perceptual Metric},
+  author = {Zhang, Richard and Isola, Phillip and Efros, Alexei A. and Shechtman, Eli and Wang, Oliver},
+  booktitle = {Proceedings of the {{IEEE/CVF}} Conference on Computer Vision and Pattern Recognition ({{CVPR}})},
   pages = {586--595},
-  year = {2018},
-  url = {https://arxiv.org/abs/1801.03924}
+  year = {2018}
 }
 
 @inproceedings{nishinaSVGEditBenchBenchmarkDataset2024,
-  title = {{{SVGEditBench}}: A Benchmark Dataset for 
-           Quantitative Assessment of {{LLM}}'s {{SVG}} 
-           Editing Capabilities},
+  title = {{{SVGEditBench}}: A Benchmark Dataset for Quantitative Assessment of {{LLM}}'s {{SVG}} Editing Capabilities},
   author = {Nishina, Kunato and Matsui, Yusuke},
-  booktitle = {Proceedings of the {{IEEE/CVF}} Conference 
-               on Computer Vision and Pattern Recognition 
-               Workshops},
+  booktitle = {Proceedings of the {{IEEE/CVF}} Conference on Computer Vision and Pattern Recognition Workshops ({{CVPRW}})},
   pages = {8142--8147},
-  year = {2024},
-  url = {https://arxiv.org/abs/2404.13710}
+  year = {2024}
 }
 
-@article{nishinaSVGEditBenchV22025,
-  title = {{{SVGEditBench V2}}: A Benchmark for 
-           Instruction-Based {{SVG}} Editing},
+@misc{nishinaSVGEditBenchV22025,
+  title = {{{SVGEditBench V2}}: A Benchmark for Instruction-Based {{SVG}} Editing},
   author = {Nishina, Kunato and Matsui, Yusuke},
-  journal = {arXiv preprint arXiv:2502.19453},
   year = {2025},
-  url = {https://arxiv.org/abs/2502.19453}
+  eprint = {2502.19453},
+  archiveprefix = {arXiv},
+  note = {arXiv preprint arXiv:2502.19453}
 }
 
 @inproceedings{chenSVGenius2025,
-  title = {{{SVGenius}}: Benchmarking {{LLMs}} in {{SVG}} 
-           Understanding, Editing and Generation},
-  author = {Chen, Siqi and Dong, Xinyu and Xu, Haolei and 
-            Wu, Xingyu and Tang, Fei and Zhang, Hang and 
-            Yan, Yuchen and Wu, Linjuan and Zhang, Wenqi and 
-            Hou, Guiyang and Shen, Yongliang and Lu, Weiming 
-            and Zhuang, Yueting},
-  booktitle = {Proceedings of the 33rd {{ACM}} International 
-               Conference on Multimedia},
-  year = {2025},
-  url = {https://arxiv.org/abs/2506.03139}
+  title = {{{SVGenius}}: Benchmarking {{LLMs}} in {{SVG}} Understanding, Editing and Generation},
+  author = {Chen, Siqi and Dong, Xinyu and Xu, Haolei and Wu, Xingyu and Tang, Fei and Zhang, Hang and Yan, Yuchen and Wu, Linjuan and Zhang, Wenqi and Hou, Guiyang and Shen, Yongliang and Lu, Weiming and Zhuang, Yueting},
+  booktitle = {Proceedings of the 33rd {{ACM}} International Conference on Multimedia},
+  year = {2025}
 }
+
 @inproceedings{szegedy2016rethinking,
-  title = {Rethinking the Inception Architecture for 
-           Computer Vision},
-  author = {Szegedy, Christian and Vanhoucke, Vincent and 
-            Ioffe, Sergey and Shlens, Jon and Wojna, Zbigniew},
-  booktitle = {Proceedings of the {{IEEE/CVF}} Conference 
-               on Computer Vision and Pattern Recognition},
+  title = {Rethinking the Inception Architecture for Computer Vision},
+  author = {Szegedy, Christian and Vanhoucke, Vincent and Ioffe, Sergey and Shlens, Jon and Wojna, Zbigniew},
+  booktitle = {Proceedings of the {{IEEE}} Conference on Computer Vision and Pattern Recognition ({{CVPR}})},
   pages = {2818--2826},
   year = {2016}
 }
 
 @misc{wikiBezier,
   author = {{Wikimedia Commons}},
-  title = {B\'{e}zier curve --- {Wikimedia Commons}},
+  title = {B\'{e}zier Curve},
   year = {2024},
-  url = {https://commons.wikimedia.org/wiki/File:Bezier_2_big.svg},
+  howpublished = {\url{https://commons.wikimedia.org/wiki/File:Bezier_2_big.svg}},
   note = {Public domain}
 }
 
@@ -601,80 +346,48 @@
   author = {{W3Techs}},
   title = {Usage Statistics of {SVG} for Websites},
   year = {2024},
-  url = {https://w3techs.com/technologies/details/im-svg},
+  howpublished = {\url{https://w3techs.com/technologies/details/im-svg}},
   note = {Accessed: April 2026}
 }
-@misc{LeveragingLargeLanguage,
-  title = {Leveraging {{Large Language Models For Scalable Vector Graphics Processing}}: {{A Review}}},
-  urldate = {2026-04-09},
-  howpublished = {https://arxiv.org/html/2503.04983},
-  file = {C:\Users\fikre\Zotero\storage\2IKCHBGQ\2503.html}
-}
-@book{boothSystematicApproachesSuccessful2012,
-  title = {Systematic {{Approaches}} to a {{Successful Literature Review}}},
-  author = {Booth, Andrew and Papaioannou, Diana and Sutton, Anthea},
-  year = {2012},
-  month = jan,
-  file = {C:\Users\fikre\Zotero\storage\SEC5T3IV\Booth et al. - 2012 - Systematic Approaches to a Successful Literature R.pdf}
+
+@article{LeveragingLargeLanguage,
+  title = {Leveraging {{Large Language Models}} for {{Scalable Vector Graphics Processing}}: {{A Review}}},
+  author = {Malashenko, Boris and Jarsky, Ivan and Efimova, Valeria},
+  journal = {Zapiski Nauchnykh Seminarov POMI},
+  volume = {546},
+  pages = {59--80},
+  year = {2025}
 }
 
-@article{kitchenhamProceduresPerformingSystematic2004a,
-  title = {Procedures for {{Performing Systematic Reviews}}},
-  author = {Kitchenham, Barbara},
-  year = {2004},
-  month = aug,
-  journal = {Keele, UK, Keele Univ.},
-  volume = {33},
-  file = {C:\Users\fikre\Zotero\storage\FVHVXWEW\Kitchenham - 2004 - Procedures for Performing Systematic Reviews.pdf}
-}
-
-@article{kitchenhamSystematicLiteratureReviews2009,
-  title = {Systematic Literature Reviews in Software Engineering -- {{A}} Systematic Literature Review},
-  author = {Kitchenham, Barbara and Pearl Brereton, O. and Budgen, David and Turner, Mark and Bailey, John and Linkman, Stephen},
-  year = {2009},
-  month = jan,
-  journal = {Information and Software Technology},
-  volume = {51},
-  number = {1},
-  pages = {7--15},
-  issn = {09505849},
-  doi = {10.1016/j.infsof.2008.09.009},
-  urldate = {2025-11-14},
-  copyright = {https://www.elsevier.com/tdm/userlicense/1.0/},
-  langid = {english},
-  file = {C:\Users\fikre\Zotero\storage\XRSPT3BW\Kitchenham et al. - 2009 - Systematic literature reviews in software engineer.pdf}
-}
-
-@article{moherPreferredReportingItems2009a,
-  title = {Preferred {{Reporting Items}} for {{Systematic Reviews}} and {{Meta-Analyses}}: {{The PRISMA Statement}}},
-  shorttitle = {Preferred {{Reporting Items}} for {{Systematic Reviews}} and {{Meta-Analyses}}},
-  author = {Moher, David and Liberati, Alessandro and Tetzlaff, Jennifer and Altman, Douglas G. and Group, The PRISMA},
-  year = {2009},
-  month = jul,
-  journal = {PLOS Medicine},
-  volume = {6},
-  number = {7},
-  pages = {e1000097},
-  publisher = {Public Library of Science},
-  issn = {1549-1676},
-  doi = {10.1371/journal.pmed.1000097},
-  urldate = {2026-04-10},
-  langid = {english},
-  keywords = {Clinical research design,Database searching,Medical journals,Medical risk factors,Metaanalysis,Publication ethics,Research reporting guidelines,Systematic reviews},
-  file = {C:\Users\fikre\Zotero\storage\UFPWVFD6\Moher et al. - 2009 - Preferred Reporting Items for Systematic Reviews a.pdf}
-}
-@misc{loo_structural_2026,
-  title={Structural Evaluation Metrics for SVG Generation 
-         via Leave-One-Out Analysis},
-  year={2026},
-  note={arXiv:2604.08809}
-}
 @misc{claude2026,
   author = {{Anthropic}},
-  title = {Claude (AI language model)},
+  title = {Claude ({AI} Language Model)},
   year = {2026},
-  url = {https://claude.ai},
-  note = {Used for assistance, editing, 
-          and structural feedback during thesis 
-          preparation}
+  howpublished = {\url{https://claude.ai}}
+}
+
+@inproceedings{wangProlificDreamerHighFidelityDiverse2023,
+  title = {{{ProlificDreamer}}: {{High-Fidelity}} and {{Diverse Text-to-3D Generation}} with {{Variational Score Distillation}}},
+  author = {Wang, Zhengyi and Lu, Cheng and Wang, Yikai and Bao, Fan and Li, Chongxuan and Su, Hang and Zhu, Jun},
+  booktitle = {Advances in {{Neural Information Processing Systems}}},
+  volume = {36},
+  pages = {8406--8441},
+  year = {2023}
+}
+
+@inproceedings{liuBezierSplattingFast2025,
+  title = {{{B\'{e}zier Splatting}} for {{Fast}} and {{Differentiable Vector Graphics Rendering}}},
+  author = {Liu, Xi and Zhou, Chaoyi and Zhao, Nanxuan and Huang, Siyu},
+  booktitle = {Advances in {{Neural Information Processing Systems}}},
+  volume = {38},
+  year = {2025}
+}
+
+@misc{zhuStructuralEvaluationMetrics2026,
+  title = {Structural Evaluation Metrics for {{SVG}} Generation via Leave-One-Out Analysis},
+  author = {Zhu, Haonan and Deganutti, Adrienne and Hirsch, Elad and Mehta, Purvanshi},
+  year = {2026},
+  eprint = {2604.08809},
+  archiveprefix = {arXiv},
+  note = {arXiv preprint arXiv:2604.08809}
 }

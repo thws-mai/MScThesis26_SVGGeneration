@@ -1,14 +1,16 @@
 \chapter{Evaluation of SVG Generation}
 \label{ch:Evaluation}
 
+Chapter~\ref{ch:supervision} ended with the observation that visual quality 
+always comes first. This chapter asks whether evaluation measures anything else.
 Evaluating SVG generation is harder than evaluating raster 
 image generation. A raster image is just pixels, the only thing that matters is how it looks.
 An SVG is a structured artifact 
-that has to look right(semantical alignment), be geometrically stable, and remain 
+that has to look right (semantic alignment), be geometrically stable, and remain 
 editable. These three requirements do not always point in 
 the same direction, and the metrics most commonly used in 
 the literature only measure the first one. 
-This chapter examines how those 14 models are evaluated, which metrics are used, where those practices 
+This chapter examines how the thirteen models are evaluated, which metrics are used, where those practices 
 fall short, and what a more complete framework would need 
 to include.
 
@@ -76,17 +78,17 @@ properties that numerical metrics miss, but they are
 subjective and rarely reported 
 with enough methodological detail to understand the ratings.
 
-Table~\ref{tab:metrics_used} maps which evaluation metrics,
-each of the fourteen models actually reports. The 
+Table~\ref{tab:metrics_used} maps which evaluation metrics
+each of the thirteen models actually reports. The 
 pattern is clear, FID and CLIP dominate text-to-SVG models, 
 MSE and LPIPS appear in vectorization models, and structural 
 metrics are almost entirely absent across both groups. 
 Human evaluation is present in roughly half the papers.
 
 
-\begin{table}[h!]
+\begin{table}[htbp]
 \centering
-\caption{Evaluation signals reported across the fourteen 
+\caption{Evaluation signals reported across the thirteen 
 models. \checkmark\,= reported, \text{--} = not reported.}
 \label{tab:metrics_used}
 \small
@@ -108,7 +110,7 @@ SVGDreamer   & \checkmark & \checkmark & --
              & --         & \checkmark & --         \\
 SVGDreamer++ & \checkmark & \checkmark & --         
              & --         & \checkmark & --         \\
-NiVeL        & --         & \checkmark & --         
+NIVeL        & --         & \checkmark & --         
              & --         & --         & --         \\
 NeuralSVG    & --         & \checkmark & --         
              & --         & --         & --         \\
@@ -151,7 +153,10 @@ proposes 18 metrics across understanding, editing, and
 generation dimensions. However, both benchmarks are 
 designed primarily for LLM-based SVG processing, and 
 neither addresses the structural properties of 
-optimization-based or dataset-trained generation methods. 
+optimization-based or dataset-driven generation methods. 
+Zhu et al.~\cite{zhuStructuralEvaluationMetrics2026} go further 
+and measure structure directly: they remove one element at a time and score each 
+element by how much the render changes. 
 
 
 
@@ -167,7 +172,8 @@ missing hierarchy, self-intersecting curves, or
 uneditable structure. For vector graphics, these are 
 not secondary properties.
 
-\paragraph{Structural redundancy.} Optimization-based 
+\subsection{Structural Redundancy}
+Optimization-based 
 methods routinely produce outputs where many small 
 overlapping paths approximate a region that a designer 
 would represent with one or two shapes. LIVE and 
@@ -184,7 +190,8 @@ A 16x difference in path count produces near-identical
 scores on the metric most commonly used to evaluate 
 these models.
 
-\paragraph{Geometric quality.} Curved paths in 
+\subsection{Geometric Quality}
+Curved paths in 
 optimization outputs are sometimes jagged, 
 self-intersecting, or discontinuous under zoom. T2V-NPR 
 explicitly measures smoothness and its ablation study 
@@ -199,10 +206,11 @@ metric. The gap between what models optimize for
 geometrically and what they report is notable.
 
 
-\paragraph{Editability.} This is the most practically 
-important gap. The industry requirement that motivated 
-the scope of this thesis was explicit: generated SVGs 
-must be editable by designers using standard tools. 
+\subsection{Editability}
+This is the most practically 
+important gap. The practical requirement behind this thesis 
+(Section~\ref{sec:motivation}) is that generated SVGs 
+must be editable by designers in standard tools. 
 None of the metrics in Table~\ref{tab:metrics_used} 
 measure this. Editability is occasionally demonstrated 
 by showing that a generated element can be recolored 
@@ -219,7 +227,7 @@ models are evaluated on is part of the problem: editability
 is a practical requirement that the field has not yet 
 learned to measure.
 
-\begin{figure}[ht]
+\begin{figure}[htbp]
     \centering
     \begin{tabular}{cc}
     \includegraphics[width=0.4\textwidth]{2.png} &
@@ -244,10 +252,10 @@ concerns for SVG generation, they directly determine
 whether a method can be used in practice. 
 Table~\ref{tab:reproducibility} summarizes code 
 availability, hardware requirements, and inference time 
-across all fourteen models.
+across all thirteen models.
 
 The efficiency gap between optimization-based and 
-dataset-trained methods is worth to consider. LIVE, the 
+dataset-driven methods is worth considering. LIVE, the 
 simplest reconstruction-supervised method, requires 
 between 2,600 and 10,000 seconds per image on an RTX 
 3090 depending on path count~\cite{maLayerwiseImageVectorization2022}. 
@@ -260,36 +268,42 @@ hardware~\cite{xingSVGDreamerTextGuided2024,xingSVGDreamerAdvancingEditability20
 By contrast, LayerTracer generates a layered SVG in 27 
 to 34 seconds~\cite{songLayerTracerCognitiveAlignedLayered2025}, 
 and SVGFusion in 24 to 36 
-seconds~\cite{xingSVGFusionScalableTexttoSVG2025}. That differences are not small. 
+seconds~\cite{xingSVGFusionScalableTexttoSVG2025}. These differences are not small. 
 Optimization-based methods take minutes to hours because they refine parameters iteratively at inference time.
-Dataset-trained models do it in seconds through a single forward pass.
+Dataset-driven models do it in seconds through a single forward pass.
 
 Hardware requirements follow the same pattern but with 
-an important exception. Dataset-trained models are faster, 
+an important exception. Dataset-driven models are faster, 
 but several require enterprise-grade infrastructure during 
-training, such as, SVGFusion trains on multiple A800 GPUs, and 
+training, for example, SVGFusion trains on multiple A800 GPUs, and 
 LayerTracer on a single A100 with 80GB VRAM. Once trained, 
 these models can run inference on less demanding hardware, 
 but the training cost creates a barrier for independent 
-replication on untrained models.
+replication of these models.
 
 Reproducibility is a separate and equally important 
-concern for those whom wants to replicate the work.
-Four of the fourteen models have no public 
+concern for those who want to replicate the work.
+Code availability was recorded for every model but was not 
+a selection criterion (Section~\ref{sec:objective}). 
+Four of the thirteen models have no public 
 code release: SAMVG, VectorFusion, DeepIcon, and 
-SVGFusion. For these models, metrics cannot 
+SVGFusion. NIVeL's code is listed as pending, so five 
+models cannot currently be run from official code. 
+For these models, metrics cannot 
 be independently tested on shared test 
-sets. NiVeL's code is listed as pending. 
+sets. 
 When models cannot be run, cross-model comparisons rely 
 entirely on self-reported numbers, which may reflect 
 favorable experimental conditions. 
 
 
-\begin{table}[h!]
+\begin{table}[htbp]
 \centering
 \caption{Reproducibility and efficiency overview across 
-the fourteen models. Inference time is per-image 
-on reported hardware.}
+the thirteen models. Inference time is per-image. 
+Hardware as reported; (train) marks training hardware. The hybrids Im2Vec and T2V-NPR 
+(Figure~\ref{fig:taxonomy}) are listed with the family 
+they share most components with.}
 \label{tab:reproducibility}
 \small
 \begin{tabularx}{\textwidth}{l l l l}
@@ -304,7 +318,7 @@ SAMVG        & None     & RTX 3090        & 139--2,000 s    \\
 VectorFusion & None     & Not stated      & 10--20 min      \\
 SVGDreamer   & Public   & V100 ($\geq$31GB)  & 7--14 min       \\
 SVGDreamer++ & Public   & A800 ($\geq$31GB)  & $\sim$7 min     \\
-NiVeL        & Pending  & A100            & $\sim$5 min     \\
+NIVeL        & Pending  & A100            & $\sim$5 min     \\
 NeuralSVG    & Public   & Not stated      & Unknown         \\
 Im2Vec       & Public   & Not stated      & Unknown         \\
 \midrule
@@ -312,9 +326,9 @@ Im2Vec       & Public   & Not stated      & Unknown         \\
 \midrule
 DeepSVG      & Public   & 2$\times$1080Ti (train) & Unknown  \\
 DeepIcon     & None     & Not stated      & Unknown         \\
-SVGFusion    & None     & Multi-A800      & 24--36 s        \\
+SVGFusion    & None     & Multi-A800 (train) & 24--36 s     \\
 T2V-NPR      & Public   & RTX 3090        & $\sim$13 min    \\
-LayerTracer  & Public   & A100 (80GB)     & 27--34 s        \\
+LayerTracer  & Public   & A100 80GB (train) & 27--34 s      \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -322,7 +336,7 @@ LayerTracer  & Public   & A100 (80GB)     & 27--34 s        \\
 Table~\ref{tab:reproducibility} divides 
 along family lines: optimization-based methods 
 are slow and generally reproducible, while several 
-dataset-trained models are fast but require strong hardware in training step.
+dataset-driven models are fast but require strong hardware in training step.
 
 
 \section{Toward a Multi-Dimensional Evaluation Framework}
@@ -334,14 +348,16 @@ Every metric in Table~\ref{tab:metrics_used} operates on rendered pixels,
 not on the SVG itself. What follows is an attempt to fix that: 
 six evaluation dimensions that cover both visual and structural quality.
 
-\paragraph{Semantic alignment.} Does the generated SVG 
+\subsection{Semantic Alignment}
+Does the generated SVG 
 represent the intended concept? FID and CLIP score 
 approximate this for text-to-SVG tasks and remain 
 the most established signals. They should be computed 
 on sample sizes above 10,000 and against reference 
 distributions that do not overlap with training data.
 
-\paragraph{Path economy.} How efficiently does the 
+\subsection{Path Economy}
+How efficiently does the 
 model represent visual content? A practical measure 
 is path count relative to visually distinct regions. 
 NeuralSVG produces semantically accurate results with 
@@ -352,7 +368,8 @@ This structural difference is invisible to FID. Path
 count is directly computable from the SVG file without 
 rasterization.
 
-\paragraph{Geometric quality.} Are the paths smooth 
+\subsection{Geometric Quality}
+Are the paths smooth 
 and free of self-intersections? T2V-NPR directly 
 measures curve smoothness, and its ablation study 
 confirms that removing the neural path representation 
@@ -363,7 +380,8 @@ path data. Both are SVG-native metrics that do not
 require rasterization and should be standard 
 reported signals.
 
-\paragraph{Layer organization.} Do generated layers 
+\subsection{Layer Organization}
+Do generated layers 
 correspond to semantically meaningful groups? This 
 is the hardest dimension to quantify. A proxy is 
 the ratio of semantically grouped elements to total 
@@ -373,7 +391,8 @@ but neither reports a quantitative layer quality
 score~\cite{songLayerTracerCognitiveAlignedLayered2025, polaczekNeuralSVGImplicitRepresentation2025}. 
 Developing a standardized layer metric remains an open problem.
 
-\paragraph{Editability.} Can a designer modify the 
+\subsection{Editability}
+Can a designer modify the 
 output using standard tools? This requires human 
 evaluation, importing the SVG into Illustrator 
 or Figma and assessing whether elements can be 
@@ -385,43 +404,60 @@ and NeuralSVG are the strongest candidates in the
 analyzed set, though this has not been formally 
 tested across all models.
 
-\paragraph{Efficiency.} What hardware and time does 
+\subsection{Efficiency}
+What hardware and time does 
 generation require? Table~\ref{tab:reproducibility} 
 provides the data. This dimension is especially 
 relevant for industrial deployment, where generation 
-speed and infrastructure cost are primary constraints.
+speed and infrastructure cost are primary constraints. 
+For dataset-driven models, training counts too. A model 
+that needs an A100 or several A800 GPUs to train is hard 
+to reproduce, even if inference takes seconds.
+
+\subsection{Applying the Framework}
 
 Table~\ref{tab:framework} applies these six dimensions 
-to all fourteen models based on their architectural 
+to all thirteen models based on their architectural 
 properties. Most ratings reflect design characteristics 
 rather than measured outcomes. No model scores well across all six dimensions. 
 Optimization-based methods tend to score well on 
-semantic alignment and layer organization but poorly 
-on path economy, geometric quality, and efficiency. 
-Dataset-trained methods score better on efficiency 
-and path economy but vary widely on semantic alignment 
-and editability depending on training data scope. 
+semantic alignment but poorly on layer organization 
+and path economy, and they are mixed on geometric quality. 
+On efficiency most of them are only partial. 
+Dataset-driven methods are fast at inference and score 
+better on path economy. On efficiency only DeepSVG and 
+DeepIcon score well once training hardware counts. They 
+vary widely on semantic alignment and editability 
+depending on training data scope. 
 Neural implicit methods occupy a middle ground which is 
-strong on geometry and layers, but slow. SVGFusion scores 
+strong on geometry and layers, but slow. They are the only 
+optimization-based methods rated well on layers. SVGFusion scores 
 well across most dimensions based on its 
 architectural design and reported metrics, but its ratings 
 cannot be independently verified because no public 
 implementation is available 
 (Table~\ref{tab:reproducibility}).
 The table maps trade-offs rather than ranking models. 
+Chapter~\ref{ch:synthesis} uses these ratings together with the 
+representation and supervision analysis to compare the models directly.
 
 
 
-\begin{table}[h!]
+\begin{table}[htbp]
 \centering
 \caption{Proposed multi-dimensional evaluation 
-framework applied to the fourteen models. 
+framework applied to the thirteen models. 
 \textbf{+} = good, \textbf{\textasciitilde} = partial, 
 \textbf{-} = bad. Ratings marked * reflect metrics 
-reported in the original paper. All other ratings are 
+reported in the original paper (Table~\ref{tab:metrics_used}; 
+for T2V-NPR, its smoothness score). All other ratings are 
 the author's assessment based on the observations from papers and
 the architectural analysis in Chapters~\ref{ch:representation} 
-and~\ref{ch:supervision}.}
+and~\ref{ch:supervision}. Editability was not measured for any 
+model. Efficiency takes into account the hardware listed in 
+Table~\ref{tab:reproducibility}. n/a = not applicable: LIVE and SAMVG 
+reconstruct a target image, so text alignment does not apply. 
+$^\dagger$Single forward pass; time not reported.}
 \label{tab:framework}
 \small
 \begin{tabularx}{\textwidth}{l c c c c c c}
@@ -429,27 +465,27 @@ and~\ref{ch:supervision}.}
 \textbf{Model} & \textbf{Semantic} & \textbf{Path} & 
 \textbf{Geom.} & \textbf{Layers} & \textbf{Edit.} & 
 \textbf{Effic.} \\
- & \textbf{Align.} & \textbf{Density} & 
+ & \textbf{Align.} & \textbf{Economy} & 
 \textbf{Quality} & & & \\
 \midrule
 \multicolumn{7}{l}{\textit{Optimization-Based}} \\
 \midrule
-LIVE         & -*              & -*              & \textasciitilde* & - & -               & \textasciitilde \\
-SAMVG        & -*              & \textasciitilde & \textasciitilde  & - & \textasciitilde & \textasciitilde\\
+LIVE         & n/a             & -               & \textasciitilde  & - & -               & \textasciitilde \\
+SAMVG        & n/a             & \textasciitilde & \textasciitilde  & - & \textasciitilde & \textasciitilde\\
 VectorFusion & +*              & -               & -                & - & -               & \textasciitilde \\
-SVGDreamer   & +*              & \textasciitilde*& \textasciitilde  & - & \textasciitilde & \textasciitilde \\
+SVGDreamer   & +*              & \textasciitilde & \textasciitilde  & - & \textasciitilde & \textasciitilde \\
 SVGDreamer++ & +*              & \textasciitilde & +                & - & \textasciitilde & \textasciitilde \\
-NiVeL        & +               & +               & +                & + & \textasciitilde & \textasciitilde \\
-NeuralSVG    & +*              & +*              & +                & + & +               & \textasciitilde \\
-Im2Vec       & \textasciitilde & \textasciitilde & \textasciitilde  & - & \textasciitilde & + \\
+NIVeL        & +*              & +               & +                & + & \textasciitilde & \textasciitilde \\
+NeuralSVG    & +*              & +               & +                & + & +               & \textasciitilde \\
+Im2Vec       & \textasciitilde & \textasciitilde & \textasciitilde  & - & \textasciitilde & +$^\dagger$ \\
 \midrule
 \multicolumn{7}{l}{\textit{Dataset-Driven}} \\
 \midrule
-DeepSVG      & \textasciitilde & \textasciitilde & \textasciitilde  & - & \textasciitilde & + \\
+DeepSVG      & \textasciitilde & \textasciitilde & \textasciitilde  & - & \textasciitilde & +$^\dagger$ \\
 DeepIcon     & \textasciitilde & +               & +*               & - & \textasciitilde & + \\
-SVGFusion    & +*              & +               & +                & + & +               & + \\
-T2V-NPR      & +*              & +*              & +*               & - & \textasciitilde & - \\
-LayerTracer  & +*              & +*              & +*               & + & +*              & + \\
+SVGFusion    & +*              & +               & +                & + & +               & \textasciitilde \\
+T2V-NPR      & +*              & +               & +*               & - & \textasciitilde & - \\
+LayerTracer  & +*              & +               & +                & + & +               & \textasciitilde \\
 \bottomrule
 \end{tabularx}
 \end{table}

@@ -13,17 +13,51 @@ assumptions about what a good SVG output should look like,
 and they lead to very different trade-offs between visual
 quality and structural organization.
 
-This chapter introduces the fourteen models that form the whole thesis.
+This chapter introduces the thirteen models that form the whole thesis.
 They were selected among a broader research landscape that also includes sequence-based
 sketch models, retrieval-based vectorization systems, and large language model approaches to SVG
 synthesis. That wider context is sketched below to
 clarify where the selected models sit and why they were
-chosen. The organizing principle is simple, these fourteen
+chosen. The organizing principle is simple, these thirteen
 models together cover the full range of design decisions of models
 in two dimensions already mentioned: representation and supervision, that shape how SVG
 structure emerges from a generation pipeline. A summary of
-all fourteen models is provided in
-Table~\ref{tab:model_overview}.
+all thirteen models is provided in
+Table~\ref{tab:model_overview}, and Figure~\ref{fig:taxonomy}
+shows how they are grouped in this thesis.
+
+\begin{figure}[tbp]
+\centering
+\begin{forest}
+for tree={
+  grow'=0, draw, rounded corners, fill=gray!10,
+  font=\footnotesize, align=left,
+  anchor=west, child anchor=west, parent anchor=east,
+  l sep=5mm, s sep=1.2mm, inner sep=2pt,
+  tier/.option=level,
+  edge path={\noexpand\path[\forestoption{edge}]
+    (!u.parent anchor) -- +(2.5mm,0) |- (.child anchor)\forestoption{edge label};}
+}
+[13 analyzed\\models
+  [Optimization-based\\(per instance)
+    [Reconstruction-supervised:\\LIVE{,} SAMVG]
+    [Semantic-supervised{,} parametric:\\VectorFusion{,} SVGDreamer{,} SVGDreamer++]
+    [Semantic-supervised{,} neural implicit:\\NIVeL{,} NeuralSVG]
+  ]
+  [Dataset-driven\\(trained{,} forward generation)
+    [Sequential tokens: DeepSVG{,} DeepIcon]
+    [Latent diffusion: SVGFusion]
+    [Layered diffusion: LayerTracer]
+  ]
+  [Hybrid
+    [Im2Vec: trained without vector supervision]
+    [T2V-NPR: trained path prior\\+ per-prompt optimization]
+  ]
+]
+\end{forest}
+\caption{Taxonomy of the thirteen analyzed models by generation strategy.}
+\label{fig:taxonomy}
+\end{figure}
 
 An early line of work treats vector drawings as ordered 
 sequences of commands or strokes. Starting from 
@@ -73,7 +107,7 @@ analysis here. The core question of this thesis is how
 specific architectural decisions impact the structure
 of the output and that relationship is difficult to
 trace through billions of parameters. A more detailed
-justification is provided in the appendix.
+justification is provided in Appendix~\ref{app:llm_exclusion}.
 
 \section{Optimization-Based Methods}
 \label{sec:optimization}
@@ -87,30 +121,38 @@ What varies across methods in this family is what that
 supervision signal is and how geometry is represented
 during optimization.
 
-All of them rely on DiffVG~\cite{liDifferentiableVectorGraphics2020a} to work.
+Almost all of them rely on DiffVG~\cite{liDifferentiableVectorGraphics2020a} to work. 
+NIVeL is the exception: it optimizes implicit fields that are evaluated on a pixel grid 
+and only turned into curves afterwards with marching squares, so DiffVG is not part of 
+its optimization loop~\cite{thamizharasanNIVeLNeuralImplicit2024}.
 The optimization loop across all methods 
 follows the same render-compare-update cycle, 
 but differs in what loss drives it and how geometry is represented.
 Table~\ref{tab:arch_optbased} summarizes how each 
-model in this group implements those differently.
+model in this group implements those differently. 
+Fuller versions of Tables~\ref{tab:arch_optbased} 
+to~\ref{tab:model_overview} are in Appendix~\ref{app:tables}.
 
-\subsection*{Reconstruction-Supervised}
+\subsection{Reconstruction-Supervised}
 
 LIVE~\cite{maLayerwiseImageVectorization2022} is the simplest form of optimization-based vectorization. 
 It starts from an empty canvas, finds where the biggest visual gap is between the current SVG and the target image, 
 drops a new path there, and optimizes everything together. It repeats this process layer by layer until the reconstruction is close enough. 
-Because paths are added one at a time from coarse to fine, the output tends to have a layered structure where each path has a recognizable role. 
+Its loss combines a pixel loss weighted toward shape contours (UDF) with a Xing loss that penalizes self-intersecting paths~\cite{maLayerwiseImageVectorization2022}. 
+Because paths are added one at a time from coarse to fine, the output tends to have a layered structure where each path has a recognizable role, 
+at least at small path counts. With many paths this breaks down (Section~\ref{sec:parametric}). 
 SAMVG~\cite{zhuSAMVGMultistageImage2023} follows the same optimization loop but starts from a better place: instead of finding gaps by 
 pixel difference, it uses the Segment Anything Model~\cite{kirillovSegmentAnything2023} to identify semantically meaningful 
-regions before any optimization begins. The loss function is the same. The difference in output quality comes almost entirely 
-from where optimization starts, which suggests that initialization matters as much as what you optimize for.
+regions before any optimization begins. The loss is the same kind, pixel reconstruction. Much of the difference in output quality comes 
+from where optimization starts (Section~\ref{sec:init_priors}). Both pipelines are shown in Figure~\ref{fig:opt_recon_pipelines}.
 
-Im2Vec~\cite{reddyIm2VecSynthesizingVector2021} does not fit cleanly into either group. 
+Im2Vec~\cite{reddyIm2VecSynthesizingVector2021} does not fit cleanly into either group and is listed as a hybrid in Figure~\ref{fig:taxonomy}. 
 It trains an encoder-decoder to predict vector primitives from a raster image in a single forward pass, 
-using differentiable rendering and reconstruction loss during training. At inference there is no iterative refinement. 
+using differentiable rendering and reconstruction loss during training. The training data are raster images only, 
+the model never sees an SVG~\cite{reddyIm2VecSynthesizingVector2021}. At inference there is no iterative refinement. 
 It is included here because its core contribution is the training objective, not a learned generative model over SVG structure.
 
-\subsection*{Semantic-Supervised}
+\subsection{Semantic-Supervised}
 
 When no target image exists, the optimization loop needs a different 
 kind of signal. These methods use a pretrained diffusion model to judge whether the 
@@ -119,8 +161,8 @@ behind this is Score Distillation Sampling
 (SDS)~\cite{pooleDreamFusionTextto3DUsing2022}, originally developed 
 for text-to-3D generation and described in 
 Section~\ref{sec:sds_vsd}: render the SVG, add noise, let the 
-diffusion model predict what the clean version should look like and 
-use the difference as a gradient to update the SVG parameters.
+diffusion model predict that noise and 
+use the difference between predicted and added noise as a gradient to update the SVG parameters.
 
 VectorFusion~\cite{jainVectorFusionTexttoSVGAbstracting2022} was 
 among the first to apply SDS to SVG generation, using Stable 
@@ -134,14 +176,16 @@ replacing SDS with Vectorized Particle-based Score Distillation
 distribution of particles rather than a single point estimate 
 (Figure~\ref{fig:svgdreamer_vpsd}). SVGDreamer also introduces 
 explicit control over how many primitives are used and how they 
-are organized into semantic layers. 
+are organized into semantic layers, through its semantic-driven 
+image vectorization (SIVE). 
 SVGDreamer++~\cite{xingSVGDreamerAdvancingEditability2025} extends 
-this further with a hierarchical refinement mechanism that can add 
-or remove primitives during generation based on how much detail 
-each region needs.
+this further with hierarchical image vectorization (HIVE), which works 
+on objects and their parts, and with an adaptive control that can add 
+or remove primitives during optimization. The pipelines of all three 
+are compared in Figure~\ref{fig:opt_semantic_pipelines}.
 
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\textwidth]{SDS.png}
 \caption{SDS optimization loop in VectorFusion~\cite{jainVectorFusionTexttoSVGAbstracting2022}.}
@@ -149,72 +193,82 @@ each region needs.
 \end{figure}
 
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\textwidth]{VPSD!.png}
 \caption{VPSD optimization loop in SVGDreamer~\cite{xingSVGDreamerTextGuided2024}.}
 \label{fig:svgdreamer_vpsd}
 \end{figure}
 
-\subsection*{Neural Implicit Representation}
+The two loops look alike, but they differ in what is trained. 
+In SDS (Figure~\ref{fig:sds_loop}) everything except the SVG is frozen. 
+The render is encoded and noised, the frozen model predicts the noise, 
+and the difference between predicted and added noise flows back through 
+DiffVG into one SVG. VPSD (Figure~\ref{fig:svgdreamer_vpsd}) keeps the 
+diffusion model frozen too, but adds two things.
 
-NiVeL~\cite{thamizharasanNIVeLNeuralImplicit2024} and 
+There are $k$ SVGs (particles) instead of one. A LoRA copy of the diffusion 
+model is trained on their renders, and the SVG update comes from the difference 
+between the frozen model and this copy. A reward model also scores the particles 
+and reweights them. The authors report this gives better-looking results and 
+faster convergence~\cite{xingSVGDreamerTextGuided2024}.
+
+\subsection{Neural Implicit Representation}
+
+NIVeL~\cite{thamizharasanNIVeLNeuralImplicit2024} and 
 NeuralSVG~\cite{polaczekNeuralSVGImplicitRepresentation2025} take 
 a different approach to the same optimization loop. 
 They store geometry as the weights of a small MLP, instead of 
 storing geometry as explicit B\'{e}zier coordinates that are 
-adjusted directly. The network takes a number (shape index) 
-and outputs the geometry for that shape. Nothing is stored as an explicit path.
+adjusted directly. In NeuralSVG the network takes a shape index 
+and outputs the geometry for that shape. In NIVeL it takes a pixel 
+coordinate and returns which layer covers it. Nothing is stored as an explicit path.
 
-This brings different properties to optimization based approaches. Compared to 
-parametric methods, where each path is an independent object and 
-optimization can push them in different directions. But with an 
+This brings different properties to optimization based approaches. In 
+parametric methods each path is an independent object, and 
+optimization can push the paths in different directions. With an 
 MLP, all shapes come from the same learned function, which 
-creates a bias toward global coherence. NiVeL uses this to 
+creates a bias toward global coherence. NIVeL uses this to 
 decompose scenes into layered components, where each layer is 
 a separate neural field whose zero-level set defines a shape 
-boundary. NeuralSVG assigns each shape a fixed index and 
-optimizes the network so that each index consistently maps to 
-the same visual region across iterations. The outputs from 
+boundary. NeuralSVG assigns each shape a fixed index 
+(Section~\ref{sec:implicit}). The outputs from 
 both tend to be cleaner and more organized than purely 
-parametric optimization, but inference is slower because the 
-network has to be optimized from scratch for every new prompt.
+parametric optimization, but they still need a full optimization 
+run for every new prompt. Figure~\ref{fig:opt_neural_pipelines} 
+compares the two pipelines.
 
-Table~\ref{tab:arch_optbased} summarizes the architectural 
-components of all optimization-based methods. The 
-``Trainables'' column refers to per-instance parameters 
-optimized at inference time, not learned model weights. None 
-of these methods require a training dataset.
-
-
-
-\begin{table}[h!]
+\begin{table}[htbp]
 \centering
 \caption{Architectural overview of optimization-based 
-SVG generation methods. Trainables refer to 
-per-instance parameters optimized at inference time.}
+SVG generation methods. Trainables: what is updated, 
+per-instance parameters optimized at inference time, 
+except for Im2Vec, whose network weights are trained once. 
+Init.: how primitives are placed before optimization. 
+Supervision: the loss that drives the update. 
+Representation: how geometry is stored while it is optimized.}
 \label{tab:arch_optbased}
-\small
-\begin{tabularx}{\textwidth}{l l l l l}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}l l l l X@{}}
 \toprule
 \textbf{Model} & \textbf{Trainables} & \textbf{Init.} 
 & \textbf{Supervision} & \textbf{Representation} \\
 \midrule
-LIVE         & SVG parameters      & Raster-driven    
+LIVE         & SVG param.          & Error-driven     
              & Pixel recon.        & Parametric       \\
-SAMVG        & None                & Mask-based       
-             & None                & Parametric       \\
+SAMVG        & SVG param.          & Mask-based       
+             & Pixel recon.        & Parametric       \\
 Im2Vec       & Encoder + RNN       & Image encoding   
              & Pixel recon.        & Parametric paths \\
-VectorFusion & SVG parameters      & Random/Trace     
+VectorFusion & SVG param.          & Random/Trace     
              & SDS                 & Parametric       \\
-SVGDreamer   & SVG param. + LoRA   & Random paths     
+SVGDreamer   & SVG param. + LoRA   & Attention (SIVE) 
              & VPSD                & Parametric       \\
 SVGDreamer++ & SVG param. + LoRA   & Random + HIVE    
              & VPSD + HIVE         & Structured param.\\
 NeuralSVG    & MLP weights + LoRA  & Saliency-based   
              & SDS                 & Neural implicit  \\
-NiVeL        & MLP weights         & Random weights   
+NIVeL        & MLP weights         & Random weights   
              & SDS                 & Neural implicit  \\
 \bottomrule
 \end{tabularx}
@@ -222,13 +276,13 @@ NiVeL        & MLP weights         & Random weights
 
 Table~\ref{tab:arch_optbased} summarizes the 
 architectural components of the optimization-based 
-methods. For all models in this group, the 
-``Trainables'' column refers to per-instance 
-parameters optimized at inference time rather than 
-learned model weights. None of these methods require 
-a training dataset; supervision is provided either 
-by the input image directly or by a frozen pretrained 
-model.
+methods. For all models here except Im2Vec, 
+``Trainables'' means per-instance parameters optimized 
+at inference time. None of them needs a training 
+dataset. Supervision comes from the input image or from 
+a frozen pretrained model. Im2Vec is different. Its 
+trainables are network weights, learned once from 
+raster images.
 
 
 
@@ -252,15 +306,15 @@ SVG-Icons8 dataset.
 The latent space separates path-level and command-level
 representations, allowing the model to capture both coarse
 shape organization and fine geometric detail. At inference,
-SVG commands are generated autoregressively from a sampled
-latent vector. DeepSVG demonstrated that structured SVG
+all SVG commands are decoded from a sampled latent vector
+in a single forward pass, not one after another~\cite{carlierDeepSVGHierarchicalGenerative2020}. DeepSVG demonstrated that structured SVG
 generation from a learned latent space is feasible, and
 also exposed the difficulty of maintaining geometric
 validity across long command sequences.
 
 DeepIcon~\cite{bingDeepIconHierarchicalNetwork2024} applies a similar framework
-to icon generation specifically, trained on a curated
-dataset of simple icons. The domain-specific training
+to icon vectorization specifically, trained on the same
+SVG-Icons8 dataset of simple icons. The domain-specific training
 produces outputs with more consistent style and geometry
 than general-purpose models, though generalization beyond
 the training distribution is limited by design.
@@ -277,21 +331,23 @@ meaningful layer organization than direct command
 prediction, with direct consequences for editability.
 
 T2V-NPR~\cite{zhangTexttoVectorGenerationNeural2024} combines dataset training
-with a learned neural path representation. Trained on
-natural image and stylization data, it generates vector
-paths through a latent path space. It uses diffusion-based semantic
-supervision during training, but at inference it operates
-as a forward generative model. Its placement here reflects
-the fact that its structural behavior is closer to
-the learned models in this section than to the per-instance
-optimization methods above.
+with per-prompt optimization. It first trains a neural path VAE
+on the FIGR-8-SVG icon dataset, so the latent space learns
+what a regular, smooth path looks like. For a new prompt there is
+no forward pass. Path latents in this learned space are optimized
+with VSD from a pretrained diffusion model, and the result is then
+refined with layer-wise vectorization~\cite{zhangTexttoVectorGenerationNeural2024}.
+So T2V-NPR is a hybrid: a trained path prior with per-instance
+optimization on top. It is described in this section because its
+path prior comes from a dataset, but its inference works like
+the optimization methods above.
 
 SVGFusion~\cite{xingSVGFusionScalableTexttoSVG2025} is the most architecturally
 complex model in this family. It first learns a continuous
-latent space of vector graphics using a Vector Path
-Variational Autoencoder (VP-VAE), trained to compress path
-sequences into dense latent representations. Generation
-then occurs through a Vector Semantic Diffusion Transformer
+latent space of vector graphics using a Vector-Pixel Fusion
+Variational Autoencoder (VP-VAE), which encodes each SVG
+together with its rendering. Generation
+then occurs through a Vector Space Diffusion Transformer
 (VS-DiT), which operates entirely in this learned latent
 space. This makes SVGFusion distinct from the
 semantic-supervised optimization methods in the previous
@@ -305,97 +361,101 @@ Table~\ref{tab:arch_dataset} summarizes the
 architectural components of the dataset-driven 
 methods.
 
-\begin{table}[h!]
+\begin{table}[htbp]
 \centering
 \caption{Architectural overview of dataset-driven 
 SVG generation methods. Training data refers to 
 the dataset used for offline model training.}
 \label{tab:arch_dataset}
-\small
-\begin{tabularx}{\textwidth}{l l l l l}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}l l l l X@{}}
 \toprule
 \textbf{Model} & \textbf{Trainables} & \textbf{Data} 
 & \textbf{Supervision} & \textbf{Representation} \\
 \midrule
-DeepSVG      & VAE + Transformer   & SVGIcons8        
+DeepSVG      & VAE + Transformer   & SVG-Icons8       
              & Recon. + KL         & Sequential tokens \\
-DeepIcon     & Transformer         & SVGIcons8        
+DeepIcon     & Transformer         & SVG-Icons8       
              & Reconstruction      & Sequential tokens \\
 SVGFusion    & VP-VAE + VS-DiT     & SVGX             
              & Recon. + Denoising  & Continuous latent \\
-T2V-NPR      & NPR-VAE + LoRA      & FIGR-8           
+T2V-NPR      & NPR-VAE + LoRA      & FIGR-8-SVG       
              & VSD                 & Neural path repr. \\
-LayerTracer  & DiT + LoRA          & LayerSVG         
+LayerTracer  & DiT + LoRA          & 20k layered SVGs 
              & Denoising           & Layered sequences \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 Unlike the optimization-based group, every model here has a 
-named training corpus. The representation column also shifts 
+training corpus. The representation column also shifts 
 away from parametric paths toward sequential tokens, latent 
 spaces, and layered sequences, reflecting a fundamentally 
 different approach to how SVG structure is encoded.
 
 
 
-Table~\ref{tab:model_overview} summarizes the fourteen models 
+Table~\ref{tab:model_overview} summarizes the thirteen models 
 analyzed in this thesis. The \textit{Inference} column 
 distinguishes between methods that optimize vector parameters 
 at inference time (\textit{Iterative Opt.}) and methods that 
 generate SVGs through a single trained forward pass 
 (\textit{Forward Dec.}). The \textit{Supervision} column 
 indicates the primary signal driving generation: 
-\textit{Opt.-based} refers to direct pixel reconstruction 
-without a pretrained model, \textit{Self-Sup.} to semantic 
+\textit{Pixel recon.} refers to reconstruction against a 
+target raster image without a pretrained model, \textit{Semantic} to 
 signals derived from frozen pretrained models (diffusion or 
 CLIP), and \textit{Supervised} to training against 
-ground-truth SVG data. Task types distinguish between 
+ground-truth SVG data. \textit{Hybrid} in the Inference 
+column marks methods that combine a trained model with a 
+per-instance optimization or vectorization step. Task types distinguish between 
 \textit{Vectorization} (raster image as input, SVG as 
 output), \textit{Text-to-SVG} (text prompt as input), and 
 \textit{Unconditional Generation} (no input at inference --- SVG 
 sampled directly from a learned latent space).
 
-\begin{table}[h!]
+\begin{table}[htbp]
 \centering
-\caption{Overview of the fourteen models analyzed in this 
+\caption{Overview of the thirteen models analyzed in this 
 thesis, organized by generation strategy.}
 \label{tab:model_overview}
-\small
-\begin{tabularx}{\textwidth}{l l l l l l}
+\footnotesize
+\begin{tabularx}{\textwidth}{l l l l l X}
 \toprule
 \textbf{Model} & \textbf{Task} & \textbf{Inference} & 
 \textbf{Input} & \textbf{Output} & \textbf{Supervision} \\
 \midrule
-LIVE         & Vectorization      & Iterative Opt. & Image    & Paths        & Optimization \\
-SAMVG        & Vectorization      & Iterative Opt. & Image    & Paths        & Optimization \\
-Im2Vec       & Vectorization      & Forward Dec.   & Image    & Paths        & Self-Sup.  \\
+LIVE         & Vectorization      & Iterative Opt. & Image    & Paths        & Pixel recon. \\
+SAMVG        & Vectorization      & Iterative Opt. & Image    & Paths        & Pixel recon. \\
+Im2Vec       & Vectorization      & Forward Dec.   & Image    & Paths        & Pixel recon. \\
 \midrule
-VectorFusion & Text-to-SVG        & Iterative Opt. & Text     & Paths        & Self-Sup.  \\
-SVGDreamer   & Text-to-SVG        & Iterative Opt. & Text     & Paths        & Self-Sup.  \\
-SVGDreamer++ & Text-to-SVG        & Iterative Opt. & Text     & Paths        & Self-Sup.  \\
-NiVeL        & Text-to-SVG        & Iterative Opt. & Text     & Layers/Paths & Self-Sup.  \\
-NeuralSVG    & Text-to-SVG        & Iterative Opt. & Text     & Layers/Paths & Self-Sup.  \\
+VectorFusion & Text-to-SVG        & Iterative Opt. & Text     & Paths        & Semantic   \\
+SVGDreamer   & Text-to-SVG        & Iterative Opt. & Text     & Paths        & Semantic   \\
+SVGDreamer++ & Text-to-SVG        & Iterative Opt. & Text     & Paths        & Semantic   \\
+NIVeL        & Text-to-SVG        & Iterative Opt. & Text     & Layers/Paths & Semantic   \\
+NeuralSVG    & Text-to-SVG        & Iterative Opt. & Text     & Layers/Paths & Semantic   \\
 \midrule
 DeepSVG      & Unconditional      & Forward Dec.   & None     & Paths        & Supervised \\
 DeepIcon     & Vectorization      & Forward Dec.   & Image    & Layers/Paths & Supervised \\
 SVGFusion    & Text-to-SVG        & Forward Dec.   & Text     & Layers/Paths & Supervised \\
-T2V-NPR      & Text-to-SVG        & Forward Dec.   & Text     & Layers/Paths & Supervised \\
+T2V-NPR      & Text-to-SVG        & Hybrid         & Text     & Layers/Paths & Sup. + Semantic \\
 LayerTracer  & Text-to-SVG        & Hybrid         & Text/Img & Layers/Paths & Supervised \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 The split between Iterative Opt. and Forward Dec. in the 
-Inference column maps cleanly onto the two families: every 
-optimization-based model refines at inference time, while 
-every dataset-driven model generates through a single 
-forward pass. LayerTracer is the only exception, labeled 
-Hybrid because it combines a trained diffusion model with 
-a per-instance vectorization step.
+Inference column maps almost cleanly onto the two families: 
+every optimization-based model except Im2Vec refines at 
+inference time, while every dataset-driven model except 
+T2V-NPR generates through a forward pass. Im2Vec is trained 
+and then decodes in a single pass. T2V-NPR trains a path 
+prior and then optimizes for each prompt. LayerTracer is 
+labeled Hybrid because it combines a trained diffusion model 
+with a per-instance vectorization step.
 
 
-The fourteen models described here differ in representation 
+The thirteen models described here differ in representation 
 and supervision, and those two dimensions do not operate 
 independently. A model's representation constrains what 
 supervision signals are meaningful, and the choice of 

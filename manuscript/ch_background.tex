@@ -25,7 +25,7 @@ different ways.
 
 Scalable Vector Graphics (SVG) is an XML-based standard for 
 representing two-dimensional graphics as structured 
-text~\cite{eisenbergSVGEssentialsProducing20}. Difference between raster formats and SVG 
+text~\cite{eisenbergSVGEssentialsProducing20}. The difference between raster formats and SVG 
 is that an SVG file is a readable document that describes how an image should 
 be drawn rather than storing pixel values. At its core, an SVG file consists of instructions or commands that 
 define geometric primitives such as circles, rectangles, lines, and 
@@ -52,14 +52,14 @@ the rest.
 Figure~\ref{fig:svg_example} shows a minimal SVG file and 
 its rendered output. The file is plain text: each element 
 is a single readable line that defines geometry and color 
-directly. This is what makes SVG editable. a designer 
+directly. This is what makes SVG editable. A designer 
 can open the file, find the element they want, and change 
 a number.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \begin{minipage}{0.52\textwidth}
-\begin{lstlisting}[language=XML, basicstyle=\small\ttfamily]
+\begin{lstlisting}[language=XML, basicstyle=\small\ttfamily, showstringspaces=false]
 <svg xmlns="http://www.w3.org/2000/svg"
      width="200" height="200">
   <!-- Face -->
@@ -113,12 +113,12 @@ geometry. The control point coordinates are the core
 parameters that models either predict directly or adjust 
 during optimization.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\textwidth]{Bezier_grad123.png}
-\caption{B\'{e}zier curves of grade 1, 2, and 3 (red) with 
+\caption{B\'{e}zier curves of degree 1, 2, and 3 (red) with 
 their control polygons (gray). From left to right, an 
-additional control point (blue) is added at each grade. 
+additional control point (blue) is added at each degree. 
 The curve changes direction and curvature as control points 
 are inserted or moved. Image: Wikimedia 
 Commons~\cite{wikiBezier}.}
@@ -173,15 +173,13 @@ al.~\cite{liDifferentiableVectorGraphics2020a} made it practically possible
 to optimize these parameters directly using image-based loss 
 functions: a graphic is initialized as a collection of 
 primitives, and their parameters are iteratively refined until 
-the rendered output matches a target. Before DiffVG, this kind 
-of gradient-based update of vector primitives was not 
-straightforward.
+the rendered output matches a target.
 
 \subsection{Sequential Representation}
 \label{sec:sequential_repr}
 
 The idea of treating vector graphics as ordered sequences of 
-drawing commands goes back to Ha and 
+drawing commands goes back to SketchRNN by Ha and 
 Eck~\cite{haNeuralRepresentationSketch2017}, who showed that 
 recurrent networks could learn to generate stroke-based 
 drawings by modelling them as sequences of pen movements. 
@@ -214,12 +212,30 @@ compact representations, but also makes it harder to control specific
 geometric features directly, because they are not explicitly defined as 
 parameters.   
 
+Take the mouth 
+in Figure~\ref{fig:svg_example}, \texttt{M 65 135 Q 100 110 135 135}. 
+A parametric representation stores its three points directly: start 
+(65,~135), control point (100,~110), and end (135,~135), plus stroke 
+width and color. Optimization changes these numbers. A sequential 
+representation turns the same curve into tokens: a move command with 
+the arguments 65 and 135, then a quadratic curve command with 100, 110, 
+135, and 135. The model has to predict them in that order. An implicit 
+representation like NeuralSVG stores none of these numbers. The mouth 
+is simply shape number 4. The MLP takes the index 4 as input and 
+outputs the control points and the color of that 
+shape~\cite{polaczekNeuralSVGImplicitRepresentation2025}. To change 
+the mouth, you change the network weights, and the numbers only appear 
+when the network is queried. NIVeL works the other way around: its network 
+takes a pixel coordinate and returns which layer covers it, so the 
+curve only appears after it is traced from the 
+field~\cite{thamizharasanNIVeLNeuralImplicit2024}.
 
-\subsection{Latent Representation}
+
+\subsection{Latent Space as a Generative Layer}
 \label{sec:latent_repr}
 
-Latent representation works differently from the first three representations, 
-it is not a vector representation in the geometric sense.
+Latent representation is not a geometric representation at all. 
+It is a generative layer that sits on top of one of the other three.
 There are no control points, no path commands, no shape boundaries 
 stored anywhere. Latent space is compressing many graphics
 into a shared numerical embedding learned during training. 
@@ -273,8 +289,6 @@ possible to apply the full range of image-based supervision
 strategies, reconstruction losses, CLIP guidance, diffusion 
 priors directly to vector parameters.
 
-
-
 The core idea is shown in Figure~\ref{fig:diffvg_pipeline}. 
 Normally, converting vector shapes to pixels is a one-way 
 street: you can go from shapes to pixels, but not back. 
@@ -283,7 +297,7 @@ can flow back through the rasterizer, any image-based loss
 function becomes usable for optimizing vector parameters 
 directly.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[
   box/.style={rectangle, draw, rounded corners,
@@ -310,8 +324,30 @@ directly~\cite{liDifferentiableVectorGraphics2020a}.}
 \label{fig:diffvg_pipeline}
 \end{figure}
 
+Not every analyzed model needs differentiable rendering. 
+DeepSVG and DeepIcon are trained directly on SVG commands, with 
+losses that compare predicted and ground-truth commands, so no 
+rasterizer is involved~\cite{carlierDeepSVGHierarchicalGenerative2020, bingDeepIconHierarchicalNetwork2024}. 
+LayerTracer generates raster construction frames with a diffusion 
+model and vectorizes them afterwards with a separate tracing 
+step~\cite{songLayerTracerCognitiveAlignedLayered2025}. NIVeL 
+optimizes implicit fields on a pixel grid and extracts curves only 
+at the end~\cite{thamizharasanNIVeLNeuralImplicit2024}. DiffVG is 
+also not the only differentiable rasterizer. B\'{e}zier Splatting, 
+for example, represents each curve as 2D Gaussians placed along it 
+and reports much faster forward and backward passes than 
+DiffVG~\cite{liuBezierSplattingFast2025}.
+
 \section{Loss Functions and Semantic Guidance}
 
+The supervision signals in this section fall into two groups. 
+Reconstruction supervision compares the rendered output with a 
+target image (Section~\ref{sec:recon_losses}). Semantic supervision 
+has no target image and uses a pretrained model, CLIP or a diffusion 
+model, to judge whether the output matches a text prompt 
+(Sections~\ref{sec:clip} to~\ref{sec:sds_vsd}). 
+Chapter~\ref{ch:Landscape} uses this split to group the 
+optimization-based methods.
 
 Even when a model manipulates vector parameters internally, 
 comparing outputs in pixel space is more practical than 
@@ -381,10 +417,12 @@ from vector parameters via differentiable rendering, the
 CLIP similarity score can serve as an optimization signal. 
 CLIP does not generate images in this setup: it acts as 
 a semantic evaluator that provides a direction for 
-improvement. In several of the models analyzed in 
-Chapter~\ref{ch:supervision}, CLIP-based guidance serves 
-as an early-stage alignment signal before stronger 
-supervision (typically from a diffusion model) takes over.
+improvement. In the models analyzed in 
+Chapter~\ref{ch:supervision}, CLIP plays a smaller role. 
+VectorFusion, for example, uses CLIP only to pick the best 
+of several raster samples before vectorization, and the 
+optimization itself is driven by a diffusion 
+model~\cite{jainVectorFusionTexttoSVGAbstracting2022}.
 
 \subsection{Diffusion Models}
 
@@ -413,28 +451,39 @@ graphics by VectorFusion~\cite{jainVectorFusionTexttoSVGAbstracting2022},
 uses a pretrained text-conditioned diffusion model as an 
 optimization signal. The current SVG is rendered to an 
 image, noise is added according to the diffusion schedule, 
-and the diffusion model predicts the denoised version 
+and the diffusion model predicts which noise was added, 
 conditioned on the text prompt. The difference between 
-the noisy image and the predicted denoising defines a 
+the predicted noise and the noise that was actually added, 
+weighted according to the timestep, defines a 
 gradient, which is backpropagated through the rasterizer 
 to update the SVG parameters. No ground-truth image is 
 required, the diffusion model's learned prior acts as 
 the teacher.
 
-A known limitation of SDS is oversaturation: because the 
-gradient update treats the rendered image as if it were 
-pure noise, results tend to be over-smoothed and lack 
-fine detail. Variational Score Distillation (VSD), 
-introduced in SVGDreamer~\cite{xingSVGDreamerTextGuided2024}, 
-addresses this by modeling the rendered output as a 
-particle in a distribution rather than treating it as 
-noise directly. This produces more stable gradients and 
-visually consistent results. Both SDS and VSD are used across several models analyzed 
+A known limitation of SDS is that results look oversaturated 
+and over-smoothed, with little fine detail. SDS only works 
+well with a very high guidance weight, and that weight pushes 
+colors to extremes. It also pulls every run toward the same 
+most likely image, so detail and variety get 
+lost~\cite{pooleDreamFusionTextto3DUsing2022, wangProlificDreamerHighFidelityDiverse2023}.
+
+Variational Score Distillation (VSD) was introduced by 
+ProlificDreamer~\cite{wangProlificDreamerHighFidelityDiverse2023} 
+for text-to-3D. Instead of one output, it keeps a few versions 
+at once, called particles. A LoRA copy of the diffusion model 
+(a small set of extra low-rank weights added to the frozen model) 
+is trained next to them and learns what they currently look 
+like. This works with normal guidance weights and gives more 
+detail and variety. SVGDreamer builds on it with Vectorized 
+Particle-based Score Distillation (VPSD), where each particle 
+is a set of SVG parameters~\cite{xingSVGDreamerTextGuided2024}. Both SDS and VSD are used across several models analyzed 
 in Chapter~\ref{ch:supervision}. The complete optimization 
 loops for SDS and VSD are shown in 
 Figures~\ref{fig:sds_loop} and~\ref{fig:svgdreamer_vpsd}, 
 where the role of the diffusion model as a supervision 
-signal becomes solid.
+signal becomes concrete. Chapter~\ref{ch:Landscape} now 
+introduces the thirteen models that are built from these 
+blocks.
 
 
 

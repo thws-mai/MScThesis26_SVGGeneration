@@ -5,12 +5,12 @@ This thesis examined how SVG generation methods construct
 vector graphics and why their structural outcomes differ. 
 The analysis was organized around three dimensions 
 (representation, supervision, and evaluation) and applied 
-across fourteen open-source models. The goal was to provide 
+across thirteen models. The goal was to provide 
 a clear reference for anyone working on SVG generation: 
 what current models do, how their design choices shape 
 the output, and where the field still falls short.
 
-\section*{Answers to the Research Questions}
+\section{Answers to the Research Questions}
 
 \textbf{RQ1: What are the main properties and structures 
 that define an editable and high-quality SVG?}
@@ -27,17 +27,21 @@ as part of the foundational definition of SVG, and
 Chapter~\ref{ch:synthesis} identified five conditions 
 under which current models can satisfy them.
 
-\textbf{RQ2: What open-source methods currently exist 
+\textbf{RQ2: What methods currently exist 
 for generating SVGs from different input modalities?}
 
-The review identified two broad methodological families. 
-Optimization-based methods (LIVE, SAMVG, Im2Vec, 
-VectorFusion, SVGDreamer, SVGDreamer++, NiVeL, and 
+The thirteen analyzed methods fall into two broad 
+methodological families. 
+Optimization-based methods (LIVE, SAMVG, 
+VectorFusion, SVGDreamer, SVGDreamer++, NIVeL, and 
 NeuralSVG) operate by iteratively refining vector 
 parameters to match a target image or semantic 
 description. Dataset-driven methods (DeepSVG, DeepIcon, 
-LayerTracer, T2V-NPR, and SVGFusion) learn generation 
-from collections of existing SVGs. 
+LayerTracer, and SVGFusion) learn generation 
+from collections of existing SVGs. Im2Vec and T2V-NPR 
+are hybrids: Im2Vec is trained on raster images and 
+decodes in one pass, and T2V-NPR combines a trained 
+path prior with per-prompt optimization. 
 Chapter~\ref{ch:Landscape} described their input 
 modalities, which span raster images, text prompts, 
 and unconditional generation from latent distributions. 
@@ -48,13 +52,19 @@ Chapter~\ref{ch:Introduction}.
 \textbf{RQ3: What types of deep learning architectures 
 are used for SVG generation?}
 
-The analyzed models employ four distinct architecture 
-types, described in Chapter~\ref{ch:Landscape} and 
-analyzed in Chapter~\ref{ch:representation}. The 
+The analyzed models fall into four architecture types: 
+per-instance optimization through a differentiable 
+rasterizer, small MLPs that encode the geometry 
+implicitly, transformer encoder-decoders over SVG 
+commands (DeepSVG, DeepIcon), and VAE or diffusion 
+transformer combinations (SVGFusion, LayerTracer). 
+They are described in Chapter~\ref{ch:Landscape} and 
+Tables~\ref{tab:arch_optbased} and~\ref{tab:arch_dataset}. The 
 structural properties of each type's output differ 
 more than their visual quality, which is the 
 observation that motivated the representation-focused 
 analysis of this thesis.
+
 \textbf{RQ4: What kinds of structure do these models 
 produce?}
 
@@ -69,7 +79,7 @@ reduced visual complexity. Chapter~\ref{ch:representation}
 traced how representation shapes these structural outcomes,
 Chapter~\ref{ch:supervision} examined how supervision signals interact with them, 
 and Chapter~\ref{ch:synthesis} mapped the resulting trade-offs 
-across all fourteen models.
+across all thirteen models.
 
 \textbf{RQ5: How can the quality and editability of 
 generated SVG be evaluated?}
@@ -85,10 +95,12 @@ organization, editability, and efficiency. The chapter
 also identified SVGEditBench and SVGenius as emerging 
 benchmarks, while noting that both were designed for 
 language-model-based SVG generation and do not 
-directly apply to the optimization and dataset-trained 
-models analyzed here.
+directly apply to the optimization and dataset-driven 
+models analyzed here. Zhu et al.~\cite{zhuStructuralEvaluationMetrics2026} 
+measure structure directly, which is the direction the 
+framework points to.
 
-\textbf{RQ6: What is the observed quality of SVG 
+\textbf{RQ6: What is the reported and assessed quality of SVG 
 outputs across different models?}
 
 No model in the analyzed set performs well across all 
@@ -96,14 +108,16 @@ six evaluation dimensions simultaneously. Optimization-
 based models achieve the strongest visual fidelity but 
 produce the least editable outputs. Dataset-driven 
 models produce structurally cleaner SVGs within 
-constrained domains. LayerTracer comes closest to balancing visual quality 
-with structural usability among the analyzed set, with 
-SVGFusion showing strong architectural potential that 
-remains unverifiable due to the absence of a public 
-implementation (Chapter~\ref{ch:Evaluation}).
+constrained domains. LayerTracer on the dataset side and 
+NeuralSVG on the optimization side come closest to balancing 
+visual quality with structural usability. Both fall short 
+only on efficiency, and their editability ratings are 
+my assessment, they were not measured. SVGFusion shows similar 
+ratings, but they remain unverifiable due to the absence 
+of a public implementation (Chapter~\ref{ch:Evaluation}).
 
 
-\section*{Contributions}
+\section{Contributions}
 
 The primary contribution of this thesis is an 
 analytical framework for understanding SVG generation 
@@ -113,7 +127,7 @@ consistent basis for comparing methods that differ
 substantially in architecture and training strategy, 
 and makes explicit a trade-off (between visual realism 
 and editability) that is present across the field but 
-rarely stated directly.
+seldom used to compare methods.
 
 A secondary contribution is a multi-dimensional 
 evaluation perspective that extends beyond pixel-level 
@@ -126,33 +140,38 @@ open.
 
 The analysis also produced a set of conditions for 
 clean and editable SVG output (primitive count control, 
-semantically aligned decomposition, structured 
-supervision, informed initialization, and design-logic 
+semantic decomposition, constrained 
+supervision, informed initialization, and design-aware 
 priors) which represent a checklist for future model 
-design that does not currently exist in the literature.
+design that, to my knowledge, has not been put together 
+in this form before.
 
 Additionally, architectural pipeline diagrams were 
 created to visualize how the optimization-based 
 methods share and diverge in their generation loops 
 (Appendix~\ref{app:pipelines}).
 
-\section*{Limitations}
+\section{Limitations}
 
-The analysis is bounded by the set of publicly 
-available, open-source models with documented 
-implementations. Several models with reported strong 
-results, including VectorFusion and DeepIcon, did not 
-have accessible code at the time of writing, the depth of implementation-level analysis 
+The analysis is bounded by the thirteen selected 
+models and by what their papers report. Several models 
+with reported strong results, including VectorFusion 
+and DeepIcon, did not have accessible code at the time 
+of writing, so the depth of implementation-level analysis 
 is limited for those methods. Quantitative comparison across models was not 
 feasible because reported metrics are heterogeneous,
 different models evaluate on different datasets, use 
 different implementations of shared metrics, and report 
 results under different experimental conditions. The framework proposed in 
 Chapter~\ref{ch:Evaluation} is conceptual rather than 
-being practically applicable.
+being practically applicable. The ratings in 
+Table~\ref{tab:framework} are my assessment from the papers, 
+not measurements, and the examples shown are the papers' own 
+figures. The selection of thirteen models is not exhaustive 
+(Section~\ref{sec:objective}).
 
 
-\section*{Future Work}
+\section{Future Work}
 
 Three directions follow directly from the findings.
 
@@ -177,8 +196,9 @@ Supervision within structured representation spaces
 (path-level latent constraints, layer consistency 
 objectives, construction sequence learning) appears to 
 regulate the fragmentation that characterizes purely 
-raster-space optimization. SVGDreamer's VPSD approach 
-and LayerTracer's construction-sequence supervision 
+raster-space optimization. SVGDreamer++'s HIVE, which 
+supervises the optimization at the level of objects and 
+their parts, and LayerTracer's construction-sequence supervision 
 both point in this direction from different starting 
 points. Converging these two approaches is a concrete 
 research question.
@@ -186,7 +206,7 @@ research question.
 
 
 
-\section*{Personal Takeaways}
+\section{Personal Takeaways}
 
 When I started this thesis, I was thinking about SVG 
 generation from the perspective of a designer. Over time, 
@@ -213,8 +233,8 @@ wants to build an SVG generator without depending on
 token limits or API restrictions of LLM-based services, 
 the optimization-based and dataset-driven methods 
 analyzed here are the reliable path. They have their own 
-costs, mostly in hardware, but the models 
-and the code are open. I think those approaches will 
+costs, mostly in hardware, but most of the models 
+and their code are open. I think those approaches will 
 prove more durable in the long run than closed 
 pipelines, and working with them directly will push the 
 field forward in ways that relying on proprietary 

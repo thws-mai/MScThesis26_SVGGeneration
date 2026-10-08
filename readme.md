@@ -25,22 +25,24 @@ This thesis argues that the structural quality of generated SVGs is primarily sh
 
 ## Key Contributions
 
-- **Comparative framework** covering 14 models across two families: optimization-based (LIVE, DiffSketcher, SVGDreamer, etc.) and dataset-driven (DeepSVG, Im2Vec, NeuralSVG, etc.)
-- **Six-dimension evaluation framework** for assessing SVG structural quality: geometric accuracy, path structure, editability, scalability, semantic alignment, and style diversity
-- **Five conditions for clean, editable SVG** (Table 8.2) — no existing model satisfies all five
+- **Comparative framework** covering 13 models in three groups: optimization-based (LIVE, SAMVG, VectorFusion, SVGDreamer, etc.), dataset-driven (DeepSVG, DeepIcon, SVGFusion, LayerTracer) and hybrid (Im2Vec, T2V-NPR)
+- **Six-dimension evaluation framework** for assessing SVG quality: semantic alignment, path economy, geometric quality, layer organization, editability, and efficiency
+- **Five conditions for clean, editable SVG** (Table 7.2) — no existing model satisfies all five
 - **Analysis of the DiffVG bottleneck** — why nearly every optimization-based model inherits flat, uneditable path structure
 - **Identification of the representation-supervision interaction** as the primary driver of structural outcomes
 
 ## Models Analyzed
 
-Optimization-based: Im2Vec, NiVeL, NeuralSVG, LIVE, SVGDreamer/++, VectorFusion, SAMVG
+Optimization-based: LIVE, SAMVG, VectorFusion, SVGDreamer/++, NIVeL, NeuralSVG
 
-Dataset-driven: DeepSVG, DeepIcon, SVGFusion, T2V w/ NPR, LayerTracer
+Dataset-driven: DeepSVG, DeepIcon, SVGFusion, LayerTracer
+
+Hybrid: Im2Vec (trained without vector supervision), T2V-NPR (trained path prior + per-prompt optimization)
 
 ## Limitations
 
 - The evaluation framework was never applied quantitatively to actual SVG outputs — it remains conceptual
-- Table 7.3 ratings are subjective author assessments, not empirically validated
+- Table 6.3 ratings are subjective author assessments, not empirically validated
 - No models were run locally; analysis is based on published results and paper descriptions
 - Grammar and writing quality issues exist in the manuscript (acknowledged in the conclusion)
 
@@ -48,7 +50,7 @@ Dataset-driven: DeepSVG, DeepIcon, SVGFusion, T2V w/ NPR, LayerTracer
 
 - LaTeX (thesis writing)
 - Python (supporting analysis)
-- Extensive literature review of 50+ papers in vector graphics generation
+- Literature review of the papers cited in the thesis (48 references)
 
 
 ## Contact
