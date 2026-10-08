@@ -31,7 +31,7 @@ confirm this way. Anything unconfirmed is listed below.
 | DeepSVG | Dataset-driven, sequential | Unconditional | SVG-Icons8 | forward | cross-entropy on commands/arguments + KL | canonicalized: start at topmost-leftmost point, clockwise; paths sorted lexicographically by start (ordered variant) | no | NeurIPS 2020 |
 | DeepIcon | Dataset-driven, sequential | Vectorization / image | SVG-Icons8 | forward | reconstruction against SVG commands; CLIP image encoder | sequential tokens | no ("bypassing the need for a differentiable rasterizer") | DICTA 2024 |
 | SVGFusion | Dataset-driven, latent diffusion | Text-to-SVG | SVGX (~240k SVGs) | sampling with VS-DiT, 24–36 s, no optimization | VP-VAE recon. + latent denoising | latent; outputs include circle, rect, ellipse | n/a | arXiv only (code not released) |
-| T2V-NPR | Hybrid | Text-to-SVG | FIGR-8-SVG (path VAE) | per-prompt VSD optimization of path latents + layer-wise vectorization | VSD | neural path latent | — | ACM TOG 43(4) / SIGGRAPH 2024 |
+| T2V-NPR | Hybrid | Text-to-SVG | FIGR-8-SVG (path VAE) | per-prompt VSD optimization of path latents + layer-wise vectorization | VSD | neural path latent | — | ACM TOG 43(4) / SIGGRAPH 2024 (repository holds only the project page, no code) |
 | LayerTracer | Dataset-driven, layered diffusion | Text-to-SVG (also image-conditioned) | ~20k designer-made layered SVGs, turned into construction sequences in a serpentine grid layout | forward diffusion + vectorization step (vtracer) | denoising | layered sequences | no | ICCV 2025 |
 
 Other verified facts used in the text: DiffVG supports Circle, Ellipse, Path, Polygon and Rect (`pydiffvg/shape.py`).
@@ -279,3 +279,15 @@ numbering.
 
 The build has no errors and no undefined references. It has 79 pages, and the remaining overfull boxes are the same
 11 pre-existing ones.
+
+## T2V-NPR code availability
+
+The official T2V-NPR repository (github.com/intchous/T2V-NPR) holds only the project webpage, with no code (last
+commit March 2025, as you reported). This matches what I saw earlier, when its README was empty.
+- Table 6.2: T2V-NPR code changed from "Public" to "None (project page only)".
+- §6.3 now says five models have no public code (SAMVG, VectorFusion, DeepIcon, SVGFusion, T2V-NPR). With NIVeL
+  pending, six cannot currently be run.
+- Table B.4: Code "No"; feasibility "Not reproducible (repository holds only a project page)".
+- "Most of the models and their code are open" (§8.5) still holds: 7 of 13 have public code (LIVE, SVGDreamer,
+  SVGDreamer++, NeuralSVG, Im2Vec, DeepSVG, LayerTracer).
+- The earlier note in this file ("four models have no code … five cannot be run") is superseded by this entry.
