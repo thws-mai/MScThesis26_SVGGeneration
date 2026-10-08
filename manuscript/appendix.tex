@@ -95,7 +95,7 @@ VectorFusion & Text-to-SVG & Iterative Opt. & Text & Paths & Semantic & Distills
         SAMVG & Vectorization & Iterative Opt. & Image & Paths & Pixel recon. & Uses SAM for semantic initialization in vectorization. \\
         NIVeL & Text-to-SVG & Iterative Opt. & Text & Layers/Paths & Semantic & Implicit neural layers as optimization domain for SDS. \\
         NeuralSVG & Text-to-SVG & Iterative Opt. & Text & Layers/Paths & Semantic & Scene encoded in MLP weights for layered shapes. \\
-        LIVE & Vectorization & Iterative Opt. & Image & Paths & Pixel recon. & Layer-wise hierarchical optimization of vector graphs. \\
+        LIVE & Vectorization & Iterative Opt. & Image & Paths & Pixel recon. & Layer-wise hierarchical optimization of vector graphics. \\
         DeepSVG & Unconditional & Forward Dec. & None & Paths & Supervised & Hierarchical Transformer for shape/command disentanglement. \\
         DeepIcon & Vectorization & Forward Dec. & Image & Layers/Paths & Supervised & Hierarchical network for direct image-to-SVG translation. \\
 \bottomrule
@@ -184,9 +184,9 @@ NIVeL & Pending & No & A100 & $\sim$5 min & High-end GPU required. \\
 T2V-NPR & Yes & VAE (unknown)& RTX 3090 & $\sim$13 min & Feasible on high-end consumer GPU. \\
 DeepSVG & Yes & VAE (unknown) & 2×1080Ti (training) & Unknown & Feasible on consumer GPU. \\
 DeepIcon & No & Transformer (unknown) & Not specified & -- & Not reproducible (no official code). \\
-SVGFusion & No & VP-VAE + VS-DiT (unknown) & Multi-A800 & 24--36 s & No official implementation available. \\
+SVGFusion & No & VP-VAE + VS-DiT (unknown) & Multi-A800 (training) & 24--36 s & No official implementation available. \\
 Im2Vec & Yes & VAE (unknown) & Not specified & Unknown & Likely feasible on consumer GPU. \\
-LayerTracer & Yes & DiT + LoRA (unknown) & A100 (80GB) & 27--34 s & Enterprise GPU required. \\
+LayerTracer & Yes & DiT + LoRA (unknown) & A100 80GB (training) & 27--34 s & Enterprise GPU required. \\
 \bottomrule
 \end{tabularx}
 \end{center}
@@ -208,7 +208,7 @@ share components and where they diverge.
     Initialized SVG Params $\rightarrow$ DiffVG $\rightarrow$ 
     Rendered Image $\rightarrow$ Pixel Reconstruction Loss 
     $\rightarrow$ Target Image, with gradients flowing back 
-    to update the SVG parameters. The only difference is 
+    to update the SVG parameters. The main difference is 
     where optimization starts. LIVE initializes directly 
     from the target image through residual analysis. SAMVG 
     adds the Segment Anything Model as a preprocessing step, 

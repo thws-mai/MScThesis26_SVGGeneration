@@ -132,7 +132,7 @@ to any recognizable component. NeuralSVG renders its rocket with exactly 16 shap
 each mapped through an MLP~\cite{polaczekNeuralSVGImplicitRepresentation2025}. 
 In the figure these read as a few large regions: a dark body with a lighter stripe, 
 angled fins, a pale flame at the tail, and the flat background. 
-That is roughly a 30x reduction in element count. SVGFusion does not sit in between. 
+Compared with SVGDreamer, 16 shapes are roughly a 30x reduction in element count. SVGFusion does not sit in between. 
 Its rocket is built from only a handful of filled shapes, so in element count it is closer 
 to DeepSVG than to SVGDreamer. What differs is the vocabulary: SVGFusion can output 
 B\'{e}zier paths but also circles, rectangles, and 
@@ -162,13 +162,14 @@ Table~\ref{tab:rep_structure} summarizes these counts.
 \centering
 \caption{Structural consequences of representation choice. The latent row is a generative layer on top of a geometric representation, not a geometric representation itself. Path counts reflect default configurations reported in the respective papers; n.r.\ = not reported.}
 \label{tab:rep_structure}
-\begin{tabular}{l l l p{5.6cm}}
+\begin{tabular}{l l l p{4.6cm}}
 \hline
 \textbf{Representation} & \textbf{Path Counts} & \textbf{Editability} & \textbf{Typical Output} \\
 \hline
 Parametric      & 64--512   & Low    & Visually rich, paths overlap heavily \\
 Sequential      & 15--30    & Medium & Clean icons, breaks on complex scenes \\
-Implicit neural & 16 (fixed)& High   & Few shapes, each semantically meaningful \\
+Implicit neural & 16 (NeuralSVG) & High   & Few shapes, each semantically meaningful \\
+                & up to 5 layers (NIVeL) & & \\
 Latent          & Few (n.r.) & Medium & Uses full SVG vocab, looks designed \\
 \hline
 \end{tabular}

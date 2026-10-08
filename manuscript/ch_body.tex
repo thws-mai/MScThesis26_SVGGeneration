@@ -18,8 +18,8 @@ They were selected among a broader research landscape that also includes sequenc
 sketch models, retrieval-based vectorization systems, and large language model approaches to SVG
 synthesis. That wider context is sketched below to
 clarify where the selected models sit and why they were
-chosen. The organizing principle is simple, these thirteen
-models together cover the full range of design decisions of models
+chosen. The organizing principle is simple: these thirteen
+models together cover the main design decisions of models
 in two dimensions already mentioned: representation and supervision, that shape how SVG
 structure emerges from a generation pipeline. A summary of
 all thirteen models is provided in
@@ -96,7 +96,7 @@ OmniSVG~\cite{yangOmniSVGUnifiedScalable2025},
 LLM4SVG~\cite{xingEmpoweringLLMsUnderstand2025}, and
 InternSVG~\cite{wangInternSVGUnifiedSVG2025} treat SVG as
 structured code and generate it through transformer
-architectures pretrained on collection of large-scale texts and images. 
+architectures pretrained on a collection of large-scale texts and images. 
 In one sense, SVG is a natural fit for language
 models: the file format is sequential XML commands, not
 unlike a programming language. Visual alignment improves
@@ -224,7 +224,7 @@ adjusted directly. In NeuralSVG the network takes a shape index
 and outputs the geometry for that shape. In NIVeL it takes a pixel 
 coordinate and returns which layer covers it. Nothing is stored as an explicit path.
 
-This brings different properties to optimization based approaches. In 
+This brings different properties to optimization-based approaches. In 
 parametric methods each path is an independent object, and 
 optimization can push the paths in different directions. With an 
 MLP, all shapes come from the same learned function, which 

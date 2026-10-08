@@ -77,8 +77,8 @@ and how those choices shape the structure of the outputs they generate.
 
 SVG generation research has divided across different directions. 
 Some models treat SVG as a stream of drawing commands, other approaches
-refine vector parameters directly against a raster target,
-it is even possible to define geometry through learned functions. 
+refine vector parameters directly against a raster target.
+It is even possible to define geometry through learned functions. 
 
 These methods differ not only in architecture but in how they internally 
 represent vector structure and what signals they use to guide generation.
@@ -122,9 +122,9 @@ provided in Appendix~\ref{app:llm_exclusion}.
 
 The thirteen models in the main analysis were selected 
 by a few practical criteria, and the selection is not 
-exhaustive. Each one is a recent learning-based method 
-(2020 to 2025) that produces SVG or structured vector 
-output. Each paper also describes its architecture in 
+exhaustive. Each one is a recent method (2020 to 2025) 
+that uses differentiable rendering or learned models and 
+produces SVG or structured vector output. Each paper also describes its architecture in 
 enough detail to analyze how the model represents 
 geometry and how it is supervised. The models were 
 chosen so that together they cover the different 

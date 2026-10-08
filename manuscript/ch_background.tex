@@ -34,7 +34,7 @@ elements~\cite{quintScalableVectorGraphics2003}.
 
 SVG supports a range of graphic elements, including basic shapes 
 such as lines, rectangles, and circles, as well as text and 
-raster image. The most flexible element is the path, 
+raster images. The most flexible element is the path, 
 which allows complex shapes to be defined using sequences of 
 commands: moving a virtual pen, drawing straight lines, and 
 creating smooth curves~\cite{eisenbergSVGEssentialsProducing20}.
@@ -197,7 +197,7 @@ The use of neural networks to define geometry implicitly
 through learned weights was established in 
 3D scene representation by Mildenhall et 
 al.~\cite{mildenhallNeRFRepresentingScenes2020}. In NeRF,
-the network acts like a function: based on given location,
+the network acts like a function: based on a given location,
 it tells you what occupies that 
 space. Nothing is stored explicitly, the geometry 
 only appears when you query the network.
@@ -237,7 +237,7 @@ field~\cite{thamizharasanNIVeLNeuralImplicit2024}.
 Latent representation is not a geometric representation at all. 
 It is a generative layer that sits on top of one of the other three.
 There are no control points, no path commands, no shape boundaries 
-stored anywhere. Latent space is compressing many graphics
+stored anywhere. Latent space compresses many graphics
 into a shared numerical embedding learned during training. 
 Kingma and Welling~\cite{kingmaAutoEncodingVariationalBayes2022} 
 formalized this idea through the Variational Autoencoder: 
@@ -356,7 +356,7 @@ as raster images, and pixel-based comparison gives access to
 well-established loss functions from computer vision. When 
 combined with differentiable rendering, gradients from these 
 losses flow back through the rasterizer to update vector 
-parameters. Which loss you use matters a lot, it shapes 
+parameters. Which loss you use matters a lot. It shapes 
 what the model focuses on during training.
 
 \subsection{Reconstruction Losses}
@@ -457,7 +457,7 @@ the predicted noise and the noise that was actually added,
 weighted according to the timestep, defines a 
 gradient, which is backpropagated through the rasterizer 
 to update the SVG parameters. No ground-truth image is 
-required, the diffusion model's learned prior acts as 
+required. The diffusion model's learned prior acts as 
 the teacher.
 
 A known limitation of SDS is that results look oversaturated 

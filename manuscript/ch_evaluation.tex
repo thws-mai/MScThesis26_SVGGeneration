@@ -24,7 +24,7 @@ research. The most common are Fréchet Inception Distance
 scores~\cite{radfordLearningTransferableVisual2021}, 
 perceptual similarity measures such as 
 LPIPS~\cite{zhangUnreasonableEffectivenessDeep2018}, 
-pixel-level reconstruction metrics such as MSE.
+and pixel-level reconstruction metrics such as MSE.
 All of these share one property: they 
 operate on rasterized outputs. The SVG file itself, its 
 path structure, is invisible to every one of them.
@@ -80,7 +80,7 @@ with enough methodological detail to understand the ratings.
 
 Table~\ref{tab:metrics_used} maps which evaluation metrics
 each of the thirteen models actually reports. The 
-pattern is clear, FID and CLIP dominate text-to-SVG models, 
+pattern is clear: FID and CLIP dominate text-to-SVG models, 
 MSE and LPIPS appear in vectorization models, and structural 
 metrics are almost entirely absent across both groups. 
 Human evaluation is present in roughly half the papers.
@@ -248,7 +248,7 @@ learned to measure.
 \label{sec:efficiency}
 
 Inference speed and reproducibility are not peripheral 
-concerns for SVG generation, they directly determine 
+concerns for SVG generation. They directly determine 
 whether a method can be used in practice. 
 Table~\ref{tab:reproducibility} summarizes code 
 availability, hardware requirements, and inference time 
