@@ -1,9 +1,13 @@
-# How Architectural Decisions Shape SVG Structure in Neural Generative Models
+# Comparative Analysis of SVG Deep Generative Models
+
+### How Architectural Decisions Shape SVG Structure in Neural Generative Models
+
+The graded version is preserved at tag graded-2026-04-14.
 
 **MSc Thesis — Technical University of Applied Sciences Würzburg-Schweinfurt (THWS)**  
 **Author:** Fikrat Mutallimov  
 **Supervisor:** Prof. Magda Gregorová  
-**Program:** Applied Computer Science — Artificial Intelligence  
+**Program:** Master of Science in Artificial Intelligence  
 **Date:** 2026
 
 **Thesis text:** [./manuscript/main.pdf](./manuscript/main.pdf) 
@@ -31,6 +35,12 @@ This thesis argues that the structural quality of generated SVGs is primarily sh
 - **Analysis of the DiffVG bottleneck** — why nearly every optimization-based model inherits flat, uneditable path structure
 - **Identification of the representation-supervision interaction** as the primary driver of structural outcomes
 
+## Key findings
+
+- **Realism–editability trade-off:** no analyzed model performs well across all six dimensions; optimization-based models achieve the strongest visual fidelity but produce the least editable outputs, while dataset-driven models produce structurally cleaner SVGs within constrained domains
+- **Initialization matters as much as the loss:** LIVE and SAMVG both use pixel reconstruction loss, but SAMVG's segmentation-based initialization yields cleaner boundaries and less path fragmentation
+- **Pixel/embedding metrics do not measure structure:** FID, CLIP similarity and LPIPS measure visual fidelity, not structural properties such as path economy, layer organization or editability
+
 ## Models Analyzed
 
 Optimization-based: LIVE, SAMVG, VectorFusion, SVGDreamer/++, NIVeL, NeuralSVG
@@ -39,17 +49,17 @@ Dataset-driven: DeepSVG, DeepIcon, SVGFusion, LayerTracer
 
 Hybrid: Im2Vec (trained without vector supervision), T2V-NPR (trained path prior + per-prompt optimization)
 
-## Limitations
+## Scope and next steps
 
 - The evaluation framework was never applied quantitatively to actual SVG outputs — it remains conceptual
 - Table 6.3 ratings are subjective author assessments, not empirically validated
 - No models were run locally; analysis is based on published results and paper descriptions
-- Grammar and writing quality issues exist in the manuscript (acknowledged in the conclusion)
+
+Applying the framework to real model outputs is the follow-up project.
 
 ## Tech Stack
 
 - LaTeX (thesis writing)
-- Python (supporting analysis)
 - Literature review of the papers cited in the thesis (48 references)
 
 
